@@ -781,6 +781,11 @@
   "resolved" "https://registry.npmjs.org/hexo-theme-landscape/-/hexo-theme-landscape-0.0.3.tgz"
   "version" "0.0.3"
 
+"hexo-theme-next@^8.11.1":
+  "integrity" "sha512-ZnpQU+Rj6piXAruC015fdGaWteN3hEUYoCUOCvTbo64iPq9EXfQia1kUdF8mwp+KibdxV8MdTVm/5kllcDf8eQ=="
+  "resolved" "https://registry.npmjs.org/hexo-theme-next/-/hexo-theme-next-8.11.1.tgz"
+  "version" "8.11.1"
+
 "hexo-util@^2.0.0", "hexo-util@^2.4.0", "hexo-util@^2.5.0":
   "integrity" "sha512-xj1jUrId2qTe8L/tRizWWRl+j7X1Zzh5rCVtffboOU0p/EfbPomxIxDvntTHT3fcqgvLHsncqJF9V5j7+buOqA=="
   "resolved" "https://registry.npmjs.org/hexo-util/-/hexo-util-2.6.1.tgz"
