@@ -466,7 +466,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-31 16:49:49" itemprop="dateModified" datetime="2022-05-31T16:49:49+08:00">2022-05-31</time>
+                <time title="修改时间：2022-05-31 17:15:43" itemprop="dateModified" datetime="2022-05-31T17:15:43+08:00">2022-05-31</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -584,89 +584,6 @@
 <p>尝试1: 更改<code>docker run --network=net</code>模式，直接共享宿主机的网络，然后开心的发现 -p 暴露的端口没了，服务一样的无法被访问了。</p>
 <p>尝试2: 改用<code>docker run --link=container1</code>互相关联起来，然后可以ping了，但是发现通过端口访问container1的服务还是不行，后来发现互联和端口能访问是两个东西。。。然后灵光一闪，把container1别名设置成<code>localhost</code>然后就能访问了。。。</p>
 <p>正确做法： 使用docker-compose进行编排啊，想暴露什么端口暴露什么端口，哦豁，这下要提前看docker的东西了。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://gou7ma7.github.io/2022/05/29/install/mysql-QA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Roy Lee">
-      <meta itemprop="description" content="行成于思而毁于随">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="业精于勤荒于嬉">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/29/install/mysql-QA/" class="post-title-link" itemprop="url">use MySQL Q&A</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-29 08:48:59" itemprop="dateCreated datePublished" datetime="2022-05-29T08:48:59+08:00">2022-05-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-31 11:48:44" itemprop="dateModified" datetime="2022-05-31T11:48:44+08:00">2022-05-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Install/" itemprop="url" rel="index"><span itemprop="name">Install</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-
-<h1 id="install"><a href="#install" class="headerlink" title="install"></a>install</h1><h1 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h1><h1 id="setting"><a href="#setting" class="headerlink" title="setting"></a>setting</h1><h1 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h1><h2 id="MySQL-clinet局域网访问-mysqld"><a href="#MySQL-clinet局域网访问-mysqld" class="headerlink" title="MySQL clinet局域网访问 mysqld"></a>MySQL clinet局域网访问 mysqld</h2><ol>
-<li>（使用docker启动）这个没啥说的，直接docker run 一把过，唯一注意的就是如果宿主机上在已经启动过mysqld了，那么docker run -p的端口号就要换一个了；ps: 密码是通过docker run  -e MYSQL_ROOT_PASSWORD&#x3D;’pwd’启动的时候传环境变量设置的；</li>
-<li>（我就是要练习自己搭建，咋说）：按照教程里面进入&gt;mysql，也创建用户update user set user.Host&#x3D;’%’ where user.User&#x3D;’root’; 本机连接是没有问题的，但是另一台机器client局域网登录的时候就报61 “Connection refused”；</li>
-<li>之前在公司里面都是叫网管然后秒解决，现在要自力更生了。</li>
-<li>首先再另一台机器client里面乱输入一个ip地址，报错为”Unknown MySQL server host”，不同于之前的被拒绝连接，说明当前host是ok，使用netstat -apn | grep 3306，看到tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      1016&#x2F;mysqld         绑定到127.0.0.1，也就是回环了；</li>
-<li>目前既然知道是由于网络没有走通，那肯定就是配置的问题了，我找到mysql的配置文件，其中关于当前mysql用的是哪个配置文件里面有很多种说法，我不愿意深究，改成功的是&#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;mysqld.cnf里边的bind-address;</li>
-<li>之后连接提示为1698 - Access denied for user ‘root‘@’IP’，说明现在的问题是密码设置的问题，大概要做的就是在启动的时候或者配置文件里面弄好连接密码，到时候client连接对口供就ok，我这边用在局域网又只玩就直接空密码了，反正以后也不会去没有网管的公司。 ps: 实际的默认密码在配置文件 &#x2F;etc&#x2F;mysql&#x2F;debian.cnf 里面。</li>
-</ol>
 
       
     </div>
@@ -807,7 +724,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://gou7ma7.github.io/2022/05/29/idea_from_leetcode/yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/">
+    <link itemprop="mainEntityOfPage" href="https://gou7ma7.github.io/2022/05/29/install/mysql-QA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -821,7 +738,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/29/idea_from_leetcode/yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/" class="post-title-link" itemprop="url">从二叉树遍历到yield</a>
+            <a href="/2022/05/29/install/mysql-QA/" class="post-title-link" itemprop="url">use MySQL Q&A</a>
         </h2>
 
         <div class="post-meta">
@@ -838,7 +755,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-31 10:54:49" itemprop="dateModified" datetime="2022-05-31T10:54:49+08:00">2022-05-31</time>
+                <time title="修改时间：2022-05-31 11:48:44" itemprop="dateModified" datetime="2022-05-31T11:48:44+08:00">2022-05-31</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -846,7 +763,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+                  <a href="/categories/Install/" itemprop="url" rel="index"><span itemprop="name">Install</span></a>
                 </span>
             </span>
 
@@ -861,17 +778,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="yield的作用"><a href="#yield的作用" class="headerlink" title="yield的作用"></a>yield的作用</h1><p>首先yield就是return，不要想多了，所以搭配<code>yield from func()</code>能够递归，就是这么简单；</p>
-<p>只是说普通的函数返回的是一个value或者obj，而yield返回的是一个生成器对象。</p>
-<h2 id="生成器的定义-amp-同迭代器的区别"><a href="#生成器的定义-amp-同迭代器的区别" class="headerlink" title="生成器的定义&amp;同迭代器的区别"></a>生成器的定义&amp;同迭代器的区别</h2><p>在python中实现了__iter__和__next__方法，可以迭代操作的对象就叫迭代器；<br>构建迭代器的时候，并不一次性加载所有元素到内存，只有调用next方法的时候才会<strong>返回</strong>需要的该元素；</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/05/29/idea_from_leetcode/yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <span id="more"></span>
+
+<h1 id="install"><a href="#install" class="headerlink" title="install"></a>install</h1><h1 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h1><h1 id="setting"><a href="#setting" class="headerlink" title="setting"></a>setting</h1><h1 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h1><h2 id="MySQL-clinet局域网访问-mysqld"><a href="#MySQL-clinet局域网访问-mysqld" class="headerlink" title="MySQL clinet局域网访问 mysqld"></a>MySQL clinet局域网访问 mysqld</h2><ol>
+<li>（使用docker启动）这个没啥说的，直接docker run 一把过，唯一注意的就是如果宿主机上在已经启动过mysqld了，那么docker run -p的端口号就要换一个了；ps: 密码是通过docker run  -e MYSQL_ROOT_PASSWORD&#x3D;’pwd’启动的时候传环境变量设置的；</li>
+<li>（我就是要练习自己搭建，咋说）：按照教程里面进入&gt;mysql，也创建用户update user set user.Host&#x3D;’%’ where user.User&#x3D;’root’; 本机连接是没有问题的，但是另一台机器client局域网登录的时候就报61 “Connection refused”；</li>
+<li>之前在公司里面都是叫网管然后秒解决，现在要自力更生了。</li>
+<li>首先再另一台机器client里面乱输入一个ip地址，报错为”Unknown MySQL server host”，不同于之前的被拒绝连接，说明当前host是ok，使用netstat -apn | grep 3306，看到tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      1016&#x2F;mysqld         绑定到127.0.0.1，也就是回环了；</li>
+<li>目前既然知道是由于网络没有走通，那肯定就是配置的问题了，我找到mysql的配置文件，其中关于当前mysql用的是哪个配置文件里面有很多种说法，我不愿意深究，改成功的是&#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;mysqld.cnf里边的bind-address;</li>
+<li>之后连接提示为1698 - Access denied for user ‘root‘@’IP’，说明现在的问题是密码设置的问题，大概要做的就是在启动的时候或者配置文件里面弄好连接密码，到时候client连接对口供就ok，我这边用在局域网又只玩就直接空密码了，反正以后也不会去没有网管的公司。 ps: 实际的默认密码在配置文件 &#x2F;etc&#x2F;mysql&#x2F;debian.cnf 里面。</li>
+</ol>
+
       
     </div>
 
@@ -952,6 +869,89 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/05/29/idea_from_leetcode/1st_hard%E4%B8%AD%E4%BD%8D%E6%95%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://gou7ma7.github.io/2022/05/29/idea_from_leetcode/yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Roy Lee">
+      <meta itemprop="description" content="行成于思而毁于随">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="业精于勤荒于嬉">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/29/idea_from_leetcode/yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/" class="post-title-link" itemprop="url">从二叉树遍历到yield</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-29 08:48:59" itemprop="dateCreated datePublished" datetime="2022-05-29T08:48:59+08:00">2022-05-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-31 10:54:49" itemprop="dateModified" datetime="2022-05-31T10:54:49+08:00">2022-05-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="yield的作用"><a href="#yield的作用" class="headerlink" title="yield的作用"></a>yield的作用</h1><p>首先yield就是return，不要想多了，所以搭配<code>yield from func()</code>能够递归，就是这么简单；</p>
+<p>只是说普通的函数返回的是一个value或者obj，而yield返回的是一个生成器对象。</p>
+<h2 id="生成器的定义-amp-同迭代器的区别"><a href="#生成器的定义-amp-同迭代器的区别" class="headerlink" title="生成器的定义&amp;同迭代器的区别"></a>生成器的定义&amp;同迭代器的区别</h2><p>在python中实现了__iter__和__next__方法，可以迭代操作的对象就叫迭代器；<br>构建迭代器的时候，并不一次性加载所有元素到内存，只有调用next方法的时候才会<strong>返回</strong>需要的该元素；</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/05/29/idea_from_leetcode/yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
