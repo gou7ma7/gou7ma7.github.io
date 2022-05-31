@@ -27,14 +27,14 @@
 <meta property="og:site_name" content="业精于勤荒于嬉">
 <meta property="og:description" content="需求现在有一个Web Service的api，请求的时候有json字符串、文件，或者两者都有，应该怎样设置接口协议。（以Flask为例） 背景在 HTTP 协议消息头中，使用 Content-Type 来表示请求和响应中的媒体类型信息。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gou7ma7.github.io/blogs/images/http_upload_01.png">
-<meta property="og:image" content="https://gou7ma7.github.io/blogs/images/http_upload_02.png">
+<meta property="og:image" content="https://gou7ma7.github.io/images/http_upload_01.png">
+<meta property="og:image" content="https://gou7ma7.github.io/images/http_upload_02.png">
 <meta property="article:published_time" content="2022-05-29T10:38:17.000Z">
 <meta property="article:modified_time" content="2022-05-29T11:09:06.188Z">
 <meta property="article:author" content="Roy Lee">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gou7ma7.github.io/blogs/images/http_upload_01.png">
+<meta name="twitter:image" content="https://gou7ma7.github.io/images/http_upload_01.png">
 
 <link rel="canonical" href="https://gou7ma7.github.io/2022/05/29/http/service-get-json&file/">
 
@@ -302,7 +302,7 @@
 <p>解释*：</p>
 <ol>
 <li>使用requests构造HTTP请求的话，**不要显示的设置headers&#x3D;{‘Content-Type’: ‘multipart&#x2F;form-data’}**，因为不能给定boundary具体的值，接口解析会失败</li>
-<li>请求体body中同时有json字符串和文件的抓包，raw格式（原始格式）的结构类似如下，可以看到键值对是按照表单编码，文件是按照二进制格式编码之后，再组成键值对进行表单编码<br><img src="/blogs/images/http_upload_01.png" alt="raw格式的请求体"><br>更加直观的webForms格式查看该请求的结构如下<img src="/blogs/images/http_upload_02.png" alt="webForms格式的请求体"><br><strong>如果使用其他语言或者HTTP请求请求库，请自行按照上述方法进行请求的构造</strong></li>
+<li>请求体body中同时有json字符串和文件的抓包，raw格式（原始格式）的结构类似如下，可以看到键值对是按照表单编码，文件是按照二进制格式编码之后，再组成键值对进行表单编码<br><img src="/images/http_upload_01.png" alt="raw格式的请求体"><br>更加直观的webForms格式查看该请求的结构如下<img src="/images/http_upload_02.png" alt="webForms格式的请求体"><br><strong>如果使用其他语言或者HTTP请求请求库，请自行按照上述方法进行请求的构造</strong></li>
 </ol>
 </blockquote>
 <h1 id="原因剖析"><a href="#原因剖析" class="headerlink" title="原因剖析"></a>原因剖析</h1><p>先进的HTTP请求库如requests在构造请求的时候会根据post的不同参数自行构造Content-Type，因此平时根本没有注意；<br>在写业务时遇到该问题，也没能沉下心好好试验一下，总想网上找篇文章一抄了之解决问题。</p>
