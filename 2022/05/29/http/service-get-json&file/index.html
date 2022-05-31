@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blogs/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blogs/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blogs/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blogs/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blogs/css/main.css">
+
+
+<link rel="stylesheet" href="/blogs/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"gou7ma7.github.io","root":"/blogs/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"DALLH37RGL","apiKey":"2757431b75c7854745bc50a2ad859e5c","indexName":"indexName","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="需求现在有一个Web Service的api，请求的时候有json字符串、文件，或者两者都有，应该怎样设置接口协议。（以Flask为例） 背景在 HTTP 协议消息头中，使用 Content-Type 来表示请求和响应中的媒体类型信息。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web Service同时json字符串和文件，编码该如何设置">
+<meta property="og:url" content="https://gou7ma7.github.io/blogs/2022/05/29/http/service-get-json&file/index.html">
+<meta property="og:site_name" content="业精于勤荒于嬉">
+<meta property="og:description" content="需求现在有一个Web Service的api，请求的时候有json字符串、文件，或者两者都有，应该怎样设置接口协议。（以Flask为例） 背景在 HTTP 协议消息头中，使用 Content-Type 来表示请求和响应中的媒体类型信息。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gou7ma7.github.io/blogs/images/http_upload_01.png">
+<meta property="og:image" content="https://gou7ma7.github.io/blogs/images/http_upload_02.png">
+<meta property="article:published_time" content="2022-05-29T10:38:17.000Z">
+<meta property="article:modified_time" content="2022-05-29T11:09:06.188Z">
+<meta property="article:author" content="Roy Lee">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gou7ma7.github.io/blogs/images/http_upload_01.png">
+
+<link rel="canonical" href="https://gou7ma7.github.io/blogs/2022/05/29/http/service-get-json&file/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Web Service同时json字符串和文件，编码该如何设置 | 业精于勤荒于嬉</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blogs/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">业精于勤荒于嬉</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blogs/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="https://github.com/gou7ma7/" rel="noopener" target="_blank"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/blogs/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blogs/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blogs/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://gou7ma7.github.io/blogs/2022/05/29/http/service-get-json&file/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blogs/images/avatar.png">
+      <meta itemprop="name" content="Roy Lee">
+      <meta itemprop="description" content="行成于思而毁于随">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="业精于勤荒于嬉">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Web Service同时json字符串和文件，编码该如何设置
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-29 18:38:17 / 修改时间：19:09:06" itemprop="dateCreated datePublished" datetime="2022-05-29T18:38:17+08:00">2022-05-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogs/categories/Web-Service/" itemprop="url" rel="index"><span itemprop="name">Web Service</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><p>现在有一个Web Service的api，请求的时候有json字符串、文件，或者两者都有，应该怎样设置接口协议。（以Flask为例）</p>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在 HTTP 协议消息头中，使用 Content-Type 来表示请求和响应中的媒体类型信息。</p>
+<span id="more"></span>
+
+<p>Content-Type: application&#x2F;json;charset:utf-8;</p>
+<blockquote>
+<p>JSON 是一种轻量级的数据格式，以 “键 - 值” 对的方式组织的数据。这个使用这个类型，需要参数本身就是 json 格式的数据，参数会被直接放到请求实体里，不进行任何处理。服务端 &#x2F; 客户端会按 json 格式解析数据（约定好的情况下）。</p>
+</blockquote>
+<p>Content-Type: multipart&#x2F;form-data</p>
+<blockquote>
+<p>这是一个多部分多媒体类型。首先生成了一个 boundary 用于分割不同的字段，在请求实体里每个参数以 ——boundary 开始，然后是附加信息和参数名，然后是空行，最后是参数内容。多个参数将会有多个 boundary 块。如果参数是文件会有特别的文件域。最后以 ——boundary–为结束标识。multipart&#x2F;form-data 支持文件上传的格式，一般需要上传文件的表单则用该类型。</p>
+</blockquote>
+<h1 id="请求参数构造"><a href="#请求参数构造" class="headerlink" title="请求参数构造"></a>请求参数构造</h1><p>此处以python的Web api框架 flask与HTTP 请求库requests进行演示，其他框架、语言的构造解析均可参照下表中的Content-Type</p>
+<table>
+<thead>
+<tr>
+<th>请求类型</th>
+<th>Content-Type</th>
+<th>requests.post参数</th>
+<th>flask.request取值对象</th>
+<th>flask.request取值结果</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>参数</td>
+<td>application&#x2F;json</td>
+<td>json&#x3D;data</td>
+<td>request.get_json(), request.json</td>
+<td>均有，dict</td>
+<td>Content-Type自动: application&#x2F;json</td>
+</tr>
+<tr>
+<td>文件</td>
+<td>multipart&#x2F;form-data; boundary&#x3D;</td>
+<td>files&#x3D;files</td>
+<td>request.files</td>
+<td>有，ImmutableMultiDict</td>
+<td>见<strong>解释*1</strong></td>
+</tr>
+<tr>
+<td>参数</td>
+<td>application&#x2F;x-www-form-urlencoded</td>
+<td>data&#x3D;{‘json’: data}</td>
+<td>request.form</td>
+<td>有，ImmutableMultiDict</td>
+<td>按照表单编码</td>
+</tr>
+<tr>
+<td>参数 文件</td>
+<td>multipart&#x2F;form-data; boundary&#x3D;</td>
+<td>data&#x3D;{‘json’: data}, files&#x3D;files</td>
+<td>request.form，request.files</td>
+<td>有，分开取</td>
+<td>混合编码，抓包信息见<strong>解释*2</strong></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>解释*：</p>
+<ol>
+<li>使用requests构造HTTP请求的话，**不要显示的设置headers&#x3D;{‘Content-Type’: ‘multipart&#x2F;form-data’}**，因为不能给定boundary具体的值，接口解析会失败</li>
+<li>请求体body中同时有json字符串和文件的抓包，raw格式（原始格式）的结构类似如下，可以看到键值对是按照表单编码，文件是按照二进制格式编码之后，再组成键值对进行表单编码<br><img src="/blogs/images/http_upload_01.png" alt="raw格式的请求体"><br>更加直观的webForms格式查看该请求的结构如下<img src="/blogs/images/http_upload_02.png" alt="webForms格式的请求体"><br><strong>如果使用其他语言或者HTTP请求请求库，请自行按照上述方法进行请求的构造</strong></li>
+</ol>
+</blockquote>
+<h1 id="原因剖析"><a href="#原因剖析" class="headerlink" title="原因剖析"></a>原因剖析</h1><p>先进的HTTP请求库如requests在构造请求的时候会根据post的不同参数自行构造Content-Type，因此平时根本没有注意；<br>在写业务时遇到该问题，也没能沉下心好好试验一下，总想网上找篇文章一抄了之解决问题。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blogs/tags/Python/" rel="tag"># Python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blogs/2022/05/29/TODO-LIST/" rel="prev" title="TODO LIST">
+      <i class="fa fa-chevron-left"></i> TODO LIST
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blogs/2022/05/29/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9C%80%E6%B1%82"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">2.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0%E6%9E%84%E9%80%A0"><span class="nav-number">3.</span> <span class="nav-text">请求参数构造</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0%E5%89%96%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">原因剖析</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Roy Lee"
+      src="/blogs/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Roy Lee</p>
+  <div class="site-description" itemprop="description">行成于思而毁于随</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blogs/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blogs/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/blogs/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Roy Lee</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blogs/lib/anime.min.js"></script>
+  <script src="/blogs/lib/velocity/velocity.min.js"></script>
+  <script src="/blogs/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blogs/js/utils.js"></script>
+
+<script src="/blogs/js/motion.js"></script>
+
+
+<script src="/blogs/js/schemes/pisces.js"></script>
+
+
+<script src="/blogs/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/blogs/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
