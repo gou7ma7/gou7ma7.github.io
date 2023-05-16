@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"gou7ma7.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="需求现在有一个Web Service的api，请求的时候有json字符串、文件，或者两者都有，应该怎样设置接口协议。（以Flask为例） 背景在 HTTP 协议消息头中，使用 Content-Type 来表示请求和响应中的媒体类型信息。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web Service同时json字符串和文件，编码该如何设置">
+<meta property="og:url" content="https://gou7ma7.github.io/2022/05/29/http/service-get-json&file/index.html">
+<meta property="og:site_name" content="业精于勤荒于嬉">
+<meta property="og:description" content="需求现在有一个Web Service的api，请求的时候有json字符串、文件，或者两者都有，应该怎样设置接口协议。（以Flask为例） 背景在 HTTP 协议消息头中，使用 Content-Type 来表示请求和响应中的媒体类型信息。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gou7ma7.github.io/images/http_upload_01.png">
+<meta property="og:image" content="https://gou7ma7.github.io/images/http_upload_02.png">
+<meta property="article:published_time" content="2022-05-29T10:38:17.000Z">
+<meta property="article:modified_time" content="2023-05-11T01:00:56.551Z">
+<meta property="article:author" content="Roy Lee">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gou7ma7.github.io/images/http_upload_01.png">
+
+
+<link rel="canonical" href="https://gou7ma7.github.io/2022/05/29/http/service-get-json&file/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://gou7ma7.github.io/2022/05/29/http/service-get-json&file/","path":"2022/05/29/http/service-get-json&file/","title":"Web Service同时json字符串和文件，编码该如何设置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Web Service同时json字符串和文件，编码该如何设置 | 业精于勤荒于嬉</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">业精于勤荒于嬉</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-github"><a href="https://github.com/gou7ma7" rel="section" target="_blank"><i class="fa fa-user fa-fw"></i>github</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-todo"><a href="https://gou7ma7.github.io/2022/05/29/TODO-LIST/" rel="section"><i class="fa fa-calendar fa-fw"></i>todo</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9C%80%E6%B1%82"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">2.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0%E6%9E%84%E9%80%A0"><span class="nav-number">3.</span> <span class="nav-text">请求参数构造</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0%E5%89%96%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">原因剖析</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Roy Lee"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Roy Lee</p>
+  <div class="site-description" itemprop="description">行成于思而毁于随</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://gou7ma7.github.io/2022/05/29/http/service-get-json&file/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Roy Lee">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="业精于勤荒于嬉">
+      <meta itemprop="description" content="行成于思而毁于随">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Web Service同时json字符串和文件，编码该如何设置 | 业精于勤荒于嬉">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Web Service同时json字符串和文件，编码该如何设置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-05-29 18:38:17" itemprop="dateCreated datePublished" datetime="2022-05-29T18:38:17+08:00">2022-05-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-05-11 09:00:56" itemprop="dateModified" datetime="2023-05-11T09:00:56+08:00">2023-05-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Web-Service/" itemprop="url" rel="index"><span itemprop="name">Web Service</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><p>现在有一个Web Service的api，请求的时候有json字符串、文件，或者两者都有，应该怎样设置接口协议。（以Flask为例）</p>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在 HTTP 协议消息头中，使用 Content-Type 来表示请求和响应中的媒体类型信息。</p>
+<span id="more"></span>
+
+<p>Content-Type: application&#x2F;json;charset:utf-8;</p>
+<blockquote>
+<p>JSON 是一种轻量级的数据格式，以 “键 - 值” 对的方式组织的数据。这个使用这个类型，需要参数本身就是 json 格式的数据，参数会被直接放到请求实体里，不进行任何处理。服务端 &#x2F; 客户端会按 json 格式解析数据（约定好的情况下）。</p>
+</blockquote>
+<p>Content-Type: multipart&#x2F;form-data</p>
+<blockquote>
+<p>这是一个多部分多媒体类型。首先生成了一个 boundary 用于分割不同的字段，在请求实体里每个参数以 ——boundary 开始，然后是附加信息和参数名，然后是空行，最后是参数内容。多个参数将会有多个 boundary 块。如果参数是文件会有特别的文件域。最后以 ——boundary–为结束标识。multipart&#x2F;form-data 支持文件上传的格式，一般需要上传文件的表单则用该类型。</p>
+</blockquote>
+<h1 id="请求参数构造"><a href="#请求参数构造" class="headerlink" title="请求参数构造"></a>请求参数构造</h1><p>此处以python的Web api框架 flask与HTTP 请求库requests进行演示，其他框架、语言的构造解析均可参照下表中的Content-Type</p>
+<table>
+<thead>
+<tr>
+<th>请求类型</th>
+<th>Content-Type</th>
+<th>requests.post参数</th>
+<th>flask.request取值对象</th>
+<th>flask.request取值结果</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>参数</td>
+<td>application&#x2F;json</td>
+<td>json&#x3D;data</td>
+<td>request.get_json(), request.json</td>
+<td>均有，dict</td>
+<td>Content-Type自动: application&#x2F;json</td>
+</tr>
+<tr>
+<td>文件</td>
+<td>multipart&#x2F;form-data; boundary&#x3D;</td>
+<td>files&#x3D;files</td>
+<td>request.files</td>
+<td>有，ImmutableMultiDict</td>
+<td>见<strong>解释*1</strong></td>
+</tr>
+<tr>
+<td>参数</td>
+<td>application&#x2F;x-www-form-urlencoded</td>
+<td>data&#x3D;{‘json’: data}</td>
+<td>request.form</td>
+<td>有，ImmutableMultiDict</td>
+<td>按照表单编码</td>
+</tr>
+<tr>
+<td>参数 文件</td>
+<td>multipart&#x2F;form-data; boundary&#x3D;</td>
+<td>data&#x3D;{‘json’: data}, files&#x3D;files</td>
+<td>request.form，request.files</td>
+<td>有，分开取</td>
+<td>混合编码，抓包信息见<strong>解释*2</strong></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>解释*：</p>
+<ol>
+<li>使用requests构造HTTP请求的话，**不要显示的设置headers&#x3D;{‘Content-Type’: ‘multipart&#x2F;form-data’}**，因为不能给定boundary具体的值，接口解析会失败</li>
+<li>请求体body中同时有json字符串和文件的抓包，raw格式（原始格式）的结构类似如下，可以看到键值对是按照表单编码，文件是按照二进制格式编码之后，再组成键值对进行表单编码<br><img src="/images/http_upload_01.png" alt="raw格式的请求体"><br>更加直观的webForms格式查看该请求的结构如下<img src="/images/http_upload_02.png" alt="webForms格式的请求体"><br><strong>如果使用其他语言或者HTTP请求请求库，请自行按照上述方法进行请求的构造</strong></li>
+</ol>
+</blockquote>
+<h1 id="原因剖析"><a href="#原因剖析" class="headerlink" title="原因剖析"></a>原因剖析</h1><p>先进的HTTP请求库如requests在构造请求的时候会根据post的不同参数自行构造Content-Type，因此平时根本没有注意；<br>在写业务时遇到该问题，也没能沉下心好好试验一下，总想网上找篇文章一抄了之解决问题。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/05/29/TODO-LIST/" rel="prev" title="TODO LIST">
+                  <i class="fa fa-chevron-left"></i> TODO LIST
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/05/11/devops/devops_toolchain_integration/" rel="next" title="DevOps Toolchain Integration Setup">
+                  DevOps Toolchain Integration Setup <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Roy Lee</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
