@@ -196,7 +196,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-05-18 08:39:54" itemprop="dateModified" datetime="2023-05-18T08:39:54+08:00">2023-05-18</time>
+      <time title="修改时间：2023-05-20 10:19:35" itemprop="dateModified" datetime="2023-05-20T10:19:35+08:00">2023-05-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -218,12 +218,23 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>在安装好<a href="https://gou7ma7.github.io/2023/05/11/devops/Kubernetes/">k8s集群</a>之后，就该往上面部署应用。</p>
-<h1 id="部署并访问-Bookinfo"><a href="#部署并访问-Bookinfo" class="headerlink" title="部署并访问 Bookinfo"></a>部署并访问 Bookinfo</h1><h2 id="Enable-KubeSphere-服务网格"><a href="#Enable-KubeSphere-服务网格" class="headerlink" title="Enable KubeSphere 服务网格"></a>Enable KubeSphere 服务网格</h2><p>还是使用<a target="_blank" rel="noopener" href="https://www.kubesphere.io/zh/docs/v3.3/pluggable-components/service-mesh/">cluster-configuration.yaml</a>一键安装</p>
-<h2 id="链路追踪与设置网关"><a href="#链路追踪与设置网关" class="headerlink" title="链路追踪与设置网关"></a>链路追踪与设置网关</h2><p>KubeSphere 项目中的网关是一个 NGINX Ingress 控制器：(项目网关)[<a target="_blank" rel="noopener" href="https://www.kubesphere.io/zh/docs/v3.3/project-administration/project-gateway/#%e8%ae%be%e7%bd%ae%e7%bd%91%e5%85%b3]%E3%80%82">https://www.kubesphere.io/zh/docs/v3.3/project-administration/project-gateway/#%e8%ae%be%e7%bd%ae%e7%bd%91%e5%85%b3]。</a></p>
-<p>KubeSphere 提供： 1. 项目范围的网关； 2. 集群范围的网关（所有项目都能享受）。</p>
-<p>我们这里学习1（KubeSphere项目 对应namespace的概念）,说白了底层就是一个Nginx，开启之后以从外部访问服务和路由。</p>
-<h1 id="节点外的机器无法访问服务"><a href="#节点外的机器无法访问服务" class="headerlink" title="节点外的机器无法访问服务"></a>节点外的机器无法访问服务</h1>
+          <h1 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h1><p><a href="https://gou7ma7.github.io/2023/05/11/devops/Kubernetes/">可用的外部可访问的k8s集群</a></p>
+<h1 id="部署并访问-Bookinfo"><a href="#部署并访问-Bookinfo" class="headerlink" title="部署并访问 Bookinfo"></a>部署并访问 Bookinfo</h1><h2 id="开启网关"><a href="#开启网关" class="headerlink" title="开启网关"></a>开启网关</h2><p>在依赖中我们开启了集群网关，提供了外部访问KubeSphere整个集群的入口。</p>
+<!-- 
+而我们这里需要开启的是(项目网关)[https://www.kubesphere.io/zh/docs/v3.3/project-administration/project-gateway/#%e8%ae%be%e7%bd%ae%e7%bd%91%e5%85%b3]，提供外部访问Bookinfo这个应用的入口。
+
+        KubeSphere 项目中的网关是一个 NGINX Ingress 控制器，KubeSphere 内置的用于 HTTP 负载均衡的机制称为应用路由，它定义了从外部到集群服务的连接规则。
+
+之前我们开启了集群网关，这里发现上述链接教程中的项目里面的网关设置无法使用； -->
+
+<p>因为如果同时存在集群网关和项目网关，项目网关禁用后无法再次启用。建议仅使用集群网关或仅使用项目网关。</p>
+<!-- 
+为了验证教程，因此先切换回admin账号关闭集群网关，然后开启项目网关。 -->
+
+<p>由于开启了集群网关，发现创建出项目之后已经自动绑定到集群网关上，因此不做额外设置。</p>
+<h2 id="创建-DevOps-项目"><a href="#创建-DevOps-项目" class="headerlink" title="创建 DevOps 项目"></a>创建 DevOps 项目</h2><p>(步骤 5：创建 DevOps 项目)[<a target="_blank" rel="noopener" href="https://www.kubesphere.io/zh/docs/v3.3/quick-start/create-workspace-and-project/]">https://www.kubesphere.io/zh/docs/v3.3/quick-start/create-workspace-and-project/]</a></p>
+<p>是时候体验一下全家桶DevOps的区别了。</p>
+
       
     </div>
 
@@ -466,7 +477,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-05-16 09:56:21" itemprop="dateModified" datetime="2023-05-16T09:56:21+08:00">2023-05-16</time>
+      <time title="修改时间：2023-05-20 21:44:32" itemprop="dateModified" datetime="2023-05-20T21:44:32+08:00">2023-05-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
