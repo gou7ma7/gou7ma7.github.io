@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"gou7ma7.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="依赖可用的外部可访问的k8s集群 部署并访问 Bookinfo开启网关在依赖中我们开启了集群网关，提供了外部访问KubeSphere整个集群的入口。   因为如果同时存在集群网关和项目网关，项目网关禁用后无法再次启用。建议仅使用集群网关或仅使用项目网关。   由于开启了集群网关，发现创建出项目之后已经自动绑定到集群网关上，因此不做额外设置。 创建 DevOps 项目(步骤 5：创建 DevOps">
+    <meta name="description" content="依赖可用的外部可访问的k8s集群 部署并访问 Bookinfo    一键部署应用、外部访问、升级发版  在依赖中我们开启了集群网关，提供了外部访问KubeSphere整个集群的入口。 因为如果同时存在集群网关和项目网关，项目网关禁用后无法再次启用。按照依赖中教程配置的集群网关，无法访问Bookinfo这个应用，试用各种IP地址 + 端口均不行。 因此为了学习本章节内容，切换回admin账号关闭集">
 <meta property="og:type" content="article">
-<meta property="og:title" content="K8s App Setup">
+<meta property="og:title" content="K8s App Setup： 网关与访问、应用发布">
 <meta property="og:url" content="https://gou7ma7.github.io/2023/05/16/devops/K8s-App-Setup/index.html">
 <meta property="og:site_name" content="业精于勤荒于嬉">
-<meta property="og:description" content="依赖可用的外部可访问的k8s集群 部署并访问 Bookinfo开启网关在依赖中我们开启了集群网关，提供了外部访问KubeSphere整个集群的入口。   因为如果同时存在集群网关和项目网关，项目网关禁用后无法再次启用。建议仅使用集群网关或仅使用项目网关。   由于开启了集群网关，发现创建出项目之后已经自动绑定到集群网关上，因此不做额外设置。 创建 DevOps 项目(步骤 5：创建 DevOps">
+<meta property="og:description" content="依赖可用的外部可访问的k8s集群 部署并访问 Bookinfo    一键部署应用、外部访问、升级发版  在依赖中我们开启了集群网关，提供了外部访问KubeSphere整个集群的入口。 因为如果同时存在集群网关和项目网关，项目网关禁用后无法再次启用。按照依赖中教程配置的集群网关，无法访问Bookinfo这个应用，试用各种IP地址 + 端口均不行。 因此为了学习本章节内容，切换回admin账号关闭集">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-05-16T13:00:10.000Z">
-<meta property="article:modified_time" content="2023-05-20T02:19:35.521Z">
+<meta property="article:modified_time" content="2023-05-22T11:35:20.024Z">
 <meta property="article:author" content="Roy Lee">
 <meta property="article:tag" content="setup">
 <meta name="twitter:card" content="summary">
@@ -37,10 +37,10 @@
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://gou7ma7.github.io/2023/05/16/devops/K8s-App-Setup/","path":"2023/05/16/devops/K8s-App-Setup/","title":"K8s App Setup"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://gou7ma7.github.io/2023/05/16/devops/K8s-App-Setup/","path":"2023/05/16/devops/K8s-App-Setup/","title":"K8s App Setup： 网关与访问、应用发布"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>K8s App Setup | 业精于勤荒于嬉</title>
+<title>K8s App Setup： 网关与访问、应用发布 | 业精于勤荒于嬉</title>
   
 
 
@@ -112,7 +112,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96"><span class="nav-number">1.</span> <span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%B9%B6%E8%AE%BF%E9%97%AE-Bookinfo"><span class="nav-number">2.</span> <span class="nav-text">部署并访问 Bookinfo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%90%AF%E7%BD%91%E5%85%B3"><span class="nav-number">2.1.</span> <span class="nav-text">开启网关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-DevOps-%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.2.</span> <span class="nav-text">创建 DevOps 项目</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96"><span class="nav-number">1.</span> <span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%B9%B6%E8%AE%BF%E9%97%AE-Bookinfo"><span class="nav-number">2.</span> <span class="nav-text">部署并访问 Bookinfo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Istio"><span class="nav-number">2.1.</span> <span class="nav-text">Istio</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%B9%B6%E9%83%A8%E7%BD%B2-WordPress"><span class="nav-number">3.</span> <span class="nav-text">创建并部署 WordPress</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E7%AB%AF%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93%E3%80%81%E6%8C%82%E8%BD%BD%E5%8D%B7"><span class="nav-number">3.1.</span> <span class="nav-text">后端、数据库、挂载卷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E3%80%81%E6%8C%82%E8%BD%BD%E5%8D%B7"><span class="nav-number">3.2.</span> <span class="nav-text">前端、挂载卷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E8%AE%BE%E7%BD%AE%E4%B8%8E%E5%A4%96%E9%83%A8%E8%AE%BF%E9%97%AE"><span class="nav-number">3.3.</span> <span class="nav-text">路由设置与外部访问</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enjoy-It"><span class="nav-number">4.</span> <span class="nav-text">Enjoy It</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -178,12 +178,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="K8s App Setup | 业精于勤荒于嬉">
+      <meta itemprop="name" content="K8s App Setup： 网关与访问、应用发布 | 业精于勤荒于嬉">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          K8s App Setup
+          K8s App Setup： 网关与访问、应用发布
         </h1>
 
         <div class="post-meta-container">
@@ -201,7 +201,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-05-20 10:19:35" itemprop="dateModified" datetime="2023-05-20T10:19:35+08:00">2023-05-20</time>
+      <time title="修改时间：2023-05-22 19:35:20" itemprop="dateModified" datetime="2023-05-22T19:35:20+08:00">2023-05-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -223,21 +223,33 @@
     
     
     <div class="post-body" itemprop="articleBody"><h1 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h1><p><a href="https://gou7ma7.github.io/2023/05/11/devops/Kubernetes/">可用的外部可访问的k8s集群</a></p>
-<h1 id="部署并访问-Bookinfo"><a href="#部署并访问-Bookinfo" class="headerlink" title="部署并访问 Bookinfo"></a>部署并访问 Bookinfo</h1><h2 id="开启网关"><a href="#开启网关" class="headerlink" title="开启网关"></a>开启网关</h2><p>在依赖中我们开启了集群网关，提供了外部访问KubeSphere整个集群的入口。</p>
-<!-- 
-而我们这里需要开启的是(项目网关)[https://www.kubesphere.io/zh/docs/v3.3/project-administration/project-gateway/#%e8%ae%be%e7%bd%ae%e7%bd%91%e5%85%b3]，提供外部访问Bookinfo这个应用的入口。
-
-        KubeSphere 项目中的网关是一个 NGINX Ingress 控制器，KubeSphere 内置的用于 HTTP 负载均衡的机制称为应用路由，它定义了从外部到集群服务的连接规则。
-
-之前我们开启了集群网关，这里发现上述链接教程中的项目里面的网关设置无法使用； -->
-
-<p>因为如果同时存在集群网关和项目网关，项目网关禁用后无法再次启用。建议仅使用集群网关或仅使用项目网关。</p>
-<!-- 
-为了验证教程，因此先切换回admin账号关闭集群网关，然后开启项目网关。 -->
-
-<p>由于开启了集群网关，发现创建出项目之后已经自动绑定到集群网关上，因此不做额外设置。</p>
-<h2 id="创建-DevOps-项目"><a href="#创建-DevOps-项目" class="headerlink" title="创建 DevOps 项目"></a>创建 DevOps 项目</h2><p>(步骤 5：创建 DevOps 项目)[<a target="_blank" rel="noopener" href="https://www.kubesphere.io/zh/docs/v3.3/quick-start/create-workspace-and-project/]">https://www.kubesphere.io/zh/docs/v3.3/quick-start/create-workspace-and-project/]</a></p>
-<p>是时候体验一下全家桶DevOps的区别了。</p>
+<h1 id="部署并访问-Bookinfo"><a href="#部署并访问-Bookinfo" class="headerlink" title="部署并访问 Bookinfo"></a>部署并访问 Bookinfo</h1><pre><code>    一键部署应用、外部访问、升级发版
+</code></pre>
+<p>在依赖中我们开启了集群网关，提供了外部访问KubeSphere整个集群的入口。</p>
+<p>因为如果同时存在集群网关和项目网关，项目网关禁用后无法再次启用。按照依赖中教程配置的集群网关，无法访问Bookinfo这个应用，试用各种IP地址 + 端口均不行。</p>
+<p>因此为了学习本章节内容，切换回admin账号关闭集群网关，然后开启(项目网关)[<a target="_blank" rel="noopener" href="https://www.kubesphere.io/zh/docs/v3.3/project-administration/project-gateway/#%e8%ae%be%e7%bd%ae%e7%bd%91%e5%85%b3]%EF%BC%8C%E5%8D%95%E7%8B%AC%E6%8F%90%E4%BE%9B%E5%A4%96%E9%83%A8%E8%AE%BF%E9%97%AEBookinfo%E8%BF%99%E4%B8%AA%E5%BA%94%E7%94%A8%E7%9A%84%E5%85%A5%E5%8F%A3%E3%80%82">https://www.kubesphere.io/zh/docs/v3.3/project-administration/project-gateway/#%e8%ae%be%e7%bd%ae%e7%bd%91%e5%85%b3]，单独提供外部访问Bookinfo这个应用的入口。</a></p>
+<pre><code>    KubeSphere 项目中的网关是一个 NGINX Ingress 控制器，KubeSphere 内置的用于 HTTP 负载均衡的机制称为应用路由，它定义了从外部到集群服务的连接规则。
+</code></pre>
+<p>一个应用可以包含多个微服务，本段直接部署一个配置好的应用。</p>
+<p>(部署)[<a target="_blank" rel="noopener" href="https://www.kubesphere.io/zh/docs/v3.3/quick-start/deploy-bookinfo-to-k8s/]%E5%8F%AA%E9%9C%80%E8%A6%81%E6%8C%89%E7%85%A7%E6%95%99%E7%A8%8B%E7%82%B9%E9%80%89%E5%8D%B3%E5%8F%AF%E5%AE%8C%E6%88%90%E3%80%82">https://www.kubesphere.io/zh/docs/v3.3/quick-start/deploy-bookinfo-to-k8s/]只需要按照教程点选即可完成。</a></p>
+<p>点击教程中的“访问服务”按钮便直接访问预设好的诸如<code>productpage.demo-project.192.168.0.2.nip.io:30981</code>地址，如果此地址访问不通，请尝试关闭集群网关之后单独重新配置项目网关。</p>
+<h2 id="Istio"><a href="#Istio" class="headerlink" title="Istio"></a>Istio</h2><p>Bookinfo 应用中的几个微服务是由不同的语言编写的。 这些服务对 Istio 并无依赖，但是构成了一个有代表性的服务网格的例子：它由多个服务、多个语言构成，并且 reviews 服务具有多个版本。</p>
+<p>要在 Istio 中运行这一应用，无需对应用自身做出任何改变。 您只要简单的在 Istio 环境中对服务进行配置和运行，具体一点说就是把 Envoy sidecar 注入到每个服务之中。 </p>
+<p><a target="_blank" rel="noopener" href="https://istio.io/latest/zh/docs/examples/bookinfo/">最终的部署</a> 为 外部Requests -&gt; Ingress Envoy -&gt; [Service Envoy -&gt; Pod] -&gt; [Service Envoy -&gt; Pod]</p>
+<p>所有的微服务都和 Envoy sidecar 集成在一起，被集成服务所有的出入流量都被 sidecar 所劫持，这样就为外部控制准备了所需的 Hook。</p>
+<h1 id="创建并部署-WordPress"><a href="#创建并部署-WordPress" class="headerlink" title="创建并部署 WordPress"></a>创建并部署 WordPress</h1><pre><code>    Secret、持久卷声明、手动部署**有状态服务**应用
+</code></pre>
+<p>一个应用可以包含多个微服务，本段手动部署部署其中的每一个服务，在手动开启外部访问。</p>
+<p><a target="_blank" rel="noopener" href="https://www.kubesphere.io/zh/docs/v3.3/quick-start/wordpress-deployment/">https://www.kubesphere.io/zh/docs/v3.3/quick-start/wordpress-deployment/</a></p>
+<p>根据上述文档进行如下操作</p>
+<h2 id="后端、数据库、挂载卷"><a href="#后端、数据库、挂载卷" class="headerlink" title="后端、数据库、挂载卷"></a>后端、数据库、挂载卷</h2><p>添加一个mysql:5.6镜像作为后端组件，因为这个服务使用到了数据库，所以把他设置成一个有状态服务；</p>
+<h2 id="前端、挂载卷"><a href="#前端、挂载卷" class="headerlink" title="前端、挂载卷"></a>前端、挂载卷</h2><p>添加一个wordpress:4.8-apache镜像前端组件；</p>
+<p>可以发现这两个服务挂载卷的持久卷声明都是同一个，但是挂载到了不同的挂载路径，也就是对于服务来说，我是自己去找的我的文件路径（每个服务各自找自己的），但是最终承载的数据其实是同一个；</p>
+<p>换句话来说，我可以用同一个持久卷声明去不同的服务上作为各自的挂载路径，这样就可以实现不同的服务共享数据。</p>
+<h2 id="路由设置与外部访问"><a href="#路由设置与外部访问" class="headerlink" title="路由设置与外部访问"></a>路由设置与外部访问</h2><p>在本文中，路由设置不用专门设置，直接按照教程下一步就行。</p>
+<p>在验证pod ready之后，就配置集群外部访问，核心做法就是应用负载 &gt; 服务，选择编辑外部访问。（这里我第一次配置的时候也十分不解，多操作几次就好）。</p>
+<p>然后教程中提到访问的<code>&#123;Node IP&#125;:&#123;NodePort&#125;</code>，前者可以就当成Master Node IP，后者就是上一步配置之后显示在服务里面的端口。</p>
+<h1 id="Enjoy-It"><a href="#Enjoy-It" class="headerlink" title="Enjoy It"></a>Enjoy It</h1><p>至此，我们就成功的完成了自动和手动的部署应用，如果之前是一位纯业务开发的话，到这里就可以从“我的机器上本地部署”升级到“远端服务器部署”!</p>
 
     </div>
 
