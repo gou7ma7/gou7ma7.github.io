@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"gou7ma7.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="背景早在成都公司，就听闻 Go 大名， 当时业务后台正在从 Java 逐步重写过来，当时还经常在技术周会上听到大家的分享学习心得。当时的领导说的，不要觉得自己学的时候有多聪明而洋洋得意，是因为 Go 的设计者足够优秀，才让这个语言如此容易上手。 学习路线官方文档看一遍https:&#x2F;&#x2F;go.dev&#x2F;learn&#x2F;# example 看一遍https:&#x2F;&#x2F;go.dev&#x2F;tour&#x2F;welcome&#x2F;1 目标">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初学 Goland">
+<meta property="og:url" content="https://gou7ma7.github.io/2023/05/19/goland/setup/index.html">
+<meta property="og:site_name" content="业精于勤荒于嬉">
+<meta property="og:description" content="背景早在成都公司，就听闻 Go 大名， 当时业务后台正在从 Java 逐步重写过来，当时还经常在技术周会上听到大家的分享学习心得。当时的领导说的，不要觉得自己学的时候有多聪明而洋洋得意，是因为 Go 的设计者足够优秀，才让这个语言如此容易上手。 学习路线官方文档看一遍https:&#x2F;&#x2F;go.dev&#x2F;learn&#x2F;# example 看一遍https:&#x2F;&#x2F;go.dev&#x2F;tour&#x2F;welcome&#x2F;1 目标">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-19T13:00:10.000Z">
+<meta property="article:modified_time" content="2024-05-19T09:55:12.433Z">
+<meta property="article:author" content="Roy Lee">
+<meta property="article:tag" content="setup">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://gou7ma7.github.io/2023/05/19/goland/setup/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://gou7ma7.github.io/2023/05/19/goland/setup/","path":"2023/05/19/goland/setup/","title":"初学 Goland"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>初学 Goland | 业精于勤荒于嬉</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">业精于勤荒于嬉</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-github"><a href="https://github.com/gou7ma7" rel="section" target="_blank"><i class="fa fa-user fa-fw"></i>github</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-todo"><a href="https://gou7ma7.github.io/2022/05/29/TODO-LIST/" rel="section"><i class="fa fa-calendar fa-fw"></i>todo</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF"><span class="nav-number">2.</span> <span class="nav-text">学习路线</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87"><span class="nav-number">3.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%85%E7%AE%A1%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">包管理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Coding"><span class="nav-number">5.</span> <span class="nav-text">Coding</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-vscode-goland-plugin-ect"><span class="nav-number">5.1.</span> <span class="nav-text">安装 vscode, goland, plugin ect</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Delve-%E8%B0%83%E8%AF%95%E5%99%A8"><span class="nav-number">5.2.</span> <span class="nav-text">安装 Delve 调试器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Build-Error-go-build-o-%E2%80%A6"><span class="nav-number">5.3.</span> <span class="nav-text">Build Error: go build -o …</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rosetta-%E7%AC%91%E6%AD%BB%E4%BA%86%EF%BC%8C-m2-%E4%B8%8D%E5%85%BC%E5%AE%B9"><span class="nav-number">5.4.</span> <span class="nav-text">Rosetta 笑死了， m2 不兼容</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%90%E6%9E%9C"><span class="nav-number">6.</span> <span class="nav-text">成果</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82"><span class="nav-number">6.1.</span> <span class="nav-text">请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90"><span class="nav-number">6.2.</span> <span class="nav-text">解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B9%E6%88%90-gin"><span class="nav-number">6.3.</span> <span class="nav-text">改成 gin</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">7.</span> <span class="nav-text">结语</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Roy Lee"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Roy Lee</p>
+  <div class="site-description" itemprop="description">行成于思而毁于随</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://gou7ma7.github.io/2023/05/19/goland/setup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Roy Lee">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="业精于勤荒于嬉">
+      <meta itemprop="description" content="行成于思而毁于随">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="初学 Goland | 业精于勤荒于嬉">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          初学 Goland
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-05-19 21:00:10" itemprop="dateCreated datePublished" datetime="2023-05-19T21:00:10+08:00">2023-05-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-05-19 17:55:12" itemprop="dateModified" datetime="2024-05-19T17:55:12+08:00">2024-05-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>早在成都公司，就听闻 Go 大名， 当时业务后台正在从 Java 逐步重写过来，当时还经常在技术周会上听到大家的分享学习心得。<br>当时的领导说的，不要觉得自己学的时候有多聪明而洋洋得意，是因为 Go 的设计者足够优秀，才让这个语言如此容易上手。</p>
+<h1 id="学习路线"><a href="#学习路线" class="headerlink" title="学习路线"></a>学习路线</h1><p>官方文档看一遍<br><a target="_blank" rel="noopener" href="https://go.dev/learn/#">https://go.dev/learn/#</a></p>
+<p>example 看一遍<br><a target="_blank" rel="noopener" href="https://go.dev/tour/welcome/1">https://go.dev/tour/welcome/1</a></p>
+<h1 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h1><p>写一个 restful 的 api，实现前端传入 cmd 后端执行。（比如 pwd, ls 那种）</p>
+<span id="more"></span>
+
+<h1 id="包管理"><a href="#包管理" class="headerlink" title="包管理"></a>包管理</h1><p>看到 go 的包是直接放在代码托管平台，而不是传统的包管理系统（如 Python 的 PyPI）， 很有意思，问了 chatGPT，主要原因就是灵活和间接。</p>
+<h1 id="Coding"><a href="#Coding" class="headerlink" title="Coding"></a>Coding</h1><p>goland + vscode</p>
+<h2 id="安装-vscode-goland-plugin-ect"><a href="#安装-vscode-goland-plugin-ect" class="headerlink" title="安装 vscode, goland, plugin ect"></a>安装 vscode, goland, plugin ect</h2><p>略</p>
+<h2 id="安装-Delve-调试器"><a href="#安装-Delve-调试器" class="headerlink" title="安装 Delve 调试器"></a>安装 Delve 调试器</h2><p>为了能在 vscode 中轻松愉快地 run and debug go， 需要安装调试器先。</p>
+<p><code>go install github.com/go-delve/delve/cmd/dlv@latest</code></p>
+<p>装不上请咨询 chatGPT</p>
+<h2 id="Build-Error-go-build-o-…"><a href="#Build-Error-go-build-o-…" class="headerlink" title="Build Error: go build -o …"></a>Build Error: go build -o …</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Starting: /Users/admin/go/bin/dlv dap --listen=127.0.0.1:49829 --log-dest=3 from /Users/admin/code/go_test</span><br><span class="line">DAP server listening at: 127.0.0.1:49829</span><br><span class="line">Build Error: go build -o /Users/admin/code/go_test/__debug_bin1492456118 -gcflags all=-N -l .</span><br><span class="line">go: go.mod file not found in current directory or any parent directory; see &#x27;go help modules&#x27; (exit status 1)</span><br></pre></td></tr></table></figure>
+
+<p>可以，果然一开始启动就有问题，在见多识广的 chatGPT 分析下，都不用手动挡查资料了。</p>
+<h2 id="Rosetta-笑死了，-m2-不兼容"><a href="#Rosetta-笑死了，-m2-不兼容" class="headerlink" title="Rosetta 笑死了， m2 不兼容"></a>Rosetta 笑死了， m2 不兼容</h2><p>我明明用的 brew 装的，就离谱，不过我还有 Linux 机器，重新装一下环境吧。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Failed to launch: could not launch process: can not run under Rosetta, check that the installed build of Go is right for your CPU architecture</span><br></pre></td></tr></table></figure>
+
+<h1 id="成果"><a href="#成果" class="headerlink" title="成果"></a>成果</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> ( </span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;net/http&quot;</span></span><br><span class="line">	<span class="string">&quot;os/exec&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">cmdHandler</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 获取请求中的命令参数</span></span><br><span class="line">	command := r.URL.Query().Get(<span class="string">&quot;cmdString&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> command == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">		http.Error(w, <span class="string">&quot;Missing cmdString parameter&quot;</span>, http.StatusBadRequest)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 执行命令</span></span><br><span class="line">	out, err := exec.Command(command).Output()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		http.Error(w, fmt.Sprintf(<span class="string">&quot;Error executing command: %s&quot;</span>, err), http.StatusInternalServerError)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 输出命令结果</span></span><br><span class="line">	w.Write(out)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	http.HandleFunc(<span class="string">&quot;/cmd&quot;</span>, cmdHandler)</span><br><span class="line">	fmt.Println(<span class="string">&quot;Starting server on :8080&quot;</span>)</span><br><span class="line">	log.Fatal(http.ListenAndServe(<span class="string">&quot;:8080&quot;</span>, <span class="literal">nil</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="请求"><a href="#请求" class="headerlink" title="请求"></a>请求</h2><p><a target="_blank" rel="noopener" href="http://localhost:8080/cmd?cmdString=ls">http://localhost:8080/cmd?cmdString=ls</a><br>返回<br>go.mod<br>main.go</p>
+<p><a target="_blank" rel="noopener" href="http://localhost:8080/cmd?cmdString=pwd">http://localhost:8080/cmd?cmdString=pwd</a><br>返回<br>&#x2F;Users&#x2F;admin&#x2F;Code&#x2F;go_test</p>
+<p><a target="_blank" rel="noopener" href="http://localhost:8080/cmd?cmdString=ls%20-la">http://localhost:8080/cmd?cmdString=ls%20-la</a><br>返回<br>Error executing command: exec: “ls -la”: executable file not found in $PATH<br>（哈哈，没想到吧，我也没想到）</p>
+<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><p>最后想了一下，不部署前端了，直接拿 url 中的 query 执行得了。</p>
+<ul>
+<li><p>用了标准库 net&#x2F;http ，这个看起来应该类似 Python 中的 http.server (我从来没有用过这个)，通过 ListenAndServe 监听端口， HandleFunc 注册路径， 最后的 nil 是 go 的传统艺能 零值；</p>
+</li>
+<li><p>cmdHandler 函数中，通过 r.URL.Query().Get() 去拿请求 url 中的参数；</p>
+</li>
+<li><p>通过 exec 函数去执行 cmdString</p>
+<h2 id="改成-gin"><a href="#改成-gin" class="headerlink" title="改成 gin"></a>改成 gin</h2><p>整个现代一点的框架<br><code>go get -u github.com/gin-gonic/gin</code></p>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">    <span class="string">&quot;os/exec&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> allowedCommands = <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>&#123;</span><br><span class="line">    <span class="string">&quot;ls&quot;</span>:   <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;date&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    r.GET(<span class="string">&quot;/cmd&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        command := c.Query(<span class="string">&quot;cmd&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> command == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">            c.JSON(<span class="number">400</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;Missing cmd parameter&quot;</span>&#125;)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> !allowedCommands[command] &#123;</span><br><span class="line">            c.JSON(<span class="number">403</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;Command not allowed&quot;</span>&#125;)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        out, err := exec.Command(command).Output()</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            c.JSON(<span class="number">500</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: fmt.Sprintf(<span class="string">&quot;Error executing command: %s&quot;</span>, err)&#125;)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        c.String(<span class="number">200</span>, <span class="type">string</span>(out))</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    r.Run(<span class="string">&quot;:8080&quot;</span>) <span class="comment">// 启动服务器并监听在 8080 端口</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看得出来，格式上和 Python 的 Flask 基本上没啥区别了。</p>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>至此，用来写业务的 go 算是勉强上手了，可以看得出来设计得非常简约。<br>但是更多的特性，比如 毕业之后就再没用过 <strong>指针</strong>， <strong>Goroutines</strong> 和 <strong>Channels</strong>，还有 和 JS 一样没用类，所以设计 <strong>embedding</strong> 的用法，如果有这个计划，前面的区域，以后再来探索吧！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/setup/" rel="tag"># setup</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/05/16/devops/K8s-App-Setup/" rel="prev" title="K8s App Setup">
+                  <i class="fa fa-chevron-left"></i> K8s App Setup
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/05/18/devops/Kubernetes/" rel="next" title="Kubernetes Setup in Local Physical Servers">
+                  Kubernetes Setup in Local Physical Servers <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Roy Lee</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
