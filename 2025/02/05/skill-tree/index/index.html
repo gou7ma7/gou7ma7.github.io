@@ -1,0 +1,1101 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Roy Lee">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第三次被裁员后，经历了几十场面试后，需要深入思考自己应该如何立足这个行业。AI 相关的岗位要求越来越多，看下来主要分为部署 AI 产品本身，或者使用 AI 优化传统 DevOps 流程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 后端工程师 + DevOps 技能树 -&gt; AIOps">
+<meta property="og:url" content="https://gou7ma7.github.io/2025/02/05/skill-tree/index/index.html">
+<meta property="og:site_name" content="DevOps -&gt; AIOps">
+<meta property="og:description" content="第三次被裁员后，经历了几十场面试后，需要深入思考自己应该如何立足这个行业。AI 相关的岗位要求越来越多，看下来主要分为部署 AI 产品本身，或者使用 AI 优化传统 DevOps 流程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-02-05T02:30:37.000Z">
+<meta property="article:modified_time" content="2025-02-15T02:19:20.845Z">
+<meta property="article:author" content="Roy Lee">
+<meta property="article:tag" content="Skill">
+<meta property="article:tag" content="AIOps">
+<meta property="article:tag" content="DevOps">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Python 后端工程师 + DevOps 技能树 -&gt; AIOps - DevOps -&gt; AIOps</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"gou7ma7.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/gou7ma7/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/images/skill-tree.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Python 后端工程师 + DevOps 技能树 -&gt; AIOps"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-05 10:30" pubdate>
+          2025年2月5日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Python 后端工程师 + DevOps 技能树 -&gt; AIOps</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>第三次被裁员后，经历了几十场面试后，需要深入思考自己应该如何立足这个行业。<br>AI 相关的岗位要求越来越多，看下来主要分为部署 AI 产品本身，或者使用 AI 优化传统 DevOps 流程。</p>
+<span id="more"></span>
+<p>刚开始面试的时候，我还在以“过往的业务经历中没有项目实践一笔带过”，并且想着应该夯实基础，而不是追赶潮流。</p>
+<p>直到面某全球一流公司时，前面技术都面秒过，却在领导面的时候，被质疑“不要讲 AI 在你的副业中的落地，我想听到的是你对我们需要的新事物的学习和整合”代表的岗位需要的 AI 相关的能力不足。</p>
+<p>这对我造成了极大冲击，总是想找个不是整天光写业务的公司，但真的问开放问题的时候又没准备好。<br>面试本身是对这个岗位要求的匹配，不只是能力的筛选，平时总是说到要跟上时代不能被淘汰，到了这个时候又搪塞以“工程上没用过”。</p>
+<p>不能这样了，不管是以后的面试，还是平时学习，闭门造车始终是不行的。<br>不得不删除之前写了 4年 的 Blog，重新开始打卡学习，看来也能找回刚学习的时候那种新鲜感了。</p>
+<div id="skillTree" style="width: 100%;height:800px;"></div>
+<div id="zoomControls" style="text-align: center; margin: 10px;">
+    <button onclick="zoom(1.2)" style="margin: 0 10px;">+</button>
+    <button onclick="zoom(0.8)" style="margin: 0 10px;">-</button>
+    <button onclick="resetZoom()" style="margin: 0 10px;">Reset</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script src="/js/skill-tree-config.js"></script>
+<script src="/js/skill-tree.js"></script>
+
+<script>
+    function embedChartAsImage() {
+        var chart = echarts.getInstanceByDom(document.getElementById('skillTree'));
+        var imgData = chart.getDataURL({
+            type: 'png',
+            pixelRatio: 2,
+            backgroundColor: '#fff'
+        });
+
+        // Create an image element and set its source to the generated PNG data
+        var imgElement = document.createElement('img');
+        imgElement.src = imgData;
+        imgElement.alt = 'Skill Tree';
+
+        // Append the image to the document
+        document.getElementById('skillTreeContainer').appendChild(imgElement);
+    }
+
+    // Delay the rendering to ensure the chart is fully loaded
+    window.onload = function() {
+        setTimeout(embedChartAsImage, 2000); // Delay of 2000 milliseconds (2 seconds)
+    };
+</script>
+<div id="skillTreeContainer" style="display: none;"></div>
+
+<h1 id="详细学习路线"><a href="#详细学习路线" class="headerlink" title="详细学习路线"></a>详细学习路线</h1><h2 id="一、AI-在-DevOps-中的应用（AiOps）"><a href="#一、AI-在-DevOps-中的应用（AiOps）" class="headerlink" title="一、AI 在 DevOps 中的应用（AiOps）"></a>一、AI 在 DevOps 中的应用（AiOps）</h2><h3 id="1-AI-辅助开发"><a href="#1-AI-辅助开发" class="headerlink" title="1. AI 辅助开发"></a>1. AI 辅助开发</h3><ul>
+<li><strong>[ ] AI 代码助手</strong><ul>
+<li><input disabled="" type="checkbox"> GitHub Copilot 使用与优化 [参考：<a target="_blank" rel="noopener" href="https://docs.github.com/en/copilot]">https://docs.github.com/en/copilot]</a></li>
+<li><input disabled="" type="checkbox"> 代码生成质量评估 [参考：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2202.13169]">https://arxiv.org/abs/2202.13169]</a></li>
+<li><input disabled="" type="checkbox"> 安全漏洞检测 [参考：<a target="_blank" rel="noopener" href="https://github.com/features/security/code-scanning]">https://github.com/features/security/code-scanning]</a></li>
+</ul>
+</li>
+<li><strong>[ ] AI 文档助手</strong><ul>
+<li><input disabled="" type="checkbox"> RAG（Retrieval-Augmented Generation）技术 [参考：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2005.11401]">https://arxiv.org/abs/2005.11401]</a></li>
+<li><input disabled="" type="checkbox"> 知识库构建与维护 [参考：<a target="_blank" rel="noopener" href="https://www.pinecone.io/learn/rag/]">https://www.pinecone.io/learn/rag/]</a></li>
+<li><input disabled="" type="checkbox"> 文档自动生成与更新 [参考：<a target="_blank" rel="noopener" href="https://github.com/microsoft/DeepSpeed]">https://github.com/microsoft/DeepSpeed]</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="2-AI-增强-CI-CD"><a href="#2-AI-增强-CI-CD" class="headerlink" title="2. AI 增强 CI&#x2F;CD"></a>2. AI 增强 CI&#x2F;CD</h3><ul>
+<li><strong>[ ] AI 替代传统 CI 工具</strong><ul>
+<li><input disabled="" type="checkbox"> AI-agent 替代 Jenkins 的可行性研究 [参考：<a target="_blank" rel="noopener" href="https://www.jenkins.io/doc/book/ai/]">https://www.jenkins.io/doc/book/ai/]</a></li>
+<li><input disabled="" type="checkbox"> 智能构建优化（依赖分析、缓存策略） [参考：<a target="_blank" rel="noopener" href="https://github.com/GoogleContainerTools/kaniko]">https://github.com/GoogleContainerTools/kaniko]</a></li>
+<li><input disabled="" type="checkbox"> 自动测试用例生成 [参考：<a target="_blank" rel="noopener" href="https://github.com/microsoft/Codex-CI]">https://github.com/microsoft/Codex-CI]</a></li>
+</ul>
+</li>
+<li><strong>[ ] 智能部署</strong><ul>
+<li><input disabled="" type="checkbox"> 基于 AI 的部署策略优化 [参考：<a target="_blank" rel="noopener" href="https://www.kubeflow.org/]">https://www.kubeflow.org/]</a></li>
+<li><input disabled="" type="checkbox"> 自动回滚机制 [参考：<a target="_blank" rel="noopener" href="https://argo-cd.readthedocs.io/en/stable/]">https://argo-cd.readthedocs.io/en/stable/]</a></li>
+<li><input disabled="" type="checkbox"> 多环境配置管理 [参考：<a target="_blank" rel="noopener" href="https://www.terraform.io/]">https://www.terraform.io/]</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="3-AI-运维监控"><a href="#3-AI-运维监控" class="headerlink" title="3. AI 运维监控"></a>3. AI 运维监控</h3><ul>
+<li><strong>[ ] 智能告警</strong><ul>
+<li><input disabled="" type="checkbox"> 异常检测与根因分析 [参考：<a target="_blank" rel="noopener" href="https://prometheus.io/docs/alerting/latest/overview/]">https://prometheus.io/docs/alerting/latest/overview/]</a></li>
+<li><input disabled="" type="checkbox"> 告警降噪与聚合 [参考：<a target="_blank" rel="noopener" href="https://grafana.com/docs/grafana/latest/alerting/]">https://grafana.com/docs/grafana/latest/alerting/]</a></li>
+<li><input disabled="" type="checkbox"> 预测性维护 [参考：<a target="_blank" rel="noopener" href="https://www.splunk.com/en_us/blog/learn/predictive-maintenance.html]">https://www.splunk.com/en_us/blog/learn/predictive-maintenance.html]</a></li>
+</ul>
+</li>
+<li><strong>[ ] 日志分析</strong><ul>
+<li><input disabled="" type="checkbox"> 日志模式识别 [参考：<a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/machine-learning/current/ml-overview.html]">https://www.elastic.co/guide/en/machine-learning/current/ml-overview.html]</a></li>
+<li><input disabled="" type="checkbox"> 异常行为检测 [参考：<a target="_blank" rel="noopener" href="https://github.com/elastic/detection-rules]">https://github.com/elastic/detection-rules]</a></li>
+<li><input disabled="" type="checkbox"> 自动生成运维报告 [参考：<a target="_blank" rel="noopener" href="https://www.datadoghq.com/]">https://www.datadoghq.com/]</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="4-AI-基础设施管理"><a href="#4-AI-基础设施管理" class="headerlink" title="4. AI 基础设施管理"></a>4. AI 基础设施管理</h3><ul>
+<li><strong>[ ] 资源优化</strong><ul>
+<li><input disabled="" type="checkbox"> 自动扩缩容策略 [参考：<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/]">https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/]</a></li>
+<li><input disabled="" type="checkbox"> 成本优化建议 [参考：<a target="_blank" rel="noopener" href="https://cloud.google.com/recommender]">https://cloud.google.com/recommender]</a></li>
+<li><input disabled="" type="checkbox"> 资源利用率分析 [参考：<a target="_blank" rel="noopener" href="https://github.com/kubernetes-sigs/metrics-server]">https://github.com/kubernetes-sigs/metrics-server]</a></li>
+</ul>
+</li>
+<li><strong>[ ] 安全防护</strong><ul>
+<li><input disabled="" type="checkbox"> 异常流量检测 [参考：<a target="_blank" rel="noopener" href="https://www.crowdstrike.com/]">https://www.crowdstrike.com/]</a></li>
+<li><input disabled="" type="checkbox"> 容器运行时安全 [参考：<a target="_blank" rel="noopener" href="https://falco.org/]">https://falco.org/]</a></li>
+<li><input disabled="" type="checkbox"> 漏洞扫描与修复建议 [参考：<a target="_blank" rel="noopener" href="https://github.com/aquasecurity/trivy]">https://github.com/aquasecurity/trivy]</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="5-AI-协作与知识管理"><a href="#5-AI-协作与知识管理" class="headerlink" title="5. AI 协作与知识管理"></a>5. AI 协作与知识管理</h3><ul>
+<li><strong>[ ] ChatOps</strong><ul>
+<li><input disabled="" type="checkbox"> 基于 AI 的运维对话系统 [参考：<a target="_blank" rel="noopener" href="https://github.com/slackapi/python-slack-sdk]">https://github.com/slackapi/python-slack-sdk]</a></li>
+<li><input disabled="" type="checkbox"> 自然语言处理运维指令 [参考：<a target="_blank" rel="noopener" href="https://github.com/RasaHQ/rasa]">https://github.com/RasaHQ/rasa]</a></li>
+<li><input disabled="" type="checkbox"> 知识库自动更新 [参考：<a target="_blank" rel="noopener" href="https://github.com/facebookresearch/faiss]">https://github.com/facebookresearch/faiss]</a></li>
+</ul>
+</li>
+<li><strong>[ ] 团队协作</strong><ul>
+<li><input disabled="" type="checkbox"> 智能任务分配 [参考：<a target="_blank" rel="noopener" href="https://asana.com/]">https://asana.com/]</a></li>
+<li><input disabled="" type="checkbox"> 知识共享与传承 [参考：<a target="_blank" rel="noopener" href="https://www.notion.so/]">https://www.notion.so/]</a></li>
+<li><input disabled="" type="checkbox"> 自动化文档协作 [参考：<a target="_blank" rel="noopener" href="https://www.gitbook.com/]">https://www.gitbook.com/]</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="二、作为后端-工程化能力"><a href="#二、作为后端-工程化能力" class="headerlink" title="二、作为后端 工程化能力"></a>二、作为后端 工程化能力</h2><h3 id="1-Python-开发"><a href="#1-Python-开发" class="headerlink" title="1. Python 开发"></a>1. Python 开发</h3><h3 id="1-1-Python-深入学习-进度-40"><a href="#1-1-Python-深入学习-进度-40" class="headerlink" title="1.1 Python 深入学习 [进度: 40%]"></a>1.1 Python 深入学习 [进度: 40%]</h3><ul>
+<li><strong>[x] Python 基础</strong>（已完成语法学习）  </li>
+<li><strong>[ ] Flask&#x2F;Django 进阶</strong>  <ul>
+<li><input disabled="" type="checkbox"> RESTful API 设计（Swagger 文档化）  </li>
+<li><input disabled="" type="checkbox"> 认证系统（JWT&#x2F;OAuth2 集成）  </li>
+<li><input disabled="" type="checkbox"> 性能优化（gunicorn 多进程配置）</li>
+</ul>
+</li>
+<li><strong>[ ] 异步编程</strong>  <ul>
+<li><input disabled="" type="checkbox"> Celery 分布式任务队列  </li>
+<li><input disabled="" type="checkbox"> asyncio 协程应用</li>
+</ul>
+</li>
+<li><strong>[ ] 源码分析专题</strong>  <ul>
+<li><input disabled="" type="checkbox"> Flask 源码：HTTP 请求处理、路由机制  </li>
+<li><input disabled="" type="checkbox"> Requests 源码：HTTP 库设计  </li>
+<li><input disabled="" type="checkbox"> 内置模块实现（json、collections）</li>
+</ul>
+</li>
+<li><strong>[ ] 版本特性对比</strong>  <ul>
+<li><input disabled="" type="checkbox"> Python 各版本差异对比：关注常用特性变更和性能提升</li>
+</ul>
+</li>
+<li><strong>[ ] 框架深入</strong>  <ul>
+<li><input disabled="" type="checkbox"> Flask&#x2F;FastAPI&#x2F;Django 框架深入  </li>
+<li><input disabled="" type="checkbox"> ORM 与数据库优化  </li>
+<li><input disabled="" type="checkbox"> RESTful API 设计  </li>
+<li><input disabled="" type="checkbox"> 认证与权限系统  </li>
+<li><input disabled="" type="checkbox"> Django 框架入门：安装配置、路由与模型管理  </li>
+<li><input disabled="" type="checkbox"> Django REST framework：创建 API，Token 认证、权限配置</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> Flask 标准开发流程：项目结构、扩展使用（如 SQLAlchemy、Flask-Login）</li>
+</ul>
+<h3 id="2-前端工具开发"><a href="#2-前端工具开发" class="headerlink" title="2. 前端工具开发"></a>2. 前端工具开发</h3><ul>
+<li><strong>[x] React 基础</strong>（已完成组件开发）  </li>
+<li><strong>[ ] Next.js 进阶</strong>  <ul>
+<li><input disabled="" type="checkbox"> 服务端渲染（SSR）优化  </li>
+<li><input disabled="" type="checkbox"> API Routes 开发  </li>
+<li><input disabled="" type="checkbox"> 与 Python 后端联调</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-系统设计"><a href="#3-系统设计" class="headerlink" title="3. 系统设计"></a>3. 系统设计</h3><ul>
+<li><strong>[ ] 分布式系统</strong>  <ul>
+<li><input disabled="" type="checkbox"> 一致性协议（Raft&#x2F;Paxos）  </li>
+<li><input disabled="" type="checkbox"> 分布式锁实现（基于 Redis&#x2F;Zookeeper）</li>
+</ul>
+</li>
+<li><strong>[ ] 消息队列</strong>  <ul>
+<li><input disabled="" type="checkbox"> Kafka 分区与副本机制  </li>
+<li><input disabled="" type="checkbox"> 消息可靠性投递（Exactly-Once 语义）</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-部署"><a href="#4-部署" class="headerlink" title="4. 部署"></a>4. 部署</h3><ul>
+<li><input disabled="" type="checkbox"> uWSGI&#x2F;Gunicorn + Nginx 部署：配置反向代理，环境变量管理，性能调优</li>
+</ul>
+<hr>
+<h2 id="三、通用基础"><a href="#三、通用基础" class="headerlink" title="三、通用基础"></a>三、通用基础</h2><h3 id="1-操作系统与网络"><a href="#1-操作系统与网络" class="headerlink" title="1. 操作系统与网络"></a>1. 操作系统与网络</h3><ul>
+<li><strong>[x] Linux 基础</strong>（已完成日常操作）  </li>
+<li><strong>[ ] Linux 高级</strong>  <ul>
+<li><input disabled="" type="checkbox"> 性能调优（sysctl 参数调整）  </li>
+<li><input disabled="" type="checkbox"> 内核机制（cgroups&#x2F;namespaces）</li>
+</ul>
+</li>
+<li><strong>[x] HTTP&#x2F;TCP 协议</strong>（已读《图解HTTP》《图解TCP&#x2F;IP》）  </li>
+<li><strong>[ ] 网络排障</strong>  <ul>
+<li><input disabled="" type="checkbox"> tcpdump&#x2F;Wireshark 抓包分析  </li>
+<li><input disabled="" type="checkbox"> 模拟网络延迟&#x2F;丢包（tc 命令）</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-算法与数据结构"><a href="#2-算法与数据结构" class="headerlink" title="2. 算法与数据结构"></a>2. 算法与数据结构</h3><ul>
+<li><strong>[ ] LeetCode 专项</strong>（特斯拉常考题型）  <ul>
+<li><input disabled="" type="checkbox"> 字符串处理（滑动窗口）  </li>
+<li><input disabled="" type="checkbox"> 树结构遍历（DFS&#x2F;BFS）  </li>
+<li><input disabled="" type="checkbox"> 动态规划（背包问题变种）</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-数据库"><a href="#3-数据库" class="headerlink" title="3. 数据库"></a>3. 数据库</h3><ul>
+<li><strong>[ ] PostgreSQL 优化</strong>  <ul>
+<li><input disabled="" type="checkbox"> 执行计划分析（EXPLAIN ANALYZE）  </li>
+<li><input disabled="" type="checkbox"> 连接池配置（PgBouncer）</li>
+</ul>
+</li>
+<li><strong>[ ] Redis 高级</strong>  <ul>
+<li><input disabled="" type="checkbox"> 持久化策略（RDB&#x2F;AOF）  </li>
+<li><input disabled="" type="checkbox"> 集群模式（Redis Cluster）</li>
+</ul>
+</li>
+</ul>
+<!-- ### 5.1 关系型数据库 [进度: 20%]
+- [x] MySQL 基础操作
+- [ ] PostgreSQL 深入学习
+  - [ ] 高级查询优化
+  - [ ] 集群部署
+- [ ] 数据库设计
+  - [ ] 范式理论
+  - [ ] 分库分表
+  - [ ] 索引优化
+  - [ ] 事务与并发控制
+  - [ ] 备份与恢复
+  - [ ] 监控与报警
+  - [ ] 性能调优
+  - [ ] 主从复制
+  - [ ] 读写分离
+### 5.2 NoSQL数据库 [进度: 10%]
+- [x] Redis 基础使用
+- [ ] MongoDB 学习
+- [ ] Elasticsearch 实践
+- [ ] 缓存设计与优化
+
+- [ ] MySQL 语法与操作：基础 SQL 查询，索引优化
+- [ ] MySQL 事务与一致性：锁机制、事务隔离级别
+- [ ] MySQL 引擎深入：InnoDB 与 MyISAM 特性比较
+- [ ] Elasticsearch 核心概念：索引、分片、查询分析
+- [ ] Elasticsearch 配置优化：节点配置、集群管理、性能优化 -->
+<hr>
+<h2 id="四、作为-DevOps-核心技能"><a href="#四、作为-DevOps-核心技能" class="headerlink" title="四、作为 DevOps 核心技能"></a>四、作为 DevOps 核心技能</h2><h3 id="1-容器与编排"><a href="#1-容器与编排" class="headerlink" title="1. 容器与编排"></a>1. 容器与编排</h3><ul>
+<li><strong>[x] Kubernetes 基础操作</strong>（已完成业务环境实践）  </li>
+<li><strong>[ ] Kubernetes 高级主题</strong>  <ul>
+<li><input disabled="" type="checkbox"> 核心组件原理（API Server、etcd、kube-proxy）  </li>
+<li><input disabled="" type="checkbox"> 多集群管理（跨数据中心部署）  </li>
+<li><input disabled="" type="checkbox"> 故障排查（Pod 状态异常、网络策略冲突）  </li>
+<li><input disabled="" type="checkbox"> 滚动更新&#x2F;回滚策略</li>
+</ul>
+</li>
+<li><strong>[x] Docker 基础操作</strong>（已完成业务环境实践 + 本地 nas 使用 portainer 管理）  – 2025.2</li>
+<li><strong>[ ] Docker 深入</strong>  <ul>
+<li><input disabled="" type="checkbox"> 多阶段构建优化镜像体积  </li>
+<li><input disabled="" type="checkbox"> 容器网络模型（bridge&#x2F;host&#x2F;none）  </li>
+<li><input disabled="" type="checkbox"> 存储卷生命周期管理</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-CI-CD-工具链"><a href="#2-CI-CD-工具链" class="headerlink" title="2. CI&#x2F;CD 工具链"></a>2. CI&#x2F;CD 工具链</h3><ul>
+<li><strong>[x] Jenkins 基础</strong>（已完成流水线搭建）  </li>
+<li><strong>[ ] Jenkins 高级</strong>  <ul>
+<li><input disabled="" type="checkbox"> 参数化流水线（动态环境部署）  </li>
+<li><input disabled="" type="checkbox"> 与 Kubernetes 集成（Jenkins on K8s）  </li>
+<li><input disabled="" type="checkbox"> 安全加固（凭据管理、RBAC）</li>
+</ul>
+</li>
+<li><strong>[ ] Argo CD 与 GitOps</strong>  <ul>
+<li><input disabled="" type="checkbox"> 声明式部署流程  </li>
+<li><input disabled="" type="checkbox"> 多环境配置管理（dev&#x2F;staging&#x2F;prod）</li>
+</ul>
+</li>
+<li><strong>[ ] 制品管理</strong>  <ul>
+<li><input disabled="" type="checkbox"> Artifactory&#x2F;Nexus 私有仓库搭建  </li>
+<li><input disabled="" type="checkbox"> 镜像扫描与漏洞检测</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-基础设施即代码（IaC）"><a href="#3-基础设施即代码（IaC）" class="headerlink" title="3. 基础设施即代码（IaC）"></a>3. 基础设施即代码（IaC）</h3><ul>
+<li><strong>[x] Ansible 基础</strong>（已完成配置管理）  </li>
+<li><strong>[ ] Terraform 深入</strong>  <ul>
+<li><input disabled="" type="checkbox"> AWS&#x2F;GCP 云资源编排  </li>
+<li><input disabled="" type="checkbox"> 模块化设计（复用代码库）  </li>
+<li><input disabled="" type="checkbox"> 状态文件安全管理</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-监控与日志"><a href="#4-监控与日志" class="headerlink" title="4. 监控与日志"></a>4. 监控与日志</h3><ul>
+<li><strong>[ ] Prometheus + Grafana</strong>  <ul>
+<li><input disabled="" type="checkbox"> 自定义指标采集（Exporter 开发）  </li>
+<li><input disabled="" type="checkbox"> 报警规则配置（如 Pod OOM 预警）</li>
+</ul>
+</li>
+<li><strong>[ ] ELK&#x2F;OpenSearch</strong>  <ul>
+<li><input disabled="" type="checkbox"> 日志收集管道设计  </li>
+<li><input disabled="" type="checkbox"> 高性能索引策略</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-生产环境专项"><a href="#5-生产环境专项" class="headerlink" title="5. 生产环境专项"></a>5. 生产环境专项</h3><ul>
+<li><strong>[ ] 高可用架构</strong>  <ul>
+<li><input disabled="" type="checkbox"> 多活数据中心设计  </li>
+<li><input disabled="" type="checkbox"> 故障转移演练</li>
+</ul>
+</li>
+<li><strong>[ ] 安全合规</strong>  <ul>
+<li><input disabled="" type="checkbox"> 容器运行时安全（Falco）  </li>
+<li><input disabled="" type="checkbox"> 网络策略（Calico 规则配置）</li>
+</ul>
+</li>
+</ul>
+<!-- ### 1.3 Go
+- [ ] Go 语言基础：语法、并发模型（goroutines、channels）
+- [ ] Go 语言标准库：net/http、context、sync 等
+- [ ] Go 语言项目结构：模块化、依赖管理
+- [ ] Go 语言构建工具：go build、go mod -->
+
+<!-- ### 1.6 其他
+- [ ] Java Spring Boot 入门：依赖注入、REST API、数据库集成
+- [ ] Java Gradle 构建流程：项目配置、依赖管理、打包 -->
+
+<!-- ## 2 计算机基础 [进度: 30%]
+### 2.1 操作系统
+- [ ] Linux 内核：进程管理、文件系统、网络管理的基础知识
+- [ ] Linux 性能调优：理解常用内核参数，调整网络、内存优化系统性能
+### 2.2 网络
+- [x] HTTP 协议：请求头与响应头，状态码，HTTPS 原理 (看完《图解HTTP》)  -- 2024.10
+- [x] TCP/IP 轮廓了解  (看完《图解TCP/IP》，现阶段任务够了)  -- 2024.10
+- [ ] TCP/IP 协议族，重点学习： TCP 三次握手、四次挥手、UDP 差异 （等业务上用得到再看吧）
+- [ ] Socket 编程：使用 Python/C 进行简单 Socket 通信编程
+### 2.3 计算机组成原理
+- [ ] 计算机组成原理：深入理解 CPU、内存、IO 子系统的基本原理
+### 2.4 系统设计
+- [ ] 系统设计：深入理解系统设计原则，掌握设计模式
+### 2.5 分布式
+- [ ] 分布式：深入理解分布式系统设计，掌握分布式事务、负载均衡、缓存策略
+### 2.6 高并发
+- [ ] 高并发：深入理解高并发系统设计，掌握限流、熔断、降级等策略
+### 2.7 高可用
+- [ ] 高可用：深入理解高可用系统设计，掌握故障恢复、监控报警等策略
+
+- [x] HTTP/HTTPS 协议（完成《图解HTTP》）- 2024.10
+- [x] TCP/IP 基础（完成《图解TCP/IP》）- 2024.10
+- [ ] 操作系统原理
+- [ ] Linux 内核与性能调优
+
+
+
+### 6. 系统架构 [总进度: 20%]
+
+### 6.1 微服务架构 [进度: 25%]
+- [x] 服务拆分原则
+- [ ] 服务发现
+  - [ ] Consul
+  - [ ] Etcd
+- [ ] API 网关
+  - [ ] Kong
+  - [ ] Traefik
+
+### 6.2 消息队列 [进度: 15%]
+- [x] RabbitMQ 基础
+- [ ] Kafka 深入学习
+- [ ] 消息模式设计
+
+### 7. 安全与性能 [总进度: 10%]
+
+### 7.1 应用安全 [进度: 15%]
+- [x] HTTPS/TLS
+- [ ] OAuth2.0/JWT
+- [ ] 安全漏洞防护
+  - [ ] XSS
+  - [ ] CSRF
+  - [ ] SQL注入
+
+### 7.2 性能优化 [进度: 5%]
+- [ ] 代码级优化
+- [ ] 系统级优化
+- [ ] 数据库优化
+
+- [ ] HTTPS 与 SSL/TLS：加密原理，CA 证书，握手过程
+- [ ] 常见加密算法：AES、RSA、SHA 算法学习
+- [ ] 《图解密码技术》阅读：了解基础加密概念与应用场景
+
+
+## 8. 数据科学与大数据
+### 8.1 AI 与数据科学
+- [ ] 机器学习基础：监督学习、无监督学习、常用算法
+- [ ] PyTorch / TensorFlow 使用：张量操作、自动微分、神经网络训练
+### 8.2 大数据技术
+- [ ] Hadoop 基础使用：HDFS、MapReduce 原理
+- [ ] Spark 快速上手：数据操作、RDD、DataFrame、数据处理案例 -->
+
+<h1 id="学习时间规划"><a href="#学习时间规划" class="headerlink" title="学习时间规划"></a>学习时间规划</h1><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>预计时间</th>
+<th>优先级</th>
+<th>状态</th>
+<th>完成时间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Python 源码分析</td>
+<td>3个月</td>
+<td>P1</td>
+<td>进行中</td>
+<td>-</td>
+</tr>
+<tr>
+<td>K8s 深入学习</td>
+<td>2个月</td>
+<td>P0</td>
+<td>已完成</td>
+<td>2024.12</td>
+</tr>
+<tr>
+<td>HTTP&#x2F;TCP学习</td>
+<td>1个月</td>
+<td>P1</td>
+<td>已完成</td>
+<td>2024.10</td>
+</tr>
+<tr>
+<td>CI&#x2F;CD 工具链</td>
+<td>2个月</td>
+<td>P1</td>
+<td>进行中</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<h1 id="进度更新记录"><a href="#进度更新记录" class="headerlink" title="进度更新记录"></a>进度更新记录</h1><h2 id="已完成项目"><a href="#已完成项目" class="headerlink" title="已完成项目"></a>已完成项目</h2><ul>
+<li><input checked="" disabled="" type="checkbox"> Kubernetes 集群搭建与管理 (2024.12)</li>
+<li><input checked="" disabled="" type="checkbox"> HTTP&#x2F;HTTPS 协议学习 (2024.10)</li>
+<li><input checked="" disabled="" type="checkbox"> TCP&#x2F;IP 基础知识掌握 (2024.10)</li>
+<li><input checked="" disabled="" type="checkbox"> React 基础组件开发</li>
+<li><input checked="" disabled="" type="checkbox"> Jenkins CI&#x2F;CD 基础配置</li>
+</ul>
+<h2 id="进行中项目"><a href="#进行中项目" class="headerlink" title="进行中项目"></a>进行中项目</h2><ul>
+<li><input disabled="" type="checkbox"> Python 源码分析系列</li>
+<li><input disabled="" type="checkbox"> Docker 深入学习</li>
+<li><input disabled="" type="checkbox"> 监控系统搭建</li>
+</ul>
+<h2 id="计划中项目"><a href="#计划中项目" class="headerlink" title="计划中项目"></a>计划中项目</h2><ul>
+<li><input disabled="" type="checkbox"> Vue 技术栈学习</li>
+<li><input disabled="" type="checkbox"> ELK 日志分析系统</li>
+<li><input disabled="" type="checkbox"> 代码质量管理平台</li>
+</ul>
+<h1 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h1><h2 id="书籍"><a href="#书籍" class="headerlink" title="书籍"></a>书籍</h2><ul>
+<li>《图解HTTP》(已读完)</li>
+<li>《图解TCP&#x2F;IP》(已读完)</li>
+<li>《图解密码技术》(计划中)</li>
+</ul>
+<h2 id="在线资源"><a href="#在线资源" class="headerlink" title="在线资源"></a>在线资源</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.python.org/3/">Python 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/">Kubernetes 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/">Docker 官方文档</a></li>
+</ul>
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><ol>
+<li>保持学习节奏：每周至少投入20小时</li>
+<li>注重实践：每个模块都要有实际项目</li>
+<li>及时复习：每月回顾一次学习内容</li>
+<li>记录笔记：建立知识体系</li>
+</ol>
+<h1 id="Abandoned"><a href="#Abandoned" class="headerlink" title="Abandoned"></a>Abandoned</h1><ul>
+<li>Selenium 异步标签页池：使用 Puppeteer&#x2F;Playwright 完成，避免业务耦合。</li>
+<li>StudyFlow 可视化技能树项目：先将需要打卡的知识点放到一个 data.json，再使用 Echarts 渲染一个棵 js 代码中表达的树，进而在 markdown 中被引用；<br>同时使用 Puppeteer 渲染这段 js 代码，将生成的这棵树的 .png 文件保存到 source&#x2F;images 目录下，能够用做文章头图，或者被首页引用。<br>至于打卡部分，就使用 iOS 原生的日历app，再定期总结规划即可，没有必要非要形式上搞一个前后端工程。</li>
+</ul>
+<!-- 原有的注释保留 -->
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Skill/" class="print-no-link">#Skill</a>
+      
+        <a href="/tags/AIOps/" class="print-no-link">#AIOps</a>
+      
+        <a href="/tags/DevOps/" class="print-no-link">#DevOps</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Python 后端工程师 + DevOps 技能树 -&gt; AIOps</div>
+      <div>https://gou7ma7.github.io/2025/02/05/skill-tree/index/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Roy Lee</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/04/hello-world/" title="Hello World">
+                        <span class="hidden-mobile">Hello World</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
