@@ -3,47 +3,94 @@
     "invisible": true,
     "children": [
         {
-            "name": "一、AI 在 DevOps 中的应用（AiOps）",
+            "name": "一、DevOps核心技能",
             "value": "0",
             "children": [
                 {
-                    "name": "1. AI 辅助开发",
+                    "name": "1. 容器与编排",
                     "value": "0",
                     "children": [
-                        { "name": "AI 代码助手", "value": "0" },
-                        { "name": "AI 文档助手", "value": "0" }
+                        {
+                            "name": "Kubernetes基础操作",
+                            "value": "0"
+                        },
+                        {
+                            "name": "Kubernetes高级主题",
+                            "value": "0",
+                            "children": [
+                                { "name": "核心组件原理", "value": "0" },
+                                { "name": "多集群管理", "value": "0" },
+                                { "name": "故障排查", "value": "0" },
+                                { "name": "滚动更新/回滚策略", "value": "0" }
+                            ]
+                        },
+                        {
+                            "name": "Docker基础操作",
+                            "value": "0"
+                        },
+                        {
+                            "name": "Docker深入",
+                            "value": "0",
+                            "children": [
+                                { "name": "多阶段构建优化", "value": "0" },
+                                { "name": "容器网络模型", "value": "0" },
+                                { "name": "存储卷管理", "value": "0" }
+                            ]
+                        }
                     ]
                 },
                 {
-                    "name": "2. AI 增强 CI/CD",
+                    "name": "2. CI/CD工具链",
                     "value": "0",
                     "children": [
-                        { "name": "AI 替代传统 CI 工具", "value": "0" },
-                        { "name": "智能部署", "value": "0" }
+                        {
+                            "name": "Jenkins基础",
+                            "value": "0"
+                        },
+                        {
+                            "name": "Jenkins高级",
+                            "value": "0",
+                            "children": [
+                                { "name": "参数化流水线", "value": "0" },
+                                { "name": "Kubernetes集成", "value": "0" },
+                                { "name": "安全加固", "value": "0" }
+                            ]
+                        },
+                        {
+                            "name": "Argo CD与GitOps",
+                            "value": "0",
+                            "children": [
+                                { "name": "声明式部署流程", "value": "0" },
+                                { "name": "多环境配置管理", "value": "0" }
+                            ]
+                        },
+                        {
+                            "name": "制品管理",
+                            "value": "0",
+                            "children": [
+                                { "name": "私有仓库搭建", "value": "0" },
+                                { "name": "镜像扫描与漏洞检测", "value": "0" }
+                            ]
+                        }
                     ]
                 },
                 {
-                    "name": "3. AI 运维监控",
+                    "name": "3. 基础设施即代码",
                     "value": "0",
                     "children": [
-                        { "name": "智能告警", "value": "0" },
-                        { "name": "日志分析", "value": "0" }
-                    ]
-                },
-                {
-                    "name": "4. AI 基础设施管理",
-                    "value": "0",
-                    "children": [
-                        { "name": "资源优化", "value": "0" },
-                        { "name": "安全防护", "value": "0" }
-                    ]
-                },
-                {
-                    "name": "5. AI 协作与知识管理",
-                    "value": "0",
-                    "children": [
-                        { "name": "ChatOps", "value": "0" },
-                        { "name": "团队协作", "value": "0" }
+                        {
+                            "name": "Ansible基础",
+                            "value": "0"
+                        },
+                        {
+                            "name": "Terraform深入",
+                            "value": "0",
+                            "children": [
+                                { "name": "云资源编排", "value": "0" },
+                                { "name": "模块化设计", "value": "0" },
+                                { "name": "状态文件管理", "value": "0" }
+                            ]
+                        }
                     ]
                 }
             ]
@@ -137,99 +184,6 @@
                                 { "name": "字符串处理", "value": "0" },
                                 { "name": "树结构遍历", "value": "0" },
                                 { "name": "动态规划", "value": "0" }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "四、DevOps核心技能",
-            "value": "0",
-            "children": [
-                {
-                    "name": "1. 容器与编排",
-                    "value": "0",
-                    "children": [
-                        {
-                            "name": "Kubernetes基础操作",
-                            "value": "0"
-                        },
-                        {
-                            "name": "Kubernetes高级主题",
-                            "value": "0",
-                            "children": [
-                                { "name": "核心组件原理", "value": "0" },
-                                { "name": "多集群管理", "value": "0" },
-                                { "name": "故障排查", "value": "0" },
-                                { "name": "滚动更新/回滚策略", "value": "0" }
-                            ]
-                        },
-                        {
-                            "name": "Docker基础操作",
-                            "value": "0"
-                        },
-                        {
-                            "name": "Docker深入",
-                            "value": "0",
-                            "children": [
-                                { "name": "多阶段构建优化", "value": "0" },
-                                { "name": "容器网络模型", "value": "0" },
-                                { "name": "存储卷管理", "value": "0" }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "2. CI/CD工具链",
-                    "value": "0",
-                    "children": [
-                        {
-                            "name": "Jenkins基础",
-                            "value": "0"
-                        },
-                        {
-                            "name": "Jenkins高级",
-                            "value": "0",
-                            "children": [
-                                { "name": "参数化流水线", "value": "0" },
-                                { "name": "Kubernetes集成", "value": "0" },
-                                { "name": "安全加固", "value": "0" }
-                            ]
-                        },
-                        {
-                            "name": "Argo CD与GitOps",
-                            "value": "0",
-                            "children": [
-                                { "name": "声明式部署流程", "value": "0" },
-                                { "name": "多环境配置管理", "value": "0" }
-                            ]
-                        },
-                        {
-                            "name": "制品管理",
-                            "value": "0",
-                            "children": [
-                                { "name": "私有仓库搭建", "value": "0" },
-                                { "name": "镜像扫描与漏洞检测", "value": "0" }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "3. 基础设施即代码",
-                    "value": "0",
-                    "children": [
-                        {
-                            "name": "Ansible基础",
-                            "value": "0"
-                        },
-                        {
-                            "name": "Terraform深入",
-                            "value": "0",
-                            "children": [
-                                { "name": "云资源编排", "value": "0" },
-                                { "name": "模块化设计", "value": "0" },
-                                { "name": "状态文件管理", "value": "0" }
                             ]
                         }
                     ]
