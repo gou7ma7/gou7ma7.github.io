@@ -1,0 +1,724 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Roy Lee">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="开头很有意思啊，经历了之前的焦虑后，开始恢复状态能正常开始学习了。 第三次被裁员了，前段时间心态起伏还是很大的，再加上家庭频出状况，很长一段时间不能集中精力学习，不过考虑到当时甚至连游戏都没有兴趣玩，现在也觉得没啥问题，哈哈。 之前删掉了啰嗦的充满“操作指南”、“操作记录”的博客，想着在 AI 时代没什么用，但是经过最近的学习，反而发现这些才是在 RAG 下宝贵的学习资料。 因为之前博客写完了，就">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI时代 暨 找到工作的第一篇博客">
+<meta property="og:url" content="https://gou7ma7.github.io/2025/02/24/career/1st_post_in_ai_era/index.html">
+<meta property="og:site_name" content="DevOps -&gt; AIOps">
+<meta property="og:description" content="开头很有意思啊，经历了之前的焦虑后，开始恢复状态能正常开始学习了。 第三次被裁员了，前段时间心态起伏还是很大的，再加上家庭频出状况，很长一段时间不能集中精力学习，不过考虑到当时甚至连游戏都没有兴趣玩，现在也觉得没啥问题，哈哈。 之前删掉了啰嗦的充满“操作指南”、“操作记录”的博客，想着在 AI 时代没什么用，但是经过最近的学习，反而发现这些才是在 RAG 下宝贵的学习资料。 因为之前博客写完了，就">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gou7ma7.github.io/2025/02/24/career/1st_post_in_ai_era/screen.jpg">
+<meta property="og:image" content="https://gou7ma7.github.io/2025/02/24/career/1st_post_in_ai_era/weight_loss_record.jpeg">
+<meta property="og:image" content="https://gou7ma7.github.io/2025/02/24/career/1st_post_in_ai_era/weight_loss_record.jpeg">
+<meta property="og:image" content="https://img.shields.io/badge/-Bilibili-00A1D6?style=flat&logo=bilibili&logoColor=white">
+<meta property="og:image" content="https://img.shields.io/badge/-LinkedIn-blue?style=flat&logo=Linkedin&logoColor=white">
+<meta property="og:image" content="https://img.shields.io/badge/-Blog-red?style=flat&logo=Blog&logoColor=white">
+<meta property="og:image" content="https://gou7ma7.github.io/images/skill-tree.png">
+<meta property="og:image" content="https://github-readme-stats.vercel.app/api/top-langs/?username=gou7ma7">
+<meta property="og:image" content="https://github-readme-stats.vercel.app/api?username=gou7ma7&show_icons=true">
+<meta property="article:published_time" content="2025-02-24T12:45:21.000Z">
+<meta property="article:modified_time" content="2025-03-20T09:40:56.222Z">
+<meta property="article:author" content="Roy Lee">
+<meta property="article:tag" content="Review">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://gou7ma7.github.io/2025/02/24/career/1st_post_in_ai_era/screen.jpg">
+  
+  
+  
+  <title>AI时代 暨 找到工作的第一篇博客 - DevOps -&gt; AIOps</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"gou7ma7.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/gou7ma7/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AI时代 暨 找到工作的第一篇博客"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-24 20:45" pubdate>
+          2025年2月24日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">AI时代 暨 找到工作的第一篇博客</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="开头"><a href="#开头" class="headerlink" title="开头"></a>开头</h1><p>很有意思啊，经历了之前的焦虑后，开始恢复状态能正常开始学习了。</p>
+<p>第三次被裁员了，前段时间心态起伏还是很大的，再加上家庭频出状况，很长一段时间不能集中精力学习，不过考虑到当时甚至连游戏都没有兴趣玩，现在也觉得没啥问题，哈哈。</p>
+<p>之前删掉了啰嗦的充满“操作指南”、“操作记录”的博客，想着在 AI 时代没什么用，但是经过最近的学习，反而发现这些才是在 RAG 下宝贵的学习资料。</p>
+<p>因为之前博客写完了，就像中学时代的“笔记”，“错题本”一样被动的放在那里，除非高度规律地规划定期回顾才能被用起来，而现在不同了，我需要迭代自己的 Workflow 了。</p>
+<p><img src="/2025/02/24/career/1st_post_in_ai_era/screen.jpg" srcset="/img/loading.gif" lazyload alt="做减法，不要再在桌子上摆很多个屏幕了"></p>
+<h1 id="身体"><a href="#身体" class="headerlink" title="身体"></a>身体</h1><p>以前喋喋不休地在博客、抖音、B站、小红书上打卡，抱团，期望能坚持此前一直没能完成的减肥，但效果甚微。</p>
+<p>大道至简，就和学习本身一样，没有每天落地的实践支持，都是空中楼阁，徒增笑耳。</p>
+<!-- <img src="/2025/02/24/career/1st_post_in_ai_era/weight_loss_record.jpeg" srcset="/img/loading.gif" lazyload class=""> -->
+<p><img src="/2025/02/24/career/1st_post_in_ai_era/weight_loss_record.jpeg" srcset="/img/loading.gif" lazyload alt="减肥数值记录"></p>
+<h1 id="家庭"><a href="#家庭" class="headerlink" title="家庭"></a>家庭</h1><p>过去的一年里我成为了父亲，又失去了父亲，在这个社会角色定位中，我没有退路了。</p>
+<p>小孩刚出生的时候太轻，妈妈操了太多的心。我当时暗下决心，希望我减肥下来的体重都能加到小孩上。</p>
+<p>然后小孩体重稳步提升，达到了正常体重，反而是我却减得快多了，这是最近最值得开心的事情了。</p>
+<p>迷茫的时候也想想，就像踏实减肥一样，积累到了才会看到成效，毕竟：</p>
+<blockquote>
+<p>没有数值，我只看到了努力和汗水。</p>
+</blockquote>
+<h1 id="AI"><a href="#AI" class="headerlink" title="AI"></a>AI</h1><p>AI 带来了很多改变啊，在首页里面已经有了足够的碎碎念了。</p>
+<p>这段时间深度体验 + 部署之后，发现现阶段的 AI 在通识方面已经无敌，但在专业领域完全不能令我满意。</p>
+<p>如果说以前的搜索引擎是纯粹只会认关键字的外行，现在的 AI 已经是过目不忘的学徒，能快速解决描述清晰且典型的问题，离指导工作者的行业专家还有一段距离。</p>
+<p>这也是我现在更有动力更新博客的原因，期望能在 RAG 的帮助下打造成我的个人知识库。</p>
+<h1 id="工作-（补于-2025年3月-找到工作后）"><a href="#工作-（补于-2025年3月-找到工作后）" class="headerlink" title="工作 （补于 2025年3月 找到工作后）"></a>工作 （补于 2025年3月 找到工作后）</h1><p>很神奇啊，找了三个月，终于找到工作了。</p>
+<p>日子过得就像梦一样，从最开始知道要被辞退时候的惴惴不安，到后来排满了的疯狂面试，再到临近入职的不真实感，明明是一个季度内发生的，却感觉隔离地太彻底了。</p>
+<p>期间心情相当大起大落，抛开各种变故的影响不谈，光是每次面试之后的抉择就觉得有够累人的，不过回想起来还是觉得每次样本训练就是一次成长。</p>
+<p>前几天还能文思泉涌地持续码字，现在下班打开电脑，又回到上学时候那种提笔忘字的状态。</p>
+<p>终于进入了世界一流知名度的公司，小时候幻想过无数次的场景，真的实现到自己身上的时候又全是不真实感。</p>
+<p>虽然依旧是一颗螺丝钉，但是现在真的满脑子都是“我奋斗了18年才和你坐在一起喝咖啡”。</p>
+<p>马上工作就快十年了，不知道其中浪费了多少年，总想做点有意义的事情，不要再混天过日了。</p>
+<p>大概在高中的时候感悟出来了能<strong>看到努力的方向</strong>和<strong>持之以恒的努力</strong>是两项最大的天赋，有点晚了，</p>
+<p>前30年也走了不少弯路，不过好在 AI时代 更多的信息差会被抹平，终于能赶上这班车了。</p>
+<p>以下，贴上找工作期间（2024年12月～2025年3月）的自我介绍，仅做纪念。</p>
+<hr>
+<h3 id="Hi-there-👋-This-is-Roy-Lee-✨"><a href="#Hi-there-👋-This-is-Roy-Lee-✨" class="headerlink" title="Hi there 👋 This is Roy Lee! ✨"></a>Hi there 👋 This is Roy Lee! ✨</h3><p><a target="_blank" rel="noopener" href="https://space.bilibili.com/776431"><img src="https://img.shields.io/badge/-Bilibili-00A1D6?style=flat&logo=bilibili&logoColor=white" srcset="/img/loading.gif" lazyload alt="Bilibili"></a> <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/%E7%BA%A2%E7%9D%BF-%E6%9D%8E-a2a612157/"><img src="https://img.shields.io/badge/-LinkedIn-blue?style=flat&logo=Linkedin&logoColor=white" srcset="/img/loading.gif" lazyload alt="Linkedin"></a> <a href="https://gou7ma7.github.io/"><img src="https://img.shields.io/badge/-Blog-red?style=flat&logo=Blog&logoColor=white" srcset="/img/loading.gif" lazyload alt="Blog"></a></p>
+<hr>
+<h3 id="About-Me"><a href="#About-Me" class="headerlink" title="About Me"></a>About Me</h3><p>I’m Roy Lee (Li Hongrui in Chinese), a DevOps and Python backend engineer with experience in multiple NASDAQ-listed companies. My most recent role was at <strong>Agora (NASDAQ: API)</strong>, where I worked as a Developer Productivity Engineer.</p>
+<p>After being laid off at the end of 2024, I’ve been actively seeking opportunities in <strong>DevOps</strong>, <strong>Python Backend Development</strong>, and <strong>Test Automation Engineering</strong>. My career began in UI automation testing, and I’ve since transitioned into DevOps, focusing on improving development efficiency and infrastructure.</p>
+<p>My early career experiences are quite repetitive, so I’ll share a video of my talk at the PyCon developer conference instead of detailing them here. It provides a comprehensive overview: <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Wv411b7Gm">My PyCon Shenzhen Talk: Joining a Tencent-backed Mid-sized Company, Summarizing My First 2 Years of Work Experience, and Advice for Newcomers</a>.</p>
+<p>我是 李红睿 （Li Hongrui），曾任职于多家纳斯达克上市公司，担任 DevOps 和 Python 后端工程师。最近一份工作是在 <strong>声网（Agora，NASDAQ: API）</strong> 担任研发效率开发工程师。</p>
+<p>2024 年末被裁员后，我一直在积极寻找 <strong>DevOps</strong>、<strong>Python 后端开发</strong> 和 <strong>测试开发</strong> 相关的职位。我的职业生涯从 UI 自动化测试开始，后来逐渐转向 DevOps，专注于提升研发效率和基础设施优化。</p>
+<p>早期经历重复度很高，因此放一个我在 pycon 开发者大会中的演讲视频，里面有详细的介绍，就不在此赘述，<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Wv411b7Gm">我在pycon深圳的演讲：进腾讯投资的中厂、总结前2年工作心得和对新人的建议</a>。</p>
+<hr>
+<h3 id="Seeking-a-New-Job"><a href="#Seeking-a-New-Job" class="headerlink" title="Seeking a New Job"></a>Seeking a New Job</h3><p>I’m currently looking for roles in <strong>DevOps</strong>, <strong>Python Backend Development</strong>, and <strong>Test Automation Engineering</strong>. If you’re hiring or know of any opportunities, feel free to reach out!</p>
+<p>我正在寻找 <strong>DevOps</strong>、<strong>Python 后端开发</strong> 和 <strong>测试开发</strong> 相关的职位。如果你有合适的职位或机会，欢迎联系我！</p>
+<hr>
+<h3 id="Skills-Learning"><a href="#Skills-Learning" class="headerlink" title="Skills &amp; Learning"></a>Skills &amp; Learning</h3><ul>
+<li><strong>Strengths</strong>: Proficient in Python, end-to-end development experience, quick learner, adaptable. </li>
+<li><strong>Weaknesses</strong>: Broad but not deep technical stack; I’m actively working on deepening my expertise in key areas.</li>
+<li><strong>Current Focus</strong>: AI in DevOps (AIOps), Kubernetes, and Python backend development.</li>
+<li><strong>English</strong>: Fluent in business English communication (emails, meetings), though technical vocabulary needs more practice in work scenarios.</li>
+</ul>
+<br>
+
+<ul>
+<li><strong>优点</strong>: 熟悉 Python 生态，有多段端到端开发经验，在UI自动化测试、运维开发、k8s云平台搭建等业务均有 0-1 的经验，学习能力强，适应能力强，最后 OKR 都完成了。</li>
+<li><strong>缺点</strong>: 技术栈广而不深，急需一份相对稳定的业务、或者足够有深度的业务来精进技术，使我达到“行业前列”的水准。</li>
+<li><strong>当前重点</strong>: AI 在 DevOps 中的应用（AIOps）、Kubernetes 和 Python 后端开发。</li>
+<li><strong>英语</strong>: 日常的邮件、口语会议交流没问题，能进行商务英语沟通，但专业词汇还需要业务场景的锻炼才能更加熟练。</li>
+</ul>
+<p><img src="https://gou7ma7.github.io/images/skill-tree.png" srcset="/img/loading.gif" lazyload alt="skill-tree"></p>
+<p>The tech industry is rapidly evolving, especially with the rise of AI. During my job search, I’ve realized that simply relying on past experiences isn’t enough. In one interview with a top-tier global company, I aced the technical rounds but was challenged during the leadership interview: “Don’t just talk about AI in your side projects. Show us how you can learn and integrate new technologies into our needs.” This was a wake-up call for me. I’ve decided to embrace the AI revolution, whether it’s deploying AI products or using AI to optimize traditional DevOps workflows.</p>
+<p>I’m now focused on building a solid foundation while staying ahead of industry trends. I’ve even deleted my 4-year-old blog to start fresh, rediscovering the joy of learning and documenting my journey. Check out my <a href="https://gou7ma7.github.io/2025/02/05/skill-tree/index/">Skill Tree</a> to see my learning roadmap.</p>
+<p>最近找工作时，发现很多岗位已经有了 AI 相关的需求。最近面某家国际一流公司，前面技术面都秒过了，结果领导面的时候被质疑了：”我问你 AI 相关的经历，不是总听你说你用 AI 做了啥副业，我更想听你怎么快速学习我们需要的技术，怎么把它们整合到现有业务里。”</p>
+<p>虽然缺乏业务环境导致我只能在我的副业工作流里面落实 AI ，但既然企业想要这方面的人才，那我至少也应该先自行学习，那位领导所说的“技术对每个人都是公平的”，我深以为然，并且要落实。</p>
+<p>我现在一边打基础，一边追新趋势。连写了 4 年的博客都删了，重新开始学习打卡，感觉又找回了当初学习的那种新鲜劲儿。进度在<a href="https://gou7ma7.github.io/2025/02/05/skill-tree/index/">技能树</a><br><a href="https://gou7ma7.github.io/2025/02/05/skill-tree/index/">https://gou7ma7.github.io/2025/02/05/skill-tree/index/</a></p>
+<hr>
+<h3 id="Let’s-Connect"><a href="#Let’s-Connect" class="headerlink" title="Let’s Connect!"></a>Let’s Connect!</h3><p>Feel free to reach out via <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/%E7%BA%A2%E7%9D%BF-%E6%9D%8E-a2a612157/">LinkedIn</a> or <a target="_blank" rel="noopener" href="https://space.bilibili.com/776431">Bilibili</a>. Let’s collaborate and grow together!</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-readme-stats.vercel.app/api/top-langs/?username=gou7ma7" srcset="/img/loading.gif" lazyload alt="Top Langs"></a></p>
+<p><img src="https://github-readme-stats.vercel.app/api?username=gou7ma7&show_icons=true" srcset="/img/loading.gif" lazyload alt="Anurag&#39;s GitHub stats"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Career/" class="category-chain-item">Career</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Review/" class="print-no-link">#Review</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>AI时代 暨 找到工作的第一篇博客</div>
+      <div>https://gou7ma7.github.io/2025/02/24/career/1st_post_in_ai_era/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Roy Lee</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/02/24/devops/setup_personal_rag_knowledge_base/" title="搭建基于 RAG 的个人知识库">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">搭建基于 RAG 的个人知识库</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/05/skill-tree/index/" title="Python 后端工程师 + DevOps 技能树 -&gt; AIOps">
+                        <span class="hidden-mobile">Python 后端工程师 + DevOps 技能树 -&gt; AIOps</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
