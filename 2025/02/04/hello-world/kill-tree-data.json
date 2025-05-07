@@ -8,10 +8,10 @@
             "children": [
                 {
                     "name": "1. AI 辅助开发",
-                    "value": "0",
+                    "value": "100",
                     "children": [
-                        { "name": "AI 代码助手", "value": "0" },
-                        { "name": "AI 文档助手", "value": "0" }
+                        { "name": "AI 代码助手", "value": "100" },
+                        { "name": "AI 文档助手", "value": "100" }
                     ]
                 },
                 {
