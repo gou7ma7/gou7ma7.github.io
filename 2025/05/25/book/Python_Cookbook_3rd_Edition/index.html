@@ -19,17 +19,17 @@
   <meta name="author" content="Roy Lee">
   <meta name="keywords" content="">
   
-    <meta name="description" content="AI没来的时候跪着看这些书， AI来了还看不懂，那AI不是白来了吗？">
+    <meta name="description" content="If I spent years cracking my knuckles over these books before AI, yet remain clueless after the robot apocalypse, aren&#39;t we just decorating the Titanic with a Roomba here?">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AI-Guided Rereading - Python Cookbook 3rd Edition">
 <meta property="og:url" content="https://gou7ma7.github.io/2025/05/25/book/Python_Cookbook_3rd_Edition/index.html">
 <meta property="og:site_name" content="DevOps -&gt; AIOps">
-<meta property="og:description" content="AI没来的时候跪着看这些书， AI来了还看不懂，那AI不是白来了吗？">
+<meta property="og:description" content="If I spent years cracking my knuckles over these books before AI, yet remain clueless after the robot apocalypse, aren&#39;t we just decorating the Titanic with a Roomba here?">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://gou7ma7.github.io/2025/05/25/book/Python_Cookbook_3rd_Edition/A_Futile_Arrival.png">
 <meta property="og:image" content="https://gou7ma7.github.io/2025/05/25/book/Python_Cookbook_3rd_Edition/With_AI">
 <meta property="article:published_time" content="2025-05-25T11:29:35.000Z">
-<meta property="article:modified_time" content="2025-05-25T13:57:52.373Z">
+<meta property="article:modified_time" content="2025-05-29T14:58:27.648Z">
 <meta property="article:author" content="Roy Lee">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary_large_image">
@@ -226,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          83 字
+          92 字
         
       </span>
     
@@ -280,8 +280,8 @@
               <div class="markdown-body">
                 
                 <!-- more --> 
-<p><img src="/2025/05/25/book/Python_Cookbook_3rd_Edition/A_Futile_Arrival.png" srcset="/img/loading.gif" lazyload alt="AI没来的时候跪着看这些书， AI来了还看不懂，那AI不是白来了吗？"></p>
-<p><img src="/2025/05/25/book/Python_Cookbook_3rd_Edition/With_AI's_Arrival.png.png" srcset="/img/loading.gif" lazyload alt="AI来了，青天就有了"></p>
+<p>If I had to parse Kant pre-AI, but post-GPT still can’t comprehend, isn’t that like bringing a quantum computer to an abacus convention?<br><img src="/2025/05/25/book/Python_Cookbook_3rd_Edition/A_Futile_Arrival.png" srcset="/img/loading.gif" lazyload alt="AI没来的时候跪着看这些书， AI来了还看不懂，那AI不是白来了吗？"></p>
+<p>When AI cometh, the binary dawn shall brighten our skies!<br><img src="/2025/05/25/book/Python_Cookbook_3rd_Edition/With_AI's_Arrival.png.png" srcset="/img/loading.gif" lazyload alt="AI来了，青天就有了"></p>
 <h1 id="CHAPTER-1-Data-Structures-and-Algorithms"><a href="#CHAPTER-1-Data-Structures-and-Algorithms" class="headerlink" title="CHAPTER 1. Data Structures and Algorithms"></a>CHAPTER 1. Data Structures and Algorithms</h1><h2 id="1-2-Unpacking-Elements-from-Iterables-of-Arbitrary-Length"><a href="#1-2-Unpacking-Elements-from-Iterables-of-Arbitrary-Length" class="headerlink" title="1.2. Unpacking Elements from Iterables of Arbitrary Length"></a>1.2. Unpacking Elements from Iterables of Arbitrary Length</h2><h3 id="star-unpacking"><a href="#star-unpacking" class="headerlink" title="star unpacking"></a>star unpacking</h3><p>完整代码示例可参考 GitHub 仓库：<a target="_blank" rel="noopener" href="https://github.com/gou7ma7/ai-guided-book-code/blob/main/Python_Cookbook_3rd_Edition/CHAPTER%201.Data%20Structures%20and%20Algorithms/star_unpacking_and_yield.py">star_unpacking_and_yield.py</a></p>
 <p>星号解压语法中，一个赋值语句只能出现一次*，想来也是，不然就成了指代不明。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">record = (<span class="hljs-string">&#x27;Dave&#x27;</span>, <span class="hljs-string">&#x27;dave@example.com&#x27;</span>, <span class="hljs-string">&#x27;773-555-1212&#x27;</span>, <span class="hljs-string">&#x27;847-555-1212&#x27;</span>)<br>name, email, *phone_numbers = record<br><span class="hljs-built_in">print</span>(phone_numbers)  <span class="hljs-comment"># [&#x27;773-555-1212&#x27;, &#x27;847-555-1212&#x27;]</span><br></code></pre></td></tr></table></figure>
