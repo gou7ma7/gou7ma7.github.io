@@ -1,7 +1,7 @@
 // 热力图配置常量
 const HEATMAP_CONFIG = {
     containerId: 'heatmap',
-    dataUrl: '/js/heatmap-data.json'
+    dataUrl: window.location.origin + '/js/heatmap-data.json'
 };
 
 // 枚举定义 (简化xAxis)
@@ -25,6 +25,9 @@ function initHeatmap() {
     fetch(HEATMAP_CONFIG.dataUrl)
         .then(response => response.json())
         .then(dataList => {
+            // 标记数据已加载
+            window.heatmapDataLoaded = true;
+            
             // 初始化ECharts实例
             const chart = echarts.init(container);
             
@@ -63,6 +66,10 @@ function initHeatmap() {
             
             // 应用配置项渲染热力图
             chart.setOption(mergedOption);
+            
+            // 触发渲染完成事件
+            const event = new Event('heatmapRendered');
+            document.dispatchEvent(event);
             
             // 添加点击事件
             chart.on('click', function(params) {
