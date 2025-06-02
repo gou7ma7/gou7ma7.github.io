@@ -304,7 +304,11 @@
 <h3 id="yield-from-return-递归"><a href="#yield-from-return-递归" class="headerlink" title="yield from &#x3D; return -&gt; 递归"></a>yield from &#x3D; return -&gt; 递归</h3><p>python好就好在他有足够多的语法糖，在本文中只要粗暴的记得以下等价关系就行<br>yield obj &#x3D; yield from func() &#x3D; return obj&#x2F;func()  # 递归过程<br>相当于yield from就是先调用这个func得到一个it，然后马上就调用这个it一次，因此就得到了递归；</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">in_order_visit_gen</span>(<span class="hljs-params">node: TreeNode</span>):<br>    <span class="hljs-keyword">if</span> node <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br>    <span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> visit_bst(node.left)<br>    <span class="hljs-keyword">yield</span> node.val<br>    <span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> visit_bst(node.right)<br><br>it = visit_bst(root_node)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">next</span>(it))<br></code></pre></td></tr></table></figure>
 
-<h3 id="并排yield-递归表达式"><a href="#并排yield-递归表达式" class="headerlink" title="并排yield -&gt; 递归表达式"></a>并排yield -&gt; 递归表达式</h3><h1 id="TODO-有空再写吧。"><a href="#TODO-有空再写吧。" class="headerlink" title="TODO 有空再写吧。"></a>TODO 有空再写吧。</h1>
+<h3 id="并排yield-递归表达式"><a href="#并排yield-递归表达式" class="headerlink" title="并排yield -&gt; 递归表达式"></a>并排yield -&gt; 递归表达式</h3><h1 id="TODO-有空再写吧。"><a href="#TODO-有空再写吧。" class="headerlink" title="TODO 有空再写吧。"></a>TODO 有空再写吧。</h1><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
                 
               </div>
             

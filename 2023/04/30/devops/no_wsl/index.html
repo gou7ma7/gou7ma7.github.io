@@ -322,6 +322,10 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Let NetworkManager manage all devices on this system</span><br>network:<br>  ethernets:<br>    enp0s3:  <span class="hljs-comment">#配置的网卡的名称</span><br>      addresses: [192.168.31.50/24]  <span class="hljs-comment">#配置的静态ip地址和掩码</span><br>      dhcp4: no  <span class="hljs-comment">#关闭DHCP，如果需要打开DHCP则写yes</span><br>      optional: <span class="hljs-literal">true</span><br>      routes:<br>        - to: 0.0.0.0/0<br>          via: 192.168.31.1  <span class="hljs-comment">#网关地址</span><br>      nameservers:<br>         addresses: [192.168.31.1]  <span class="hljs-comment">#DNS服务器地址，多个DNS服务器地址需要用英文逗号分隔开</span><br>  version: 2<br>    <span class="hljs-comment"># renderer: NetworkManager</span><br>  renderer: networkd  <span class="hljs-comment">#指定后端采用systemd-networkd或者Network Manager</span><br></code></pre></td></tr></table></figure>
 
 <p>networkd和NetworkManager都是用于管理网络接口的后端。networkd是systemd的一部分，它是一个轻量级的网络管理器，可以在Ubuntu 18.04及更高版本中使用。它使用Netplan配置文件来配置网络接口。NetworkManager是一个更高级的网络管理器，可以在Ubuntu 16.04及更高版本中使用。它提供了一个GUI界面，可以方便地配置网络接口。</p>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
 
                 
               </div>
@@ -412,9 +416,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/04/30/devops/setup_kubernetes/" title="Kubernetes Setup in Local Physical Servers">
+                      <a href="/2023/04/30/devops/devops_toolchain_integration/" title="DevOps Toolchain Integration Setup">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Kubernetes Setup in Local Physical Servers</span>
+                        <span class="hidden-mobile">DevOps Toolchain Integration Setup</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -422,8 +426,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/05/29/leetcode/4_hard%E4%B8%AD%E4%BD%8D%E6%95%B0/" title="hard 4. Median of Two Sorted Arrays -- 第一道Hard，做了5年。">
-                        <span class="hidden-mobile">hard 4. Median of Two Sorted Arrays -- 第一道Hard，做了5年。</span>
+                      <a href="/2023/04/30/devops/setup_kubernetes/" title="Kubernetes Setup in Local Physical Servers">
+                        <span class="hidden-mobile">Kubernetes Setup in Local Physical Servers</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

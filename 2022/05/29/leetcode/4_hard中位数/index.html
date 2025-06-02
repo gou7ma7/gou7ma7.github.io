@@ -318,6 +318,10 @@
 <p>先比较两个数组的中位数，同时将2个数组平均分成两份，考虑一下，中位数只可能诞生在两个数组相对“中间”的位置，因此一次性淘汰掉2个数组的两边的部分；</p>
 <p>最后再注意一下边界取值等，代码如下</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># TODO 一头一尾一个个删除</span><br>len1 = <span class="hljs-built_in">len</span>(nums1)<br>len2 = <span class="hljs-built_in">len</span>(nums2)<br><span class="hljs-keyword">while</span> len1 &gt; <span class="hljs-number">2</span> <span class="hljs-keyword">and</span> len2 &gt; <span class="hljs-number">2</span>:<br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(nums1) == <span class="hljs-number">1</span> <span class="hljs-keyword">or</span> <span class="hljs-built_in">len</span>(nums2) == <span class="hljs-number">1</span>:<br>        <span class="hljs-keyword">break</span><br><br>    mid_1 = get_mid(nums1)<br>    mid_2 = get_mid(nums2)<br>    <span class="hljs-keyword">if</span> mid_1 == mid_2:<br>        <span class="hljs-keyword">return</span> mid_1<br>    <span class="hljs-keyword">elif</span> mid_1 &lt; mid_2:  <span class="hljs-comment"># 砍掉nums1小的和nums2大的部分</span><br>        cut = <span class="hljs-built_in">min</span>((<span class="hljs-built_in">len</span>(nums1) - <span class="hljs-number">1</span>) // <span class="hljs-number">2</span>, (<span class="hljs-built_in">len</span>(nums2) - <span class="hljs-number">1</span>) // <span class="hljs-number">2</span>)<br>        nums1 = nums1[cut:]<br>        nums2 = nums2[:len2 - cut]<br>    <span class="hljs-keyword">else</span>:  <span class="hljs-comment"># 砍掉nums1大的和nums2小的部分</span><br>        cut = <span class="hljs-built_in">min</span>((<span class="hljs-built_in">len</span>(nums2) - <span class="hljs-number">1</span>) // <span class="hljs-number">2</span>, (<span class="hljs-built_in">len</span>(nums1) - <span class="hljs-number">1</span>) // <span class="hljs-number">2</span>)<br>        nums1 = nums1[:len1 - cut]<br>        nums2 = nums2[cut:]<br>    len1 = <span class="hljs-built_in">len</span>(nums1)<br>    len2 = <span class="hljs-built_in">len</span>(nums2)<br><br></code></pre></td></tr></table></figure>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
 
                 
               </div>
@@ -408,9 +412,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/04/30/devops/no_wsl/" title="不要用WSL，否则会变得不幸">
+                      <a href="/2023/04/30/devops/setup_kubernetes/" title="Kubernetes Setup in Local Physical Servers">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">不要用WSL，否则会变得不幸</span>
+                        <span class="hidden-mobile">Kubernetes Setup in Local Physical Servers</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
