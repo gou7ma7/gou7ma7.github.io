@@ -19,22 +19,24 @@
   <meta name="author" content="Roy Lee">
   <meta name="keywords" content="">
   
-    <meta name="description" content="yield的作用首先yield就是return，不要想多了，所以搭配yield from func()能够递归，就是这么简单； 只是说普通的函数返回的是一个value或者obj，而yield返回的是一个生成器对象。 生成器的定义&amp;同迭代器的区别在python中实现了__iter__和__next__方法，可以迭代操作的对象就叫迭代器；构建迭代器的时候，并不一次性加载所有元素到内存，只有调用">
+    <meta name="description" content="用最新的模型生成很老的知识点，一种又新又旧的学习体验。  前言这是一篇跨越 3年 又新又旧的文章。（或者说单纯鸽了这么久，上次写作的细节仍历历在目） 当时写作时 ChatGPT 都没落地，为了调一个 Blog 展示效果还得花上许多时间查文档，试实现。 现在 AI 的存在已经让手写 Blog 这种类似以前游戏中为了节省算力资源预先渲染好的的 “过场动画” 大部分时候没什么意义了，想要查询什么知识">
 <meta property="og:type" content="article">
-<meta property="og:title" content="从二叉树遍历到yield">
+<meta property="og:title" content="从二叉树遍历到yield，然后到协程、异步">
 <meta property="og:url" content="https://gou7ma7.github.io/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/index.html">
 <meta property="og:site_name" content="DevOps -&gt; AIOps">
-<meta property="og:description" content="yield的作用首先yield就是return，不要想多了，所以搭配yield from func()能够递归，就是这么简单； 只是说普通的函数返回的是一个value或者obj，而yield返回的是一个生成器对象。 生成器的定义&amp;同迭代器的区别在python中实现了__iter__和__next__方法，可以迭代操作的对象就叫迭代器；构建迭代器的时候，并不一次性加载所有元素到内存，只有调用">
+<meta property="og:description" content="用最新的模型生成很老的知识点，一种又新又旧的学习体验。  前言这是一篇跨越 3年 又新又旧的文章。（或者说单纯鸽了这么久，上次写作的细节仍历历在目） 当时写作时 ChatGPT 都没落地，为了调一个 Blog 展示效果还得花上许多时间查文档，试实现。 现在 AI 的存在已经让手写 Blog 这种类似以前游戏中为了节省算力资源预先渲染好的的 “过场动画” 大部分时候没什么意义了，想要查询什么知识">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gou7ma7.github.io/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield01.png">
 <meta property="article:published_time" content="2022-05-29T00:48:59.000Z">
-<meta property="article:modified_time" content="2025-11-10T04:49:07.535Z">
+<meta property="article:modified_time" content="2025-11-26T07:14:47.599Z">
 <meta property="article:author" content="Roy Lee">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://gou7ma7.github.io/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield01.png">
   
   
   
-  <title>从二叉树遍历到yield - DevOps -&gt; AIOps</title>
+  <title>从二叉树遍历到yield，然后到协程、异步 - DevOps -&gt; AIOps</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +202,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="从二叉树遍历到yield"></span>
+            <span id="subtitle" data-typed-text="从二叉树遍历到yield，然后到协程、异步"></span>
           
         </div>
 
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.3k 字
+          2.4k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          12 分钟
+          20 分钟
         
       </span>
     
@@ -271,12 +273,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">从二叉树遍历到yield</h1>
+            <h1 id="seo-header">从二叉树遍历到yield，然后到协程、异步</h1>
             
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2025年11月10日 下午
+                    本文最后更新于 2025年11月26日 下午
                   
                 
               </p>
@@ -284,13 +286,50 @@
             
               <div class="markdown-body">
                 
-                <h1 id="yield的作用"><a href="#yield的作用" class="headerlink" title="yield的作用"></a>yield的作用</h1><p>首先yield就是return，不要想多了，所以搭配<code>yield from func()</code>能够递归，就是这么简单；</p>
-<p>只是说普通的函数返回的是一个value或者obj，而yield返回的是一个生成器对象。</p>
-<h2 id="生成器的定义-同迭代器的区别"><a href="#生成器的定义-同迭代器的区别" class="headerlink" title="生成器的定义&amp;同迭代器的区别"></a>生成器的定义&amp;同迭代器的区别</h2><p>在python中实现了__iter__和__next__方法，可以迭代操作的对象就叫迭代器；<br>构建迭代器的时候，并不一次性加载所有元素到内存，只有调用next方法的时候才会<strong>返回</strong>需要的该元素；</p>
+                <p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield01.png" srcset="/img/loading.gif" lazyload alt="本图由 2025年11月20日 谷歌发布的Nano Banana Pro （Gemini 3 Pro图像）生成"></p>
+<blockquote>
+<p>用最新的模型生成很老的知识点，一种又新又旧的学习体验。</p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是一篇跨越 3年 又新又旧的文章。<br>（或者说单纯鸽了这么久，上次写作的细节仍历历在目）</p>
+<p>当时写作时 ChatGPT 都没落地，为了调一个 Blog 展示效果还得花上许多时间查文档，试实现。</p>
+<p>现在 AI 的存在已经让手写 Blog 这种类似以前游戏中为了节省算力资源预先渲染好的的 “过场动画” 大部分时候没什么意义了，想要查询什么知识点的时候，直接实时生成一篇 Post，通识知识质量还高于绝大多数。</p>
+<p>看了一下时间，正好是来上海的第一份工作，封控将要结束，从共享办公室搬到自己租的办公楼时候。</p>
 <span id="more"></span>
 
-<p>生成器就是一种迭代器，由生成器函数返回；<br>生成器函数就是上文中的 return -&gt; yield的函数；  </p>
-<h1 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h1><p>学以致用，看文档的时候自然说：都懂，都懂，结果自己不仅写不来还看不懂。<br>尤其是再遇到几个yield并排就不会了？</p>
+<p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/background.png" srcset="/img/loading.gif" lazyload alt="写作背景"></p>
+<blockquote>
+<p>这张生成图真的太抽象了，而且我说了我是 2025年3月去的百度，不知道 2023 和 “虚桌” 是什么意思。。。</p>
+</blockquote>
+<p>那个时候刚刚才接触云服务，又正值 AI 普及方兴未艾，面对公司都是谷歌退下来的老人，没想到自己两年后也会去百度走一遭。</p>
+<p>一晃也真的是又 3年 过去了，再不抓紧总结点什么的话，感觉都留不下自己的痕迹。</p>
+<p>本文理论部分大规模参考以下视频，当看到第4遍，再加上不断应用 ayscio 相关的架构，总算把这个抽象的概念越看越具体了。</p>
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=726448831&bvid=BV1sS4y1b7qb&cid=718057385&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="width: 100%; height: 500px;"> </iframe>
+
+<h1 id="yield-是什么"><a href="#yield-是什么" class="headerlink" title="yield 是什么"></a>yield 是什么</h1><blockquote>
+<p> yield的作用<br>首先yield就是return，不要想多了，所以搭配<code>yield from func()</code>能够递归，就是这么简单；</p>
+<p>只是说普通的函数返回的是一个value或者obj，而yield返回的是一个生成器对象。<br> 生成器的定义&amp;同迭代器的区别<br>在python中实现了__iter__和__next__方法，可以迭代操作的对象就叫迭代器；<br>构建迭代器的时候，并不一次性加载所有元素到内存，只有调用next方法的时候才会<strong>返回</strong>需要的该元素；<br>生成器就是一种迭代器，由生成器函数返回；<br>生成器函数就是上文中的 return -&gt; yield的函数；  </p>
+</blockquote>
+<p>我当年的说法本身没什么问题，但是太过流于表面，从性质进行总结。</p>
+<p>要想真正知道 yield 是什么，首先当然是应用，此处略去，一定的积累之后，优先看官方文档 <a target="_blank" rel="noopener" href="https://docs.python.org/3/reference/expressions.html#yield-expressions">https://docs.python.org/3/reference/expressions.html#yield-expressions</a></p>
+<p>expression： 就像正则表达式，会有返回值的那种。</p>
+<p>statement： 就像 print 语句，不会有返回值。</p>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p>当前我并没有阅读 Python 源码的计划，因此仅在豆包的指导下，涉猎 Objects&#x2F;genobject.c 等文件，理解了调用栈等相关概念的实现部分。</p>
+<h2 id="生成器和迭代器的区别"><a href="#生成器和迭代器的区别" class="headerlink" title="生成器和迭代器的区别"></a>生成器和迭代器的区别</h2><p>话说这是之前遇到很高频的面试问题了，但是当时并没有系统的学习过，也只是从用法上进行了一些回答。</p>
+<p>总的来说，前者是后者的子集。 而在 Python 里面，后者更像是一种具有某种性质的数据结构概念，前者是后者的一种具体实现方式。</p>
+<p>或者具体的来说，在 Python 里面，可以跟在 in 关键字后面的就是 <strong>可迭代对象</strong>。</p>
+<hr>
+<p>迭代（英语：iteration），亦作疊代，是重复反馈过程的活动，其目的通常是为了接近并且到达所需的目标或结果。每一次对过程的重复被称为一次“迭代”，而每一次迭代得到的结果会被用来作为下一次迭代的初始值。</p>
+<p>可迭代对象（Iterable）： 能够被迭代（遍历）的对象，作为 “数据容器”，提供迭代的 “数据来源”，但不负责迭代的具体逻辑（如 “如何获取下一个元素”“是否迭代结束”）。</p>
+<p>迭代器（Iterator）： 实现了迭代协议（Iterator Protocol）的对象，是 “迭代的具体执行者”—— 负责按顺序生成下一个元素、记录迭代状态、判断迭代结束。</p>
+<p>很明显能看出来，后者多了一个正如同常见的 递推公式 需要知道 自己 和 之后其他项 的规律的能力，因此迭代器 除了也有 <code>__iter__ </code> 方法返回它自身意外， 还有 <code>__next__ </code> 方法返回之后承载迭代的规律的 “其他项”。</p>
+<p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield02.png" srcset="/img/loading.gif" lazyload alt="可迭代对象和迭代器的区别"></p>
+<blockquote>
+<p>很明显的能够看到，由于可迭代对象（Iterable）只是 “数据容器”，且不知道迭代逻辑，因此不具备 “惰性计算” 的能力，还是一股脑加载到内存里面的。</p>
+</blockquote>
+<p>在屏蔽底层 C语言 实现的细节下，我认为我们已经阐述清楚了 <strong>迭代器</strong> 这个概念，接下来我们继续讨论生成器。</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield05.png" srcset="/img/loading.gif" lazyload alt="迭代器和生成器的区别"></h2><blockquote>
+<p>用法<br>学以致用，看文档的时候自然说：都懂，都懂，结果自己不仅写不来还看不懂。<br>尤其是再遇到几个yield并排就不会了？</p>
+</blockquote>
 <h2 id="当一个生成器函数中多个yield并排"><a href="#当一个生成器函数中多个yield并排" class="headerlink" title="当一个生成器函数中多个yield并排"></a>当一个生成器函数中多个yield并排</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">func</span>():  <span class="hljs-comment"># 普通函数</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">2</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">3</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">gen</span>():  <span class="hljs-comment"># 生成器函数</span><br>    <span class="hljs-keyword">yield</span> <span class="hljs-number">1</span><br>    <span class="hljs-keyword">yield</span> <span class="hljs-number">2</span><br>    <span class="hljs-keyword">yield</span> <span class="hljs-number">3</span><br><br><span class="hljs-comment"># 遍历一个生成器</span><br>it = gen()<br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-built_in">next</span>(it))<br>    <span class="hljs-keyword">except</span> StopIteration:<br>        sys.exit()<br></code></pre></td></tr></table></figure>
 <p>要遍历一个生成器，自然需要调用next方法到报错为止，实际上行为和遍历序列的时候下标越界同理，只是现代编译器做好了没意识到而已。  </p>
 <blockquote>
@@ -361,7 +400,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>从二叉树遍历到yield</div>
+      <div>从二叉树遍历到yield，然后到协程、异步</div>
       <div>https://gou7ma7.github.io/2022/05/29/book/@2022_python_grammer_yield与二叉树遍历/</div>
     </div>
     <div class="license-meta">
