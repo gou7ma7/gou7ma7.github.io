@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://gou7ma7.github.io/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield01.png">
 <meta property="article:published_time" content="2022-05-29T00:48:59.000Z">
-<meta property="article:modified_time" content="2025-12-05T11:53:49.870Z">
+<meta property="article:modified_time" content="2025-12-09T12:42:12.232Z">
 <meta property="article:author" content="Roy Lee">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary_large_image">
@@ -278,7 +278,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2025年12月5日 晚上
+                    本文最后更新于 2025年12月9日 晚上
                   
                 
               </p>
@@ -326,7 +326,7 @@
 <h3 id="可迭代对象是什么"><a href="#可迭代对象是什么" class="headerlink" title="可迭代对象是什么"></a>可迭代对象是什么</h3><p>具体的来说，在 Python 里面，可以跟在 in 关键字后面的就是 <strong>可迭代对象</strong>。</p>
 <p>抽象的来说，可迭代对象（Iterable）： 能够被迭代（遍历）的对象，作为 “数据容器”，提供迭代的 “数据来源”，但不负责迭代的具体逻辑（如 “如何获取下一个元素”“是否迭代结束”）</p>
 <p>按照视频中的拆解 Python 实现后发现，实现了 <code>__iter__ </code> 方法，用来随时返回容器里面的数据的对象，就叫做可迭代对象。而且也满足上述定义：能返回自身作为被迭代的对象，且不需要知道对象之间（如何迭代）关系。</p>
-<h2 id="迭代器是什么-1"><a href="#迭代器是什么-1" class="headerlink" title="迭代器是什么"></a>迭代器是什么</h2><p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield02.png" srcset="/img/loading.gif" lazyload alt="可迭代对象和迭代器的区别"></p>
+<h2 id="迭代器是什么-1"><a href="#迭代器是什么-1" class="headerlink" title="迭代器是什么"></a>迭代器是什么</h2><p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield02.jpg" srcset="/img/loading.gif" lazyload alt="可迭代对象和迭代器的区别"></p>
 <blockquote>
 <p>很明显的能够看到，由于可迭代对象（Iterable）只是 “数据容器”，且不知道迭代逻辑，因此不具备 “惰性计算” 的能力，还是一股脑加载到内存里面的。</p>
 </blockquote>
