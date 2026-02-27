@@ -1,0 +1,741 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Roy Lee">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言本文初创建于入职百度之前，写作背景为在声网的时候太多的同事咨询日常事务，且从不看文档，正值 RAG 方兴未艾，号称是大模型幻觉的通用解。 因此酷爱尝鲜的我就在本地 4070 上部署了 Ollama 跑了个 Deepseek 32B 蒸馏模型，看它一个个字的蹦，也不失为一种乐趣。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 Nas 的 Docker 里面装 vLLM">
+<meta property="og:url" content="https://gou7ma7.github.io/2025/02/24/ai/@2025_nas_docker_vllm/index.html">
+<meta property="og:site_name" content="DevOps -&gt; AIOps">
+<meta property="og:description" content="前言本文初创建于入职百度之前，写作背景为在声网的时候太多的同事咨询日常事务，且从不看文档，正值 RAG 方兴未艾，号称是大模型幻觉的通用解。 因此酷爱尝鲜的我就在本地 4070 上部署了 Ollama 跑了个 Deepseek 32B 蒸馏模型，看它一个个字的蹦，也不失为一种乐趣。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gou7ma7.github.io/2025/02/24/ai/@2025_nas_docker_vllm/01.png">
+<meta property="og:image" content="https://gou7ma7.github.io/2025/02/24/ai/@2025_nas_docker_vllm/02.png">
+<meta property="og:image" content="https://gou7ma7.github.io/2025/02/24/ai/@2025_nas_docker_vllm/03.jpg">
+<meta property="article:published_time" content="2025-02-24T12:46:54.000Z">
+<meta property="article:modified_time" content="2026-02-27T01:11:19.000Z">
+<meta property="article:author" content="Roy Lee">
+<meta property="article:tag" content="vLLM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://gou7ma7.github.io/2025/02/24/ai/@2025_nas_docker_vllm/01.png">
+  
+  
+  
+  <title>在 Nas 的 Docker 里面装 vLLM - DevOps -&gt; AIOps</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"gou7ma7.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/gou7ma7/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="在 Nas 的 Docker 里面装 vLLM"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-24 20:46" pubdate>
+          2025年2月24日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">在 Nas 的 Docker 里面装 vLLM</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年2月27日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文初创建于入职百度之前，写作背景为在声网的时候太多的同事咨询日常事务，且从不看文档，正值 RAG 方兴未艾，号称是大模型幻觉的通用解。</p>
+<p>因此酷爱尝鲜的我就在本地 4070 上部署了 Ollama 跑了个 Deepseek 32B 蒸馏模型，看它一个个字的蹦，也不失为一种乐趣。</p>
+<span id="more"></span>
+<blockquote>
+<p>TODO  最近刚入职，太忙了，而且暂时也没钱买 5090D，同时公司的资源够我研究很久了。</p>
+</blockquote>
+<p>后来啊，后来就迷失在 百度 半夜接客户电话的提心吊胆中惶惶不可终日。</p>
+<p>再后来就是 “RAG 已死，长上下文窗口和 Agent 编排当立“，正如冒出的各个新技术一样，别的不说， Agent 横空出世直接让之前的 “通用解” 变成了笑话。</p>
+<p>当然都是科普安装记录文，谁也别瞧不起谁，就将就挪用了。</p>
+<p>当时的家用 PC </p>
+<blockquote>
+<ul>
+<li>操作系统：Ubuntu 24.10</li>
+<li>CPU: AMD Ryzen 9 5950X 16-Core Processor</li>
+<li>内存：32GB</li>
+<li>显卡：NVIDIA Corporation AD104 [GeForce RTX 4070] (rev a1)</li>
+</ul>
+</blockquote>
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=114063761739419&bvid=BV12tPveLEpr&cid=28570224111&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="width: 100%; height: 500px;"> </iframe>
+
+<p>这是现在公司的电脑</p>
+<blockquote>
+<ul>
+<li>操作系统：fnOS 1.1.4 基于 Debian GNU&#x2F;Linux 12 (bookworm)</li>
+<li>CPU: Intel Core i9-14900KF 24核 32 线程</li>
+<li>内存：4 条共 64 GB 4200MHz DDR5</li>
+<li>显卡：NVIDIA GeForce RTX 4090</li>
+</ul>
+</blockquote>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="操作系统-fnOS"><a href="#操作系统-fnOS" class="headerlink" title="操作系统 - fnOS"></a>操作系统 - fnOS</h2><p>飞牛OS 是基于 Debian 打造的国产 NAS&#x2F;桌面一体操作系统，很多的东西都打包好了，直接跑 AI 相关的工程完全胜任，太好用了以至于治好了我操作系统纠结症。</p>
+<p>官网见 <a target="_blank" rel="noopener" href="https://www.fnnas.com/">https://www.fnnas.com/</a>。 </p>
+<p>同理 Ubuntu 或者其他 Linux 发行版自然同理，同时附上老生常谈的： Windows, macOS 用户请自求多福。</p>
+<h2 id="显卡驱动集-Nvidia-Driver-560"><a href="#显卡驱动集-Nvidia-Driver-560" class="headerlink" title="显卡驱动集 - Nvidia-Driver-560"></a>显卡驱动集 - Nvidia-Driver-560</h2><p>登录飞牛后台管理 GUI -&gt; 应用中心 -&gt; 驱动 -&gt; Nvidia-Driver-560</p>
+<p>直接在界面上点击安装即可。</p>
+<p><img src="/2025/02/24/ai/@2025_nas_docker_vllm/01.png" srcset="/img/loading.gif" lazyload alt="Nas 安装驱动"></p>
+<p>安装完成后 SSH 登录，在 Host 直接运行 <code>nvidia-smi</code> ，能如上图所示识别到显卡信息即为成功。</p>
+<blockquote>
+<p>nvidia-smi 全称是 NVIDIA System Management Interface， 用于监控和查询 GPU 状态。</p>
+</blockquote>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><p>如果 Host 没有，请自行安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker --version<br>Docker version 28.5.2, build ecc6942<br></code></pre></td></tr></table></figure>
+
+<h2 id="nvidia-container-toolkit"><a href="#nvidia-container-toolkit" class="headerlink" title="nvidia-container-toolkit"></a>nvidia-container-toolkit</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt-get update<br><span class="hljs-built_in">sudo</span> apt-get install -y nvidia-container-toolkit<br></code></pre></td></tr></table></figure>
+
+<p>在这个过程中，可能会遇到  <a target="_blank" rel="noopener" href="https://nvidia.github.io/libnvidia-container/gpgkey">https://nvidia.github.io/libnvidia-container/gpgkey</a> 相关的 源迁移而导致报错，请自行查阅 AI 解决。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash">    docker run --<span class="hljs-built_in">rm</span> --runtime=nvidia --gpus all nvidia/cuda:12.3.0-base-ubuntu22.04 nvidia-smi<br>Thu Dec 11 02:13:12 2025       <br>+-----------------------------------------------------------------------------------------+<br>| NVIDIA-SMI 560.28.03              Driver Version: 560.28.03      CUDA Version: 12.6     |<br>|-----------------------------------------+------------------------+----------------------+<br>| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |<br>| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |<br>|                                         |                        |               MIG M. |<br>|=========================================+========================+======================|<br>|   0  NVIDIA GeForce RTX 4090        Off |   00000000:01:00.0 Off |                  Off |<br>|  0%   39C    P8              8W /  450W |       1MiB /  24564MiB |      0%      Default |<br>|                                         |                        |                  N/A |<br>+-----------------------------------------+------------------------+----------------------+<br>                                                                                         <br>+-----------------------------------------------------------------------------------------+<br>| Processes:                                                                              |<br>|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |<br>|        ID   ID                                                               Usage      |<br>|=========================================================================================|<br>|  No running processes found                                                             |<br>+-----------------------------------------------------------------------------------------+<br></code></pre></td></tr></table></figure>
+
+<p>看到 container 里面能成功运行 <code>nvidia-smi</code> 并且和 Host 行为一致，表示着可以在 docker 里面几乎无损的直通驱动了。</p>
+<p><img src="/2025/02/24/ai/@2025_nas_docker_vllm/02.png" srcset="/img/loading.gif" lazyload alt="关系"><br>安装 nvidia-container-toolkit 会自动安装 libnvidia-container，无需额外关注。</p>
+<h2 id="官方-Docker-镜像"><a href="#官方-Docker-镜像" class="headerlink" title="官方 Docker 镜像"></a>官方 Docker 镜像</h2><p>飞牛OS 自己的服务已经占用了 host 的 8000 端口，得换一个。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 拉取vLLM镜像（适配CUDA 12.x）</span><br><span class="hljs-built_in">sudo</span> docker pull vllm/vllm-openai:latest<br><span class="hljs-comment"># 运行容器（指定GPU、端口、模型，7B模型需至少10GB显存）</span><br><span class="hljs-built_in">sudo</span> docker run --gpus all -p 18000:8000 \<br>  vllm/vllm-openai:latest \<br>  --model lmsys/vicuna-7b-v1.5 \  <span class="hljs-comment"># 替换为你要运行的模型</span><br>  --tensor-parallel-size 1 \       <span class="hljs-comment"># 用几块GPU，按需改</span><br>  --port 18000<br></code></pre></td></tr></table></figure>
+
+<div class="note note-info">
+            <p>这里拉取的推理镜像 <code>vllm-openai</code> 中已经包含了 CUDA 套件，否则需要先在 host 中装好。</p>
+          </div>
+
+<p>在本地开发机上 curl 进行最简单的请求</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">❯ curl http://192.168.31.78:18000/v1/completions \<br>  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \<br>  -d <span class="hljs-string">&#x27;&#123;</span><br><span class="hljs-string">    &quot;model&quot;: &quot;lmsys/vicuna-7b-v1.5&quot;,</span><br><span class="hljs-string">    &quot;prompt&quot;: &quot;Hello vLLM!&quot;,</span><br><span class="hljs-string">    &quot;max_tokens&quot;: 50</span><br><span class="hljs-string">  &#125;&#x27;</span><br><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;cmpl-a5b14ea50b0f422ca76d7200492adc33&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;object&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;text_completion&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;created&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1765433551</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;model&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;lmsys/vicuna-7b-v1.5&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;choices&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>    <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;index&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;text&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot; I&#x27;m sorry, I cannot provide a review of vLLM, beyond what I have already written above. However, if you have any questions about vLLM, or any other LL.M programs, I&#x27;d be happy to help&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;logprobs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">null</span></span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;finish_reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;length&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;stop_reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">null</span></span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;prompt_logprobs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">null</span></span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;usage&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;prompt_tokens&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">6</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;total_tokens&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">56</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;completion_tokens&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">50</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;prompt_tokens_details&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">null</span></span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br><br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/2025/02/24/ai/@2025_nas_docker_vllm/03.jpg" srcset="/img/loading.gif" lazyload alt="启动docker"></p>
+<blockquote>
+<p>可以看到，实际上打包成了一个 FastAPI 提供接口服务</p>
+</blockquote>
+<p>至此， vLLM 的服务就安装完成，接下来就是直接学习了。</p>
+<p>PS: 当前的 4090 显卡可以用更加强力的模型</p>
+<blockquote>
+<p> docker run -d –name vllm-openai –gpus all –runtime&#x3D;nvidia <br>  -e NVIDIA_VISIBLE_DEVICES&#x3D;all -e NVIDIA_DRIVER_CAPABILITIES&#x3D;compute,utility <br>  -e HF_HUB_ENABLE_HF_TRANSFER&#x3D;0 <br>  -p 18000:8000 <br>  vllm&#x2F;vllm-openai:v0.6.6 <br>  –model deepseek-ai&#x2F;DeepSeek-R1-Distill-Qwen-32B-AWQ <br>  –quantization awq <br>  –kv-cache-dtype fp8_e4m3 <br>  –tensor-parallel-size 1 <br>  –max-model-len 4096 <br>  –port 8000</p>
+</blockquote>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/vLLM/" class="print-no-link">#vLLM</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>在 Nas 的 Docker 里面装 vLLM</div>
+      <div>https://gou7ma7.github.io/2025/02/24/ai/@2025_nas_docker_vllm/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Roy Lee</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/07/15/ai/mid_2025_struggle_with_ai/@2025_index/" title="Mid-2025: Struggling with AI">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Mid-2025: Struggling with AI</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/24/career/@2025_1st_post_in_ai_era/" title="AI时代 暨 找到工作的第一篇博客">
+                        <span class="hidden-mobile">AI时代 暨 找到工作的第一篇博客</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+<i class="iconfont icon-love"></i>
+<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

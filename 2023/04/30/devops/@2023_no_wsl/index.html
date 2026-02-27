@@ -1,0 +1,712 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Roy Lee">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="有位前辈用“Linux本身不要钱，但是你（折腾）的时间更费钱”来形容Linux上可能遇到的适配问题，从而表达自己对该系统又爱又恨的感情。 而寄宿在Windows上的WSL，更是将这个说法发挥到极致。 在我自己从头搭建Kubernetes工具链的时候，由于家境贫寒，本想就着手上4台老旧PC搭建个基本能用的集群就行，结果在Windows里面装WSL，以及WSL里面装Kubernetes的时候，遇到太多">
+<meta property="og:type" content="article">
+<meta property="og:title" content="不要用WSL，否则会变得不幸">
+<meta property="og:url" content="https://gou7ma7.github.io/2023/04/30/devops/@2023_no_wsl/index.html">
+<meta property="og:site_name" content="DevOps -&gt; AIOps">
+<meta property="og:description" content="有位前辈用“Linux本身不要钱，但是你（折腾）的时间更费钱”来形容Linux上可能遇到的适配问题，从而表达自己对该系统又爱又恨的感情。 而寄宿在Windows上的WSL，更是将这个说法发挥到极致。 在我自己从头搭建Kubernetes工具链的时候，由于家境贫寒，本想就着手上4台老旧PC搭建个基本能用的集群就行，结果在Windows里面装WSL，以及WSL里面装Kubernetes的时候，遇到太多">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-04-30T07:54:17.000Z">
+<meta property="article:modified_time" content="2026-02-27T01:11:19.000Z">
+<meta property="article:author" content="Roy Lee">
+<meta property="article:tag" content="Setup">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>不要用WSL，否则会变得不幸 - DevOps -&gt; AIOps</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"gou7ma7.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/gou7ma7/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="不要用WSL，否则会变得不幸"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-30 15:54" pubdate>
+          2023年4月30日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">不要用WSL，否则会变得不幸</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年2月27日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>有位前辈用“Linux本身不要钱，但是你（折腾）的时间更费钱”来形容Linux上可能遇到的适配问题，从而表达自己对该系统又爱又恨的感情。</p>
+<p>而寄宿在Windows上的WSL，更是将这个说法发挥到极致。</p>
+<p>在我自己从头搭建Kubernetes工具链的时候，由于家境贫寒，本想就着手上4台老旧PC搭建个基本能用的集群就行，结果在Windows里面装WSL，以及WSL里面装Kubernetes的时候，遇到太多看不到尽头的问题，遂放弃。</p>
+<p>目前我的解决方案是安装Ubuntu系统到其中2台PC，至少先跑起来一个最小的主从集群。</p>
+<p>而本次我本身就是为了学习才搭建环境，因此记录下遇到的WSL相关的问题，以便学有余力的时候更加透彻的掌握操作系统相关的知识。</p>
+<span id="more"></span>
+
+<h1 id="WSL的适用范围"><a href="#WSL的适用范围" class="headerlink" title="WSL的适用范围"></a>WSL的适用范围</h1><p>写写Python代码，搭建普通的前后端应用，WSL是非常合适的，甚至避免了在Windows上安装软件的麻烦事。</p>
+<p>但是在涉及到底层的东西，比如说虚拟化、容器化、集群化等这种需要用到“网卡”之类硬件的配置的时候，WSL这类基于Hyper-v的“精简版”虚拟机就会变得缺胳膊少腿，有早年用过“番茄花园”这种精简版Windows打游戏然后缺少组件经历的朋友就能体会到我的感受。</p>
+<h1 id="最好的是物理机，其次是真正的虚拟机"><a href="#最好的是物理机，其次是真正的虚拟机" class="headerlink" title="最好的是物理机，其次是真正的虚拟机"></a>最好的是物理机，其次是真正的虚拟机</h1><p>这几天我一直在满是坑的泥泞中匍匐，很多问题要么是没有通用解法，要么是试下来根本不管用。</p>
+<p>最后学习阶段只推荐VMware、VirtualBox这种成熟得不能再成熟的真正的虚拟机，如果不信欢迎自行尝试。</p>
+<h1 id="systemd与systemctl"><a href="#systemd与systemctl" class="headerlink" title="systemd与systemctl"></a>systemd与systemctl</h1><p>systemd是一个Linux系统的初始化系统和服务管理器;</p>
+<p>而systemctl是systemd的一个命令行工具，用于控制systemd系统和服务管理器。</p>
+<p>systemctl可以启动、停止、重启、重载、状态检查、启用或禁用系统服务。</p>
+<p>WSL2本身是由Windows负责运行的，因此使用tree或ps命令时会看到根进程不是systemd，这将导致无法启动Linux系统服务的守护进程(deamon)。当我们执行systemctl命令的时候，会显示出我们的init system (PID 1)并非systemd，而是微软提供的init system。</p>
+<p>即使在&#x2F;etc&#x2F;wsl.conf添加systemd&#x3D;true配置等操作也会有各种问题。</p>
+<h2 id="service代替systemctl"><a href="#service代替systemctl" class="headerlink" title="service代替systemctl"></a>service代替systemctl</h2><p>虽然有些时候能够通过service代替systemctl，但是有些时候会出现<code>Failed to connect to bus: No such file or directory</code>的错误。</p>
+<p>比如我跑一个自动安装docker &#x2F; 自动开启ssh的脚本的时候，由于源头默认提供的脚本是使用systemctl的，还是绕不开这个问题。</p>
+<p>如果我去批量替换别人的脚本，又会带来新的问题。</p>
+<h1 id="WSL2无法连接网络"><a href="#WSL2无法连接网络" class="headerlink" title="WSL2无法连接网络"></a>WSL2无法连接网络</h1><h2 id="Windows-automatically-generates-resolv-conf-file-with-wrong-nameserver"><a href="#Windows-automatically-generates-resolv-conf-file-with-wrong-nameserver" class="headerlink" title="Windows automatically generates resolv.conf file with wrong nameserver"></a>Windows automatically generates resolv.conf file with wrong nameserver</h2><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/62314789/no-internet-connection-on-wsl-ubuntu-windows-subsystem-for-linux">https://stackoverflow.com/questions/62314789/no-internet-connection-on-wsl-ubuntu-windows-subsystem-for-linux</a><br>Locate the file by running the following command:</p>
+<p><code>sudo vim /etc/resolv.conf</code></p>
+<p>You will see the following in the file:</p>
+<h1 id="This-file-was-automatically-generated-by-WSL-To-stop-automatic-generation-of-this-file-add-the-following-entry-to-etc-resolv-conf"><a href="#This-file-was-automatically-generated-by-WSL-To-stop-automatic-generation-of-this-file-add-the-following-entry-to-etc-resolv-conf" class="headerlink" title="This file was automatically generated by WSL. To stop automatic generation of this file, add the following entry to &#x2F;etc&#x2F;resolv.conf"></a>This file was automatically generated by WSL. To stop automatic generation of this file, add the following entry to &#x2F;etc&#x2F;resolv.conf</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># [network]</span><br><span class="hljs-comment"># generateResolvConf = false</span><br>nameserver xxx.xx.xx<br></code></pre></td></tr></table></figure>
+<p>Change the nameserver value to 8.8.8.8 and save the file. You should now be able to connect to the internet.</p>
+<h2 id="winsock"><a href="#winsock" class="headerlink" title="winsock"></a>winsock</h2><p><a target="_blank" rel="noopener" href="https://github.com/microsoft/WSL/issues/3438#issuecomment-41051857">https://github.com/microsoft/WSL/issues/3438#issuecomment-41051857</a><br>Open Command Prompt as an Administrator and type these commands:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">netsh winsock reset <br>netsh int ip reset all<br>netsh winhttp reset proxy<br>ipconfig /flushdns<br>Reboot your machine.<br></code></pre></td></tr></table></figure>
+
+<p>完成之后一定重启WSL，否则修改不生效。</p>
+<h1 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h1><p>WSL2可以直接用Windows的命令行直接进入，也可以通过VSCode的WSL插件直接本地连接WSL；</p>
+<h2 id="无法Set-Bridge-Network"><a href="#无法Set-Bridge-Network" class="headerlink" title="无法Set Bridge Network"></a>无法Set Bridge Network</h2><p>在正统的虚拟机配置设置Bridge Network都是点一键就能拿完成的工作，我无法在WSL上完成，虽然各种教程都说在Windows上的Hyper-v管理器上设置一下就好了，但是如果真的是这样的话，就不会有这篇文章了。</p>
+<h2 id="kex-exchange-identification-Connection-closed-by-remote-host"><a href="#kex-exchange-identification-Connection-closed-by-remote-host" class="headerlink" title="kex_exchange_identification: Connection closed by remote host"></a>kex_exchange_identification: Connection closed by remote host</h2><p>在WSL2中开启sshd服务之后，连接自己机器上的WSL2只需要通过<code>ssh localhost</code>就可以；</p>
+<p>连接局域网中另一个PC物理机上的WSL2就会出现标题标错，还有更离谱的timeout，我尝试过很多，就没成功过（多半是因为上面Set Bridge Network没成功导致的）。</p>
+<h1 id="Transport-endpoint-is-not-connected"><a href="#Transport-endpoint-is-not-connected" class="headerlink" title="Transport endpoint is not connected"></a>Transport endpoint is not connected</h1><p>导致这个问题的原因太多了，不断重启LxssManager服务可能会暂时可用一下，我就是被这个问题搞得彻底放弃的。</p>
+<p>LxssManager是Windows 10中的一个服务，它支持运行本机ELF二进制文件。该服务提供在Windows上运行ELF二进制文件所需的基础结构。WSL是Windows Subsystem for Linux的缩写，它是一个允许在Windows 10上运行Linux二进制文件的兼容层。LxssManager是WSL的一部分，它负责管理WSL的Linux发行版。</p>
+<h1 id="swap"><a href="#swap" class="headerlink" title="swap"></a>swap</h1><p>首先部署Kubernetes的机器不能开启swap，因为在写入虚拟内存的时候会影响性能和造成系统卡顿；</p>
+<p>于是在实体机上只需要<code>sudo swapoff -a</code>简单一步的操作，在WSL上死活不起作用，推测是WSL的swap是由Windows上的某个专门负责虚拟化的服务进行配置的，然后由于问题太过偏门，尝试了之后没有找到轻松有效的方法。</p>
+<h1 id="Ubuntu-桥接接入局域网固定IP"><a href="#Ubuntu-桥接接入局域网固定IP" class="headerlink" title="Ubuntu 桥接接入局域网固定IP"></a>Ubuntu 桥接接入局域网固定IP</h1><h2 id="入网方式"><a href="#入网方式" class="headerlink" title="入网方式"></a>入网方式</h2><p>一般虚拟机软件都提供多种网络模式，主要有：</p>
+<p>NAT模式： 虚拟机没有直接接入局域网，和集群里面的Node宿主机互相ping不通，<strong>不选</strong></p>
+<p>Bridged Adapter模式：即桥接模式，为虚拟机模拟出一个独立的网卡，有独立的IP地址接入局域网，<strong>选</strong></p>
+<h2 id="固定IP"><a href="#固定IP" class="headerlink" title="固定IP"></a>固定IP</h2><p>当虚拟机使用桥接模式接入局域网之后，就和物理机Ubuntu的设置一样了。</p>
+<p>Ubuntu 18.04 LTS之后的版本使用&#x2F;etc&#x2F;netplan&#x2F;下得文件来配置网络，我这里叫01-network-manager-all.yaml。</p>
+<p>首先使用<code>ifconfig</code>查看当前机器的网络情况，找到桥接的网卡名称，我这里是<code>enp0s3</code>；</p>
+<p>然后使用<code>sudo vim /etc/netplan/01-network-manager-all.yaml</code>打开配置文件，添加如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Let NetworkManager manage all devices on this system</span><br>network:<br>  ethernets:<br>    enp0s3:  <span class="hljs-comment">#配置的网卡的名称</span><br>      addresses: [192.168.31.50/24]  <span class="hljs-comment">#配置的静态ip地址和掩码</span><br>      dhcp4: no  <span class="hljs-comment">#关闭DHCP，如果需要打开DHCP则写yes</span><br>      optional: <span class="hljs-literal">true</span><br>      routes:<br>        - to: 0.0.0.0/0<br>          via: 192.168.31.1  <span class="hljs-comment">#网关地址</span><br>      nameservers:<br>         addresses: [192.168.31.1]  <span class="hljs-comment">#DNS服务器地址，多个DNS服务器地址需要用英文逗号分隔开</span><br>  version: 2<br>    <span class="hljs-comment"># renderer: NetworkManager</span><br>  renderer: networkd  <span class="hljs-comment">#指定后端采用systemd-networkd或者Network Manager</span><br></code></pre></td></tr></table></figure>
+
+<p>networkd和NetworkManager都是用于管理网络接口的后端。networkd是systemd的一部分，它是一个轻量级的网络管理器，可以在Ubuntu 18.04及更高版本中使用。它使用Netplan配置文件来配置网络接口。NetworkManager是一个更高级的网络管理器，可以在Ubuntu 16.04及更高版本中使用。它提供了一个GUI界面，可以方便地配置网络接口。</p>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/DevOps/" class="category-chain-item">DevOps</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Setup/" class="print-no-link">#Setup</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>不要用WSL，否则会变得不幸</div>
+      <div>https://gou7ma7.github.io/2023/04/30/devops/@2023_no_wsl/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Roy Lee</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年4月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/04/30/devops/@2023_devops_toolchain_integration/" title="DevOps Toolchain Integration Setup">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">DevOps Toolchain Integration Setup</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/30/devops/@2023_setup_kubernetes/" title="Kubernetes Setup in Local Physical Servers">
+                        <span class="hidden-mobile">Kubernetes Setup in Local Physical Servers</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+<i class="iconfont icon-love"></i>
+<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

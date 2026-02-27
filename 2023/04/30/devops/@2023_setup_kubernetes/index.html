@@ -1,0 +1,810 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Roy Lee">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="选择在我自己在作为一名初学者学习编程的时候，曾看到过一位前辈在知乎日报中写道： 他们当年学习编程痛苦在根本找不到参考资料，只能自己硬着头皮摸索前进，不过好处是每个方向的技术选型基本上是固定的，不会有纠结； 而现在的初学者在一开始学习编程，就会很容易迷失在面对浩如烟海的技术路线选择中，尤其是热门的方向，总有前人做好了各种版本的教程、工具，完全不知道从哪里开始。 在我一开始学习DevOps的时候背过官">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes Setup in Local Physical Servers">
+<meta property="og:url" content="https://gou7ma7.github.io/2023/04/30/devops/@2023_setup_kubernetes/index.html">
+<meta property="og:site_name" content="DevOps -&gt; AIOps">
+<meta property="og:description" content="选择在我自己在作为一名初学者学习编程的时候，曾看到过一位前辈在知乎日报中写道： 他们当年学习编程痛苦在根本找不到参考资料，只能自己硬着头皮摸索前进，不过好处是每个方向的技术选型基本上是固定的，不会有纠结； 而现在的初学者在一开始学习编程，就会很容易迷失在面对浩如烟海的技术路线选择中，尤其是热门的方向，总有前人做好了各种版本的教程、工具，完全不知道从哪里开始。 在我一开始学习DevOps的时候背过官">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-04-30T07:54:17.000Z">
+<meta property="article:modified_time" content="2025-11-11T06:24:23.000Z">
+<meta property="article:author" content="Roy Lee">
+<meta property="article:tag" content="Setup">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Kubernetes Setup in Local Physical Servers - DevOps -&gt; AIOps</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"gou7ma7.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/gou7ma7/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Kubernetes Setup in Local Physical Servers"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-30 15:54" pubdate>
+          2023年4月30日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Kubernetes Setup in Local Physical Servers</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2025年11月11日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="选择"><a href="#选择" class="headerlink" title="选择"></a>选择</h1><p>在我自己在作为一名初学者学习编程的时候，曾看到过一位前辈在知乎日报中写道：</p>
+<p>他们当年学习编程痛苦在根本找不到参考资料，只能自己硬着头皮摸索前进，不过好处是每个方向的技术选型基本上是固定的，不会有纠结；</p>
+<p>而现在的初学者在一开始学习编程，就会很容易迷失在面对浩如烟海的技术路线选择中，尤其是热门的方向，总有前人做好了各种版本的教程、工具，完全不知道从哪里开始。</p>
+<p>在我一开始学习DevOps的时候背过官方推荐的minikube教程， 到后来也尝试过搭建轻量化的k3s环境，算上业务中的阿里云容器服务Kubernetes版（Alibaba Cloud Container Service for Kubernetes，简称容器服务ACK），最终发现“搭建环境”本身也是造轮子的一部分，对提高<strong>理解应用能力</strong>甚微。</p>
+<p>因此本文选择最简单的一种方式：<br><a target="_blank" rel="noopener" href="https://kubesphere.io/zh/docs/v3.3/quick-start/all-in-one-on-linux/">在 Linux 上以 All-in-One 模式安装 KubeSphere</a>（以下简称<strong>官方文档</strong>），直接最简化地安装，然后再在使用中进行学习，毕竟<strong>背诵任何的学习资料都不如自己动手部署一遍</strong>。</p>
+<span id="more"></span>
+<h1 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h1><p>本文仅供学习使用，生产环境请使用云服务厂商提供的成熟的Kubernetes环境。</p>
+<h1 id="Master-Node"><a href="#Master-Node" class="headerlink" title="Master Node"></a>Master Node</h1><p>Ubuntu 实体机 in roy-qtc6（有些时候master node的名字可能是这个），这是一台2013年刚上大学时候买的HASEE 神舟 精盾 K580S-i7D1，三千六就拿到当时平民级最强的CPU和显卡，甚至到10年后的今天不管是装Windows娱乐还是装Linux学习性能都充裕，对比一会儿提到的同龄人简直是扬我国威。</p>
+<p>按照<a target="_blank" rel="noopener" href="https://kubesphere.io/zh/docs/v3.3/quick-start/all-in-one-on-linux/">官方文档</a>中的步骤进行安装。</p>
+<p>由于kubernetes与kubesphere之间存在一个版本匹配问题，因此我这里直接使用example中推荐的版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ ./kk create cluster --with-kubernetes v1.22.12 --with-kubesphere v3.3.2<br></code></pre></td></tr></table></figure>
+<p>当运行上述命令时，会检查机器是否安装依赖。</p>
+<p>  在我这台机器上，只需要预先手动安装conntrack socat ebtables ethtool，其他组件会自动安装。</p>
+<pre><code class="hljs">`$ apt-get install conntrack socat ebtables ethtool`
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>sudo</th>
+<th>curl</th>
+<th>openssl</th>
+<th>ebtables</th>
+<th>socat</th>
+<th>ipset</th>
+<th>ipvsadm</th>
+<th>conntrack</th>
+<th>chrony</th>
+<th>docker</th>
+<th>containerd</th>
+<th>nfs client</th>
+<th>ceph client</th>
+<th>glusterfs client</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>master</td>
+<td>y</td>
+<td>y</td>
+<td>y</td>
+<td>y</td>
+<td>y</td>
+<td></td>
+<td></td>
+<td>y</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>查看log会发现 在依次安装kubelet、kubectl、helm、kubecni、crictl、etcd、docker等，在之后的教程里，会解释组件的作用。</p>
+<p>经过漫长的等待之后，当console中出现Welcome hints、ip地址与默认admin账号密码， 就表示Kubenets安装完成。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">❯ Welcome to KubeSphere!<br></code></pre></td></tr></table></figure>
+<p>这个时候可以登录<a target="_blank" rel="noopener" href="http://ip:30880/dashboard">http://ip:30880/dashboard</a> 进行可视化操作。</p>
+<p>以上安装过程基本上是一键安装，在物理机器与Ubuntu系统没有太大问题的情况下，一小时之内能完成。</p>
+<p>如果要安装官方的Kubernetes Dashboard的话，还需要手动安装、并配置外部访问与账号，这些额外的概念无疑会在一开始极大的增加初学者的负担。</p>
+<p>而这些步骤&#x2F;组件 <strong>KubeSphere全家桶</strong>全都集成了，让开发者将更多的经历集中在理解与应用k8s核心组件与部署业务代码上。</p>
+<p>接下来可以跟着官方文档应用学习其中组件了。</p>
+<h2 id="Troubleshooting"><a href="#Troubleshooting" class="headerlink" title="Troubleshooting"></a>Troubleshooting</h2><h3 id="WARNING-FileExisting-ethtool-ethtool-not-found-in-system-path"><a href="#WARNING-FileExisting-ethtool-ethtool-not-found-in-system-path" class="headerlink" title="[WARNING FileExisting-ethtool]: ethtool not found in system path"></a>[WARNING FileExisting-ethtool]: ethtool not found in system path</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ apt-get install ebtables ethtool<br></code></pre></td></tr></table></figure>
+<p>这两个依赖是必须的，但是官方文档中没有列出来。</p>
+<h3 id="kubectl-Please-wait-for-the-installation-to-complete"><a href="#kubectl-Please-wait-for-the-installation-to-complete" class="headerlink" title="kubectl Please wait for the installation to complete"></a>kubectl Please wait for the installation to complete</h3><p>安装的一直卡在这个命令，推测可能是kube-system中的k8s自己的pod没有就绪，另外启动一个shell查询pod状况；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">❯ kubectl get pod -A<br>NAMESPACE           NAME                                           READY   STATUS    RESTARTS   AGE<br>...<br>kube-system         openebs-localpv-provisioner-57bbf864d5-zhl6k   0/1     Pending   0          26m<br>kubesphere-system   ks-installer-85d6fb8c97-mns4d                  0/1     Pending   0          26m<br></code></pre></td></tr></table></figure>
+
+<p>查看其中一个pod的Events</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">❯ kubectl describe pod openebs-localpv-provisioner-57bbf864d5-zhl6k -n kube-system<br>Name:           openebs-localpv-provisioner-57bbf864d5-zhl6k<br>...<br>Events:<br>  Type     Reason            Age                 From               Message<br>  ----     ------            ----                ----               -------<br>  Warning  FailedScheduling  97s (x35 over 36m)  default-scheduler  0/1 nodes are available: 1 node(s) had taint &#123;node-role.kubernetes.io/master: &#125;, that the pod didn<span class="hljs-string">&#x27;t tolerate.</span><br></code></pre></td></tr></table></figure>
+<p>发现openebs-localpv-provisioner与ks-installer的STATUS均是Pending，通过Events里面的描述，发现是因为有taints所以pod调度不上去。</p>
+<p>查看node的taints</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">❯ kubectl get nodes -o json | jq <span class="hljs-string">&#x27;.items[].spec&#x27;</span><br>&#123;<br>  <span class="hljs-string">&quot;taints&quot;</span>: [<br>    &#123;<br>      <span class="hljs-string">&quot;effect&quot;</span>: <span class="hljs-string">&quot;NoSchedule&quot;</span>,<br>      <span class="hljs-string">&quot;key&quot;</span>: <span class="hljs-string">&quot;node-role.kubernetes.io/master&quot;</span><br>    &#125;,<br>    &#123;<br>      <span class="hljs-string">&quot;effect&quot;</span>: <span class="hljs-string">&quot;NoSchedule&quot;</span>,<br>      <span class="hljs-string">&quot;key&quot;</span>: <span class="hljs-string">&quot;node.kubernetes.io/not-ready&quot;</span><br>    &#125;<br>  ]<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>means that no pod can be scheduled on the master node unless it has a toleration for this taint123， 意思就是说不能在master节点上的和not-ready的pod不允许调度到我这个节点上。</p>
+<p>The OpenEBS Local PV provisioner is designed to run on worker nodes and not on master nodes1. If you want to deploy the OpenEBS Local PV provisioner on a master node, you can do so by adding the label openebs.io&#x2F;engine&#x3D;provisioner to the master node2. However, it is not recommended to run the provisioner on master nodes as it can cause issues with the Kubernetes control plane</p>
+<p>污点（Taint）是 Kubernetes 中的一个概念，它是一种标记，用于标识节点上的一些特殊条件，例如节点上的硬件故障或其他不可用性。 污点可以阻止 Pod 调度到具有特定污点的节点上。 有关更多信息，请参见<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/">官方文档</a>。</p>
+<p>Taints and Tolerations 是一起组合使用的，相当于“黑名单”机制，前者配置在nodes上，只能配置过后者的pod；</p>
+<pre><code class="hljs">简单但是不推荐的做法： 将taints删除
+</code></pre>
+<blockquote>
+<p>:warning: <strong>不如直接用minikube单节点部署</strong>: 这里的意思是这个pod不能调度在master节点上，如果删了这个污点，相当于是强行调度在master上了。</p>
+</blockquote>
+<p>执行<code>kubectl taint nodes --all node-role.kubernetes.io/master-</code>, 这个命令是在将所有节点的node-role.kubernetes.io&#x2F;master 污点删除，以便可以在这些节点上调度非 master Pod。</p>
+<p>然后发现唯一node上的taint没有了(这里换一个方法查看taints)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">❯ kubectl describe node master | grep Taints<br>Taints:             &lt;none&gt;<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">正规做法：先跳过这个pod的安装，参照下文先安装一个worker node并注册到cluster，然后再重复安装步骤安装。
+</code></pre>
+<p>完成安装worker node并注册到cluster后，验证查看当前nodes</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">❯ kubectl get nodes<br>NAME             STATUS   ROLES                  AGE    VERSION<br>worker           Ready    worker                 9h     v1.22.12<br>master           Ready    control-plane,master   4d3h   v1.22.12<br></code></pre></td></tr></table></figure>
+
+<p>当看到出现STATUS为Ready的worker时候，就可以再执行<code>./kk create cluster --with-kubernetes v1.22.12 --with-kubesphere v3.3.2</code>，然后经过漫长的等待即可。</p>
+<h1 id="Worker-Node"><a href="#Worker-Node" class="headerlink" title="Worker Node"></a>Worker Node</h1><p>Ubuntu 实体机 in roy-macbookair（有些时候worker node的名字可能是这个），这是一台2013款的具有10年历史的老机器，陪我拿到了第一家上市公司的offer，但目前已经无法正常运行macOS，因此安装Ubuntu（图形化模式略微卡顿，使用命令行模式才能流畅运行k8s）。</p>
+<p>按照<a target="_blank" rel="noopener" href="https://kubesphere.io/zh/docs/v3.3/installing-on-linux/introduction/multioverview/">在 Linux 上多节点安装</a>中的步骤进行安装。</p>
+<p>将一台新准备好的Linux物理机， 作为Node（不管Worker是Master）添加到cluster只需要KubeKey + SSH 就能完成。</p>
+<p>那么同样地，先安装相关地依赖<br><code>$ apt install conntrack socat ebtables ethtool</code></p>
+<p>然后在当前目录下创建一个config-sample.yaml的文件（这一步可以在新机器的终端上完成，也可也在已有集群的任意一个物理机的终端上完成）<br><code>$ ./kk create config</code></p>
+<p>在我这里，config-sample.yaml的内容如下，其中的ssh相关的信息需要自己填写，这里我使用的是密码登录，因此需要填写密码，如果使用的是ssh key登录，则不需要填写密码（但是需要配置ssh-key）。</p>
+<p>然后按照教程中的配置文件，结合自己的node name与ip，修改配置文件，然后执行<code>$ ./kk create cluster -f config-sample.yaml</code>（集群未安装）&#x2F; <code>/kk add nodes -f sample.yaml</code>（集群已安装），等待一段时间后，集群就安装好了。</p>
+<p>在经过以上操作后，可以看到我成功的创建了一个一共拥有3个Node的Cluster，就可以开始自己的kubenets操作了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">13:09:53 CST success: [roy-qtc6]<br>13:09:53 CST success: [roy-300]<br>13:09:53 CST success: [roy-macbookair]<br>13:09:53 CST Pipeline[AddNodesPipeline] execute successfully<br>❯ kubectl get nodes<br>NAME             STATUS   ROLES                  AGE     VERSION<br>roy-300          Ready    worker                 2m41s   v1.22.12<br>roy-macbookair   Ready    worker                 23h     v1.22.12<br>roy-qtc6         Ready    control-plane,master   4d18h   v1.22.12<br></code></pre></td></tr></table></figure>
+
+<p>安装出了问题也别急，<code>./kk delete cluster</code>解君愁。</p>
+<h1 id="角色、权限等配置"><a href="#角色、权限等配置" class="headerlink" title="角色、权限等配置"></a>角色、权限等配置</h1><p>就像大多数成熟的管理系统一样，初始化安装之后会分配一个admin账户，然后再通过该账户创建一个业务账户，之后大多数操作都应该通过业务账户进行操作。</p>
+<p>而这些概念、操作在每个云平台上略有不同，且不影响k8s的核心组件，同时又都是基本都能在Web UI进行点点点操作，所以本段略。</p>
+<p>可以参考<a target="_blank" rel="noopener" href="https://kubesphere.io/zh/docs/v3.3/quick-start/create-workspace-and-project/">在kubesphere创建企业空间、项目、用户和平台角色</a></p>
+<h1 id="外部访问"><a href="#外部访问" class="headerlink" title="外部访问"></a>外部访问</h1><p>在安装好Cluster之后，可以看到每个Node连接的IP地址是10开头的，这个明显是Kubernetes Cluster的IP地址， 不是外部可以访问的IP地址，因此需要一个网关来提供外部访问。</p>
+<h2 id="启动网关"><a href="#启动网关" class="headerlink" title="启动网关"></a>启动网关</h2><p>网关是在项目中运行的 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/ingress-nginx">NGINX Ingress 控制器</a>。</p>
+<p><a target="_blank" rel="noopener" href="https://www.kubesphere.io/zh/docs/v3.3/pluggable-components/service-mesh/">在安装后启用服务网格</a></p>
+<pre><code class="hljs">本段为KubeSphere的配置，其他云平台可能不同
+</code></pre>
+<p>使用定制资源定义（CRD）里面的clusterconfiguration的ks-installer进行安装，看名字就知道是KubeSphere自己的，其他云平台没有。</p>
+<h2 id="提供外部访问"><a href="#提供外部访问" class="headerlink" title="提供外部访问"></a>提供外部访问</h2><p><a target="_blank" rel="noopener" href="https://www.kubesphere.io/zh/docs/v3.3/cluster-administration/cluster-settings/cluster-gateway/">设置集群网关</a><br>访问模式设置为 NodePort，选择确定之后，集群网关详情里面会出现一个和宿主机网段相同的局域网网关IP地址（在我这里是192开头的），这个是可以访问的。</p>
+<p><a target="_blank" rel="noopener" href="https://www.kubesphere.io/zh/docs/v3.3/multicluster-management/enable-multicluster/retrieve-kubeconfig/#%E8%8E%B7%E5%8F%96-kubeconfig">通过使用 kubeconfig 文件配置访问集群</a><br>除了上面链接中的方法外，还可以在KubeSphere UI右下角的工具箱图标上悬停，然后在弹出菜单中选择 kubeconfig，点击右上角的下载按钮，就可以直接下载连接K8s的kubeconfig.yaml。</p>
+<p>特别注意的是需要把Cluster里面的server IP替换为局域网的IP</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">clusters:</span><br><span class="hljs-bullet">-</span> <span class="hljs-attr">cluster:</span><br>    <span class="hljs-attr">server:</span> <span class="hljs-string">https://10.233.0.1:443</span>  <span class="hljs-comment"># 替换为集群网关详情里面和宿主机网段相同的局域网网关IP地址</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="KubeSphere-DevOps-系统"><a href="#KubeSphere-DevOps-系统" class="headerlink" title="KubeSphere DevOps 系统"></a>KubeSphere DevOps 系统</h1><pre><code class="hljs">本段为KubeSphere的配置，其他云平台可能不同，步骤在[KubeSphere DevOps 系统](https://kubesphere.io/zh/docs/v3.3/pluggable-components/devops/)
+</code></pre>
+<p>KubeSphere全家桶的DevOps 系统基于 Jenkins 的 KubeSphere DevOps 系统是专为 Kubernetes 中的 CI&#x2F;CD 工作流设计的，它提供了一站式的解决方案，帮助开发和运维团队用非常简单的方式构建、测试和发布应用到 Kubernetes。(得了，感觉以前的工作又是造轮子了，这叫深度业务定制开发！)</p>
+<blockquote>
+<p>:warning: <strong>整个集群内存最好25Gi以上</strong>: 我一开始安装的时候就遇到了各种卡住且没有提示的问题，其实就是内存不够，但是增加内存是需要硬件成本的，排查的时候花了很多的精力和时间。</p>
+</blockquote>
+<h2 id="Troubleshooting-1"><a href="#Troubleshooting-1" class="headerlink" title="Troubleshooting"></a>Troubleshooting</h2><p>在之前工作中用过实体机上的Jenkins，也用过k8s节点中的Jenkins，但从来没用过全家桶的Jenkins，因此本段就算安装不上，也完全不影响使用。</p>
+<h3 id="安装一直卡住，没有任何提示与报错"><a href="#安装一直卡住，没有任何提示与报错" class="headerlink" title="安装一直卡住，没有任何提示与报错"></a>安装一直卡住，没有任何提示与报错</h3><p>很自然去查看pod状况。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash">❯ kubectl get pod -n kubesphere-devops-system<br>devops-jenkins-c8b495c5-4hqwf        0/1     Pending     0          19h<br><br>❯ kubectl describe pod devops-jenkins-c8b495c5-4hqwf -n kubesphere-devops-system<br>...<br>Containers:<br>  devops-jenkins:<br>...<br>    Requests:<br>      cpu:      2<br>      memory:   2Gi<br>Events:<br>  Type     Reason            Age    From               Message<br>  ----     ------            ----   ----               -------<br>  Warning  FailedScheduling  69m    default-scheduler  0/1 nodes are available: 1 node(s) had taint &#123;node.kubernetes.io/memory-pressure: &#125;, that the pod didn<span class="hljs-string">&#x27;t tolerate.</span><br></code></pre></td></tr></table></figure>
+<p>（这里有时Events里面会是空的，就只能靠其他信息推测了）</p>
+<p>但是很神奇的是查看node本身并没有添加任何污点</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">❯ kubectl get nodes -o json | jq <span class="hljs-string">&#x27;.items[].spec.taints&#x27;</span><br>null<br></code></pre></td></tr></table></figure>
+<p>然后再仔细审视<code>describe pod devops-jenkins</code>pod的描述，报错是内存pressure，多半是内存不足，然后惊讶地发现需要2Gi的内存，而我的传家宝MacBook Air只剩下可怜的不到1Gi，由于这是物理资源的不足，无法弥补，要么放弃体验KubeSphere DevOps全家桶，要么只能自己在另一台物理机&#x2F;node上安装jenkins。</p>
+<p>一想到某人那种32Gi的电脑沉迷召唤师峡谷，就想悄悄给装一个Ubuntu上去996.</p>
+<p>（2天后更新： 结果把自己的神船刷Ubuntu了，然后去给朋友搬家捡了的PC）</p>
+<p>整一些内存大的电脑添加到Cluster 成为Node就好了。</p>
+<p>实测发现要装KubeSphere DevOps 系统最好还是保证整个集群内存有25Gi以上的容量，否则会出现各种问题，为此时隔十多年我又玩起了虚拟机，这里<strong>只推荐正统的VMware，VirtualBox</strong>这种，否则虚拟化的大坑欢迎您。</p>
+<h1 id="Cluster-Uninstall"><a href="#Cluster-Uninstall" class="headerlink" title="Cluster Uninstall"></a>Cluster Uninstall</h1><p>当Cluster出现某些问题，且安装上面的排查依旧不能解决的时候，就使用重装大法，DevOps的其中一个特质就是无状态、重装方便，在应用部署上这是巨大的进步。</p>
+<p>首先需要一个config-sample.yaml来配置集群的信息，比如Master &#x2F; Worker Node 的IP，账户等，如果没有的话，<code>./kk create config-sample.yaml</code>生成一下新的。</p>
+<p>然后<code>./kk delete cluster -f config-sample.yaml</code></p>
+<p>接着SSH到每一台Worker Node机器上，进行<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/44698283/how-to-completely-uninstall-kubernetes">深度清理</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">kubeadm reset<br><span class="hljs-built_in">sudo</span> apt-get purge kubeadm kubectl kubelet kubernetes-cni kube*   <br><span class="hljs-built_in">sudo</span> apt-get autoremove  <br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">rm</span> -rf ~/.kube<br></code></pre></td></tr></table></figure>
+<p>上面这个命令是把包都干掉了（而且实测不用重启机器就生效）</p>
+<p>If you are clearing the cluster so that you can start again, then, in addition do the following to ensure my systems are in a state ready for kubeadm init again:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">kubeadm reset -f<br><span class="hljs-built_in">rm</span> -rf /etc/cni /etc/kubernetes /var/lib/dockershim /var/lib/etcd /var/lib/kubelet /var/run/kubernetes ~/.kube/*<br>iptables -F &amp;&amp; iptables -X<br>iptables -t nat -F &amp;&amp; iptables -t nat -X<br>iptables -t raw -F &amp;&amp; iptables -t raw -X<br>iptables -t mangle -F &amp;&amp; iptables -t mangle -X<br>systemctl restart docker<br></code></pre></td></tr></table></figure>
+
+<p>这个时候就算清理干净了，最后再回到Master Node机器上，执行<code>./kk create cluster -f config-sample.yaml</code>，等待一段时间后，集群就重新安装好了。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>本文历时半个月，从4月13号被干掉，休息半个月，5月1号开始搭环境，经过了半个月走走停停，不断地试错，查资料，写总结，才终于在5月20号地今天完成这个学习计划的开头 ————环境搭建。</p>
+<p>这一个月里，有耍到接近昏迷，也有一天4个场面试的高强度，有点回到了快毕业那会的节奏。只是再也不像当初那么无助，迷茫而又没用行动力了。</p>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/DevOps/" class="category-chain-item">DevOps</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Setup/" class="print-no-link">#Setup</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Kubernetes Setup in Local Physical Servers</div>
+      <div>https://gou7ma7.github.io/2023/04/30/devops/@2023_setup_kubernetes/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Roy Lee</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年4月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/04/30/devops/@2023_no_wsl/" title="不要用WSL，否则会变得不幸">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">不要用WSL，否则会变得不幸</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/" title="从二叉树遍历到yield，然后到协程、异步">
+                        <span class="hidden-mobile">从二叉树遍历到yield，然后到协程、异步</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+<i class="iconfont icon-love"></i>
+<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
