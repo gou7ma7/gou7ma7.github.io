@@ -343,6 +343,11 @@
 <p><img src="/2025/02/24/ai/@2025_nas_docker_vllm/02.png" srcset="/img/loading.gif" lazyload alt="关系"><br>安装 nvidia-container-toolkit 会自动安装 libnvidia-container，无需额外关注。</p>
 <h2 id="官方-Docker-镜像"><a href="#官方-Docker-镜像" class="headerlink" title="官方 Docker 镜像"></a>官方 Docker 镜像</h2><p>飞牛OS 自己的服务已经占用了 host 的 8000 端口，得换一个。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 拉取vLLM镜像（适配CUDA 12.x）</span><br><span class="hljs-built_in">sudo</span> docker pull vllm/vllm-openai:latest<br><span class="hljs-comment"># 运行容器（指定GPU、端口、模型，7B模型需至少10GB显存）</span><br><span class="hljs-built_in">sudo</span> docker run --gpus all -p 18000:8000 \<br>  vllm/vllm-openai:latest \<br>  --model lmsys/vicuna-7b-v1.5 \  <span class="hljs-comment"># 替换为你要运行的模型</span><br>  --tensor-parallel-size 1 \       <span class="hljs-comment"># 用几块GPU，按需改</span><br>  --port 18000<br></code></pre></td></tr></table></figure>
+
+<div class="note note-info">
+            <p>这里拉取的推理镜像 <code>vllm-openai</code> 中已经包含了 CUDA 套件，否则需要先在 host 中装好。</p>
+          </div>
+
 <p>在本地开发机上 curl 进行最简单的请求</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">❯ curl http://192.168.31.78:18000/v1/completions \<br>  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \<br>  -d <span class="hljs-string">&#x27;&#123;</span><br><span class="hljs-string">    &quot;model&quot;: &quot;lmsys/vicuna-7b-v1.5&quot;,</span><br><span class="hljs-string">    &quot;prompt&quot;: &quot;Hello vLLM!&quot;,</span><br><span class="hljs-string">    &quot;max_tokens&quot;: 50</span><br><span class="hljs-string">  &#125;&#x27;</span><br><br></code></pre></td></tr></table></figure>
 
