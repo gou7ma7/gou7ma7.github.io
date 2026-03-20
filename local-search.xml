@@ -26,12 +26,14 @@
     
     <categories>
       
-      <category>Goose</category>
+      <category>Agent</category>
       
     </categories>
     
     
     <tags>
+      
+      <tag>Troubleshooting</tag>
       
       <tag>Agent</tag>
       
@@ -58,9 +60,13 @@
     
     <tags>
       
+      <tag>Work</tag>
+      
       <tag>Review</tag>
       
       <tag>AI</tag>
+      
+      <tag>Leadership</tag>
       
     </tags>
     
@@ -84,6 +90,8 @@
     
     
     <tags>
+      
+      <tag>Health</tag>
       
       <tag>Record</tag>
       
@@ -141,6 +149,8 @@
       
       <tag>Record</tag>
       
+      <tag>Life</tag>
+      
     </tags>
     
   </entry>
@@ -165,6 +175,8 @@
     <tags>
       
       <tag>AI</tag>
+      
+      <tag>Diary</tag>
       
       <tag>Coding</tag>
       
@@ -191,6 +203,8 @@
     
     <tags>
       
+      <tag>Inference</tag>
+      
       <tag>vLLM</tag>
       
     </tags>
@@ -216,7 +230,11 @@
     
     <tags>
       
+      <tag>Work</tag>
+      
       <tag>Review</tag>
+      
+      <tag>AI</tag>
       
     </tags>
     
@@ -264,6 +282,8 @@
     
     <tags>
       
+      <tag>Work</tag>
+      
       <tag>Review</tag>
       
     </tags>
@@ -288,6 +308,8 @@
     
     
     <tags>
+      
+      <tag>Toolchain</tag>
       
       <tag>Setup</tag>
       
@@ -316,6 +338,10 @@
       
       <tag>Setup</tag>
       
+      <tag>Environment</tag>
+      
+      <tag>WSL</tag>
+      
     </tags>
     
   </entry>
@@ -341,6 +367,8 @@
       
       <tag>Setup</tag>
       
+      <tag>Kubernetes</tag>
+      
     </tags>
     
   </entry>
@@ -364,7 +392,7 @@
     
     <tags>
       
-      <tag>Python</tag>
+      <tag>DataStructure</tag>
       
     </tags>
     
