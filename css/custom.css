@@ -1,0 +1,17 @@
+/* 文章页主内容区加宽，减少两侧空白，每行显示更多文字 */
+/* #board-ctn 仅文章页存在 */
+#board-ctn.container {
+  max-width: 1400px;
+}
+
+/* 文章页中间栏从 8/12 改为 10/12，两侧边栏变窄，每行可显示更多字 */
+@media (min-width: 992px) {
+  .container-fluid.nopadding-x .row .col-lg-8.nopadding-x-md {
+    flex: 0 0 83.333333%;
+    max-width: 83.333333%;
+  }
+  .container-fluid.nopadding-x .row .side-col.col-lg-2 {
+    flex: 0 0 8.333333%;
+    max-width: 8.333333%;
+  }
+}

@@ -1,0 +1,942 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Roy Lee">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这篇文章记录一个可复现的问题：在 goose 1.27.0 下，通过 Azure OpenAI provider 访问企业网关暴露出来的 Claude 模型一切正常；升级到 1.28.0 后，同样的配置流程就失败。最后顺着源码一路翻下来，Azure Provider 没变，goose 配置没变，根因是 goose 从 1.28.0 开始收紧了 OpenAI-format 请求里 max_toke">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Goose 升级后 Azure OpenAI 通道下的 Claude 突然不可用：一次 max_tokens &#x2F; max_completion_tokens 兼容性排查">
+<meta property="og:url" content="https://gou7ma7.github.io/2026/04/13/devops/@2026_goose_call_azure_openai_claude_breakage_max_tokens/index.html">
+<meta property="og:site_name" content="DevOps -&gt; AI Agent">
+<meta property="og:description" content="这篇文章记录一个可复现的问题：在 goose 1.27.0 下，通过 Azure OpenAI provider 访问企业网关暴露出来的 Claude 模型一切正常；升级到 1.28.0 后，同样的配置流程就失败。最后顺着源码一路翻下来，Azure Provider 没变，goose 配置没变，根因是 goose 从 1.28.0 开始收紧了 OpenAI-format 请求里 max_toke">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-13T12:49:34.000Z">
+<meta property="article:modified_time" content="2026-04-29T15:15:18.000Z">
+<meta property="article:author" content="Roy Lee">
+<meta property="article:tag" content="Troubleshooting">
+<meta property="article:tag" content="Agent">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Goose 升级后 Azure OpenAI 通道下的 Claude 突然不可用：一次 max_tokens / max_completion_tokens 兼容性排查 - DevOps -&gt; AI Agent</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"gou7ma7.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/gou7ma7/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Goose 升级后 Azure OpenAI 通道下的 Claude 突然不可用：一次 max_tokens / max_completion_tokens 兼容性排查"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-13 20:49" pubdate>
+          2026年4月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Goose 升级后 Azure OpenAI 通道下的 Claude 突然不可用：一次 max_tokens / max_completion_tokens 兼容性排查</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月29日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>这篇文章记录一个可复现的问题：在 <strong>goose 1.27.0</strong> 下，通过 <strong>Azure OpenAI provider</strong> 访问企业网关暴露出来的 <strong>Claude</strong> 模型一切正常；升级到 <strong>1.28.0</strong> 后，同样的配置流程就失败。<br>最后顺着源码一路翻下来，Azure Provider 没变，goose 配置没变，根因是 <strong>goose 从 1.28.0 开始收紧了 OpenAI-format 请求里 <code>max_tokens</code> &#x2F; <code>max_completion_tokens</code> 的选择策略和相关校验</strong>。</p>
+</blockquote>
+<blockquote>
+<p><strong>环境</strong>：Windows、 Linux、goose CLI &#x2F; Desktop 均复现、企业模型网关以 Azure OpenAI Endpoint 形态暴露，模型列表中除了 GPT，也包含 <code>claude-opus-4-6</code> 这类非 OpenAI 的模型。</p>
+</blockquote>
+<span id="more"></span>
+
+<div class="note note-warning">
+            <p>Update - 2026-04-29：</p><ol><li>根本原因是因为网关语义问题，在 …openai.azure.com 中提供了非 openai 协议；</li><li>手动设置为 https:&#x2F;&#x2F;…openai.azure.com&#x2F;anthropic&#x2F;v1 就行，很抽象但能用；</li><li>不能站着说话不腰疼，这种 “当时定死了，后面却要上新的，还要考虑兼容性” 的事情我也干了不少，做人不能太双标；</li><li>可以从本 post 就看出来 AI <strong>一定</strong> 会给出一个 <em>概率最高</em> 但不一定 <em>最满足解决业务</em> 的回答；</li><li>解决的契机是后来试 Hermes 出现了另一些问题，调试它的时候，在 GPT-5.5 下发现上述的 endpoint 可行；</li><li>同时发现 Goose 发新版的时候，UI 上本来 Provider 里面本来的 <strong>Azure</strong> 改名叫 <strong>Azure OpenAI</strong> 了，再结合本文的解读，自然明白了 Goose 真的是严格按照 openai 协议收紧了这个 Provider 的参数校验。这样一来直接新建一个使用 Anthropic 协议的 Customer Provider 就好；</li><li>还是经典的 AI 不是知道我不知道这个问题，只能给大而全不犯错的通识解法，什么官场老油条是吧。</li></ol>
+          </div>
+<p>在 《 <a href="/2026/04/29/devops/@2026_one_gateway_two_protocols_zero_clarity/" title="名叫 openai.azure.com 的网关却提供 Anthropic 协议时，你让 Agent 怎么办？">名叫 openai.azure.com 的网关却提供 Anthropic 协议时，你让 Agent 怎么办？</a> 》中有详细解析和修复方法。</p>
+<hr>
+<h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><p>公司内部统一提供模型网关，对外暴露的是 <strong>Azure OpenAI Endpoint</strong>。也就是说，客户端这一侧看起来像在接 Azure OpenAI，但网关后面并不一定只有 OpenAI-format 的 GPT，也挂着 Claude 等非 OpenAI 的模型。</p>
+<p>在我的环境里，这套配置在 <strong>goose 1.27.0</strong> 下是可以工作的：</p>
+<ul>
+<li>provider 选 <strong>Azure OpenAI</strong></li>
+<li>模型选企业网关暴露出来的 <code>claude-opus-4-6</code></li>
+<li>正常使用 Claude 的 thinking 配置</li>
+</ul>
+<p>但升级到 <strong>goose 1.28.0</strong> 之后，问题就出现了：Claude 不再能被正常选用，配置流程会直接失败，甚至继续使用之前正常的 Session 也会报错。</p>
+<h2 id="2-现象与复现"><a href="#2-现象与复现" class="headerlink" title="2. 现象与复现"></a>2. 现象与复现</h2><p>在 PowerShell 中执行：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">goose configure<br></code></pre></td></tr></table></figure>
+
+<p>然后选择：</p>
+<ul>
+<li><code>Configure Providers</code> （goose 中只要不是用诸如 OpenAI 第一方的 api_key 的都是这个）</li>
+<li><code>Azure OpenAI</code> （相当于“预设网关配置”）</li>
+<li>模型：<code>claude-opus-4-6</code></li>
+<li>Claude extended thinking：例如 <code>Adaptive</code> 或 <code>High</code></li>
+</ul>
+<p>随后 goose 直接报错退出，关键信息如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">Context length exceeded: Unsupported parameter: &#x27;max_tokens&#x27; is not supported with this model. Use &#x27;max_completion_tokens&#x27; instead.<br>Failed to configure provider: init chat completion request with tool did not succeed.<br></code></pre></td></tr></table></figure>
+
+<p>这里最容易误导人的，是报错前缀里的 <code>Context length exceeded</code>。</p>
+<blockquote>
+<p>当然最好排查出来真正导致失败的并不是上下文超长，而是<strong>请求参数名不兼容</strong>：</p>
+<ul>
+<li>该模型 &#x2F; 网关实现<strong>不接受</strong> <code>max_tokens</code></li>
+<li>它<strong>只接受</strong> <code>max_completion_tokens</code></li>
+</ul>
+</blockquote>
+<p>换句话说，这不是“token 不够了”，而是“字段名写错了”。</p>
+<p>前者是配额&#x2F;长度问题，后者是协议兼容问题；看起来只差一点，排查方向能差十万八千里；</p>
+<p>纯粹是污染上下文，如果这次没有准确的版本 diff ，还不知道排查到什么时候。</p>
+<h2 id="3-排查过程"><a href="#3-排查过程" class="headerlink" title="3. 排查过程"></a>3. 排查过程</h2><h3 id="3-1-先确认不是-Azure-OpenAI-provider-整体不可用"><a href="#3-1-先确认不是-Azure-OpenAI-provider-整体不可用" class="headerlink" title="3.1 先确认不是 Azure OpenAI provider 整体不可用"></a>3.1 先确认不是 Azure OpenAI provider 整体不可用</h3><p>第一步我先看了运行时配置：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">goose info <span class="hljs-literal">-v</span><br></code></pre></td></tr></table></figure>
+
+<p>当时输出里的关键信息包括：</p>
+<ul>
+<li>goose Version：<code>1.28.0</code></li>
+<li><code>GOOSE_PROVIDER: azure_openai</code></li>
+<li><code>AZURE_OPENAI_ENDPOINT: https://...openai.azure.com</code></li>
+<li><code>AZURE_OPENAI_DEPLOYMENT_NAME: gpt-**</code></li>
+<li><code>GOOSE_MODEL: **</code></li>
+<li>配置 Claude thinking 后会出现 <code>CLAUDE_THINKING_*</code> 相关变量</li>
+</ul>
+<p>这一步至少能说明两件事：</p>
+<ol>
+<li><strong>Azure OpenAI provider 本身不是坏的</strong>，因为 GPT 路径仍然是通的。</li>
+<li>问题集中发生在：<strong>同一 provider 下切到 Claude 模型时</strong>，goose 发出的初始化请求被模型端拒绝。</li>
+</ol>
+<p>也就是说，排查方向不应该放在「Azure 认证」「endpoint 地址」「provider 是否可用」这些通用问题上，而应该看<strong>Claude 这条请求链路的请求体差异</strong>。</p>
+<h3 id="3-2-源码定位：问题出在-OpenAI-format-请求体里的-max-字段"><a href="#3-2-源码定位：问题出在-OpenAI-format-请求体里的-max-字段" class="headerlink" title="3.2 源码定位：问题出在 OpenAI-format 请求体里的 max 字段"></a>3.2 源码定位：问题出在 OpenAI-format 请求体里的 max 字段</h3><p>顺着 goose 源码往下看，Azure OpenAI 这条链路最终会走到 OpenAI-compatible 的请求构造逻辑。核心位置在：</p>
+<ul>
+<li><code>crates/goose/src/providers/formats/openai.rs</code></li>
+</ul>
+<p>更具体一点，这次问题真正相关的函数是：</p>
+<ul>
+<li><code>create_request(...)</code></li>
+</ul>
+<p>它负责组装 OpenAI-format 的 chat completions 请求体，也就是最终会决定到底发：</p>
+<ul>
+<li><code>max_tokens</code></li>
+<li>还是 <code>max_completion_tokens</code></li>
+</ul>
+<p>这时候问题就收敛了：既然报错已经明确说模型不接受 <code>max_tokens</code>，那就只要搞清楚 <strong>goose 在什么版本、什么条件下开始发 <code>max_tokens</code></strong>，基本就能把锅定位出来。</p>
+<h2 id="4-关键版本差异：变更发生在-1-28-0"><a href="#4-关键版本差异：变更发生在-1-28-0" class="headerlink" title="4. 关键版本差异：变更发生在 1.28.0"></a>4. 关键版本差异：变更发生在 1.28.0</h2><h3 id="4-1-1-27-0：始终发送-max-completion-tokens"><a href="#4-1-1-27-0：始终发送-max-completion-tokens" class="headerlink" title="4.1 1.27.0：始终发送 max_completion_tokens"></a>4.1 1.27.0：始终发送 <code>max_completion_tokens</code></h3><p>在 <strong>v1.27.0</strong> 中，<code>create_request(...)</code> 的逻辑是固定写入 <code>max_completion_tokens</code>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust">payload.<span class="hljs-title function_ invoke__">as_object_mut</span>().<span class="hljs-title function_ invoke__">unwrap</span>().<span class="hljs-title function_ invoke__">insert</span>(<br>    <span class="hljs-string">&quot;max_completion_tokens&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(),<br>    json!(model_config.<span class="hljs-title function_ invoke__">max_output_tokens</span>()),<br>);<br></code></pre></td></tr></table></figure>
+
+<p>对应源码：</p>
+<ul>
+<li>v1.27.0 文件：<br><a target="_blank" rel="noopener" href="https://github.com/block/goose/blob/v1.27.0/crates/goose/src/providers/formats/openai.rs#L758-L835">https://github.com/block/goose/blob/v1.27.0/crates/goose/src/providers/formats/openai.rs#L758-L835</a></li>
+<li>Azure provider（v1.28.0）：<br><a target="_blank" rel="noopener" href="https://github.com/block/goose/blob/v1.28.0/crates/goose/src/providers/azure.rs">https://github.com/block/goose/blob/v1.28.0/crates/goose/src/providers/azure.rs</a></li>
+<li>OpenAI-compatible provider（v1.28.0）：<br><a target="_blank" rel="noopener" href="https://github.com/block/goose/blob/v1.28.0/crates/goose/src/providers/openai_compatible.rs">https://github.com/block/goose/blob/v1.28.0/crates/goose/src/providers/openai_compatible.rs</a></li>
+</ul>
+<p>这意味着在 <strong>1.27.0</strong> 里，无论模型最终是不是被视为 reasoning 模型，这条 OpenAI-format chat completions 路径发出去的都是 <code>max_completion_tokens</code>。</p>
+<p>这也解释了为什么在我的企业网关环境里，Claude 能正常工作：<strong>它恰好接受的就是这个字段</strong>。</p>
+<h3 id="4-2-1-28-0：开始在两个字段之间分支选择"><a href="#4-2-1-28-0：开始在两个字段之间分支选择" class="headerlink" title="4.2 1.28.0：开始在两个字段之间分支选择"></a>4.2 1.28.0：开始在两个字段之间分支选择</h3><p>到了 <strong>v1.28.0</strong>，逻辑变成了按模型类型二选一：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> (model_name, reasoning_effort) = <span class="hljs-title function_ invoke__">extract_reasoning_effort</span>(&amp;model_config.model_name);<br><span class="hljs-keyword">let</span> <span class="hljs-variable">is_reasoning_model</span> = reasoning_effort.<span class="hljs-title function_ invoke__">is_some</span>();<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">key</span> = <span class="hljs-keyword">if</span> is_reasoning_model &#123;<br>    <span class="hljs-string">&quot;max_completion_tokens&quot;</span><br>&#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-string">&quot;max_tokens&quot;</span><br>&#125;;<br>payload<br>    .<span class="hljs-title function_ invoke__">as_object_mut</span>()<br>    .<span class="hljs-title function_ invoke__">unwrap</span>()<br>    .<span class="hljs-title function_ invoke__">insert</span>(key.<span class="hljs-title function_ invoke__">to_string</span>(), json!(model_config.<span class="hljs-title function_ invoke__">max_output_tokens</span>()));<br></code></pre></td></tr></table></figure>
+
+<p>对应源码：</p>
+<ul>
+<li>v1.28.0 文件：<br><a target="_blank" rel="noopener" href="https://github.com/block/goose/blob/v1.28.0/crates/goose/src/providers/formats/openai.rs#L749-L805">https://github.com/block/goose/blob/v1.28.0/crates/goose/src/providers/formats/openai.rs#L749-L805</a></li>
+</ul>
+<p>也就是：</p>
+<ul>
+<li>reasoning 模型 → <code>max_completion_tokens</code></li>
+<li>非 reasoning 模型 → <code>max_tokens</code></li>
+</ul>
+<p>这就是这次 breakage 的分界线。</p>
+<p>说得更直白一点：<strong>1.27.0 的行为是“统一发 <code>max_completion_tokens</code>”，1.28.0 的行为是“先判断你像不像 reasoning 模型，再决定发哪个字段”</strong>。而问题恰恰出在，企业网关里的 Claude 实现并没有这个逻辑。</p>
+<h3 id="4-3-具体是哪一个提交引入的"><a href="#4-3-具体是哪一个提交引入的" class="headerlink" title="4.3 具体是哪一个提交引入的"></a>4.3 具体是哪一个提交引入的</h3><p>继续往前追 <code>git blame</code> &#x2F; <code>git log</code>，可以把这次行为变化定位到这个提交：</p>
+<ul>
+<li><strong>提交</strong>：<code>0fba6353e4b00a8c6dabfbca22e51b4229d8a793</code></li>
+<li><strong>标题</strong>：<code>feat(openai): capture reasoning summaries from responses API (#7375)</code></li>
+</ul>
+<p>GitHub 链接：</p>
+<ul>
+<li>提交页：<br><a target="_blank" rel="noopener" href="https://github.com/block/goose/commit/0fba6353e4b00a8c6dabfbca22e51b4229d8a793">https://github.com/block/goose/commit/0fba6353e4b00a8c6dabfbca22e51b4229d8a793</a></li>
+<li><code>v1.27.0...v1.28.0</code> 对比：<br><a target="_blank" rel="noopener" href="https://github.com/block/goose/compare/v1.27.0...v1.28.0">https://github.com/block/goose/compare/v1.27.0...v1.28.0</a></li>
+</ul>
+<p>从这个提交里，能看到两个关键变化：</p>
+<ol>
+<li>reasoning 模型判断从原来的方法演进为：</li>
+</ol>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> (model_name, reasoning_effort) = <span class="hljs-title function_ invoke__">extract_reasoning_effort</span>(&amp;model_config.model_name);<br><span class="hljs-keyword">let</span> <span class="hljs-variable">is_reasoning_model</span> = reasoning_effort.<span class="hljs-title function_ invoke__">is_some</span>();<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>原先固定写死的：</li>
+</ol>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust">payload.<span class="hljs-title function_ invoke__">as_object_mut</span>().<span class="hljs-title function_ invoke__">unwrap</span>().<span class="hljs-title function_ invoke__">insert</span>(<br>    <span class="hljs-string">&quot;max_completion_tokens&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(),<br>    json!(model_config.<span class="hljs-title function_ invoke__">max_output_tokens</span>()),<br>);<br></code></pre></td></tr></table></figure>
+
+<p>被改成了：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">key</span> = <span class="hljs-keyword">if</span> is_reasoning_model &#123;<br>    <span class="hljs-string">&quot;max_completion_tokens&quot;</span><br>&#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-string">&quot;max_tokens&quot;</span><br>&#125;;<br>payload<br>    .<span class="hljs-title function_ invoke__">as_object_mut</span>()<br>    .<span class="hljs-title function_ invoke__">unwrap</span>()<br>    .<span class="hljs-title function_ invoke__">insert</span>(key.<span class="hljs-title function_ invoke__">to_string</span>(), json!(model_config.<span class="hljs-title function_ invoke__">max_output_tokens</span>()));<br></code></pre></td></tr></table></figure>
+
+<p>换句话说，这次问题并不是“1.28.0 突然不能调 Claude 了”这么简单，而是：<strong>1.28.0 开始改变了 OpenAI-format 请求体里 max 字段的生成规则，而企业网关里的 Claude 部署刚好不兼容这个变化。</strong></p>
+<h2 id="5-为什么是-Claude-会踩中这个问题"><a href="#5-为什么是-Claude-会踩中这个问题" class="headerlink" title="5. 为什么是 Claude 会踩中这个问题"></a>5. 为什么是 Claude 会踩中这个问题</h2><p>到这里，链路其实就比较清楚了。</p>
+<p>企业网关里的 <strong><code>claude-opus-4-6</code></strong> 在这个 Azure OpenAI 兼容实现下，表现为：</p>
+<ul>
+<li><strong>不接受</strong> <code>max_tokens</code></li>
+<li><strong>只接受</strong> <code>max_completion_tokens</code></li>
+</ul>
+<p>而 goose 从 <strong>1.28.0</strong> 开始，如果把当前模型判成“非 reasoning 模型”，就会构造出这样的请求：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;max_tokens&quot;</span><span class="hljs-punctuation">:</span> ...<br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>于是请求在初始化阶段就会被拒绝。</p>
+<p>把整件事串起来，就是下面这四步：</p>
+<ol>
+<li>使用的是 <strong>Azure OpenAI provider</strong>，但背后挂的是企业网关暴露出来的 Claude；</li>
+<li>goose 走的是 <strong>OpenAI-format chat completions</strong> 请求构造逻辑；</li>
+<li><strong>1.28.0</strong> 开始，goose 不再总是发送 <code>max_completion_tokens</code>；</li>
+<li>企业网关里的 Claude 部署又只接受 <code>max_completion_tokens</code>。</li>
+</ol>
+<p>这四个条件叠在一起，就得到了这次升级后的 breakage。</p>
+<p>说到底，这不是 Claude “不能配 thinking”，也不是 Azure provider “不支持 Claude”，而是<strong>网关名和协议名语义不匹配</strong>。</p>
+<h2 id="6-一个额外观察：UI-里的-Claude-thinking，不等于-OpenAI-format-请求里的-reasoning-判定"><a href="#6-一个额外观察：UI-里的-Claude-thinking，不等于-OpenAI-format-请求里的-reasoning-判定" class="headerlink" title="6. 一个额外观察：UI 里的 Claude thinking，不等于 OpenAI-format 请求里的 reasoning 判定"></a>6. 一个额外观察：UI 里的 Claude thinking，不等于 OpenAI-format 请求里的 reasoning 判定</h2><p>排查过程中，还有一个很容易想混的点。</p>
+<p>在配置界面里，给 Claude 选择 extended thinking（例如 adaptive &#x2F; high）之后，配置中会出现：</p>
+<ul>
+<li><code>CLAUDE_THINKING_TYPE</code></li>
+<li><code>CLAUDE_THINKING_EFFORT</code></li>
+<li><code>CLAUDE_THINKING_BUDGET</code></li>
+</ul>
+<p>这些字段描述的是<strong>Claude 语义上的 thinking</strong>。但 goose 在 OpenAI-compatible 请求里到底发 <code>max_tokens</code> 还是 <code>max_completion_tokens</code>，依赖的是<strong>OpenAI-format 这套请求构造逻辑里的 reasoning 模型判定</strong>。</p>
+<p>这两套概念在产品层面看起来很像，但在实现层面并不是一回事，是两个独立的协议中的词，长得像而已。</p>
+<p>所以即使 UI 里已经选了 Claude thinking，也不代表这条 OpenAI-format 请求一定会走到 <code>max_completion_tokens</code> 分支。只要最终仍被判成“非 reasoning 模型”，它就会发出 <code>max_tokens</code>，并继续撞上企业网关的兼容性限制。</p>
+<p>这一点其实很像很多“前台有开关、后台不是同一套语义”的问题：界面上看起来你已经打开了功能，但底层协议分支压根不是按这个开关在跑。</p>
+<h2 id="7-结论"><a href="#7-结论" class="headerlink" title="7. 结论"></a>7. 结论</h2><p>这不是一个单纯的“Claude 模型不可用”问题，本质上是一个<strong>OpenAI-compatible 网关与客户端实现之间的字段兼容性问题</strong>。</p>
+<p>结论可以压缩成一句话：</p>
+<blockquote>
+<p><strong>goose 1.28.0 改变了 OpenAI-format 请求里 max 字段的选择策略；而企业网关里的 Claude 部署不接受 <code>max_tokens</code>，只接受 <code>max_completion_tokens</code>，于是升级后兼容性被打破。</strong></p>
+</blockquote>
+<p>从结果上看：</p>
+<ul>
+<li><strong>1.27.0 能用</strong>，是因为它始终发送 <code>max_completion_tokens</code></li>
+<li><strong>1.28.0 出问题</strong>，是因为它开始在 <code>max_tokens</code> &#x2F; <code>max_completion_tokens</code> 之间分支选择</li>
+</ul>
+<p>如果你只看表象，会觉得像是“升级后 Claude 坏了”；但如果看协议层，其实更准确的说法是：<strong>升级后请求字段策略变了，而你的企业网关正好不兼容这个变化。</strong></p>
+<h2 id="8-可行解法-（已专门有-post-，本章作废）"><a href="#8-可行解法-（已专门有-post-，本章作废）" class="headerlink" title="8. 可行解法 （已专门有 post ，本章作废）"></a><del>8. 可行解法 （已专门有 post ，本章作废）</del></h2><div class="note note-warning">
+            <p>AI 大人（时最强的 GPT-5.4-pro，不要问我为什么不是 claude-opus-4.6 要不先看看标题？）还是不太行啊。</p><p>最后那个 8.5 方案 E：改用原生 Claude provider 已经非常接近正确解法了，都能考虑到使用原生的，为什么就不能再稍微扩展一下成 Customer provider with Claude-format 呢？</p><p>而且这还是我跑了好几次 AI 最后汇总出来的结果，基本都是你说得对但是不能解决问题，都需要再结合实际问题延展一下（<strong>尤其是最后解决之后对着答案分析的时候</strong>）。</p><p>最后正确的解法是一段时日后，在一个解决其他问题的巧合下，用 GPT-5.5 + Hermes 验证出来的，看来要么就是我给 AI 大人上供的咒语还不够诚心，还得多练。</p>
+          </div>
+
+<h3 id="8-1-方案-A：让企业网关兼容-max-tokens"><a href="#8-1-方案-A：让企业网关兼容-max-tokens" class="headerlink" title="8.1 方案 A：让企业网关兼容 max_tokens"></a>8.1 方案 A：让企业网关兼容 <code>max_tokens</code></h3><p>如果企业网关对外宣称自己是 <strong>OpenAI-compatible</strong>，最稳妥的做法其实是让它兼容两种写法，例如：</p>
+<ul>
+<li>把 <code>max_tokens</code> 当成 <code>max_completion_tokens</code> 的别名</li>
+<li>同时接受两个字段，并以 <code>max_completion_tokens</code> 为优先</li>
+</ul>
+<p>这是从协议兼容性的角度最合理的修法，也最能减少不同 SDK &#x2F; 工具链之间的摩擦。</p>
+<div class="note note-warning">
+            <p>但是这基本不现实，跨部门合作自有国情在此。</p>
+          </div>
+
+<h3 id="8-2-方案-B：短期回退到-goose-1-27-0"><a href="#8-2-方案-B：短期回退到-goose-1-27-0" class="headerlink" title="8.2 方案 B：短期回退到 goose 1.27.0"></a>8.2 方案 B：短期回退到 goose 1.27.0</h3><p>如果业务上需要尽快恢复可用性，而网关短期又改不了，那么<strong>回退到最后一个已知可用版本</strong>是成本最低的方案。</p>
+<div class="note note-warning">
+            <p>真不愧是 AI 大人给出的方案呢，真详细全面。</p>
+          </div>
+
+<h3 id="8-3-方案-C：本地修改-goose"><a href="#8-3-方案-C：本地修改-goose" class="headerlink" title="8.3 方案 C：本地修改 goose"></a>8.3 方案 C：本地修改 goose</h3><p>如果网关不能改，又希望继续使用较新的 goose 版本，那就只能在客户端侧做兼容处理。例如：</p>
+<ul>
+<li>对 <code>claude-*</code> 强制使用 <code>max_completion_tokens</code></li>
+<li>在发送 OpenAI-format 请求前，把 <code>max_tokens</code> 重写为 <code>max_completion_tokens</code></li>
+</ul>
+<p>这条路的代价是：</p>
+<ul>
+<li>需要自己构建 goose</li>
+<li>后续升级时要自己处理合并</li>
+<li>需要承担自维护成本</li>
+</ul>
+<h3 id="8-4-方案-D：在本地加一层反向代理改写请求体"><a href="#8-4-方案-D：在本地加一层反向代理改写请求体" class="headerlink" title="8.4 方案 D：在本地加一层反向代理改写请求体"></a>8.4 方案 D：在本地加一层反向代理改写请求体</h3><p>还有一种工程上比较实用的方案，是在 goose 与企业网关之间加一层代理：</p>
+<ul>
+<li>拦截 JSON 请求体</li>
+<li>把 <code>max_tokens</code> 改写成 <code>max_completion_tokens</code></li>
+<li>再转发给网关</li>
+</ul>
+<p>优点是不需要改 goose 源码；缺点是多了一层组件，也多了一层运维负担。</p>
+<p>这招属于很“软件工程精髓”的方案 - 包一层：上游不改、下游要跑、你又不能一直回退版本，那就只好在中间垫一层。</p>
+<h3 id="8-5-方案-E：改用原生-Claude-provider"><a href="#8-5-方案-E：改用原生-Claude-provider" class="headerlink" title="8.5 方案 E：改用原生 Claude provider"></a>8.5 方案 E：改用原生 Claude provider</h3><p>如果公司环境允许直接走 Anthropic，而不是必须经过 Azure OpenAI 形态的企业网关，那么改用原生 Claude provider 往往会更自然。</p>
+<p>但在很多企业环境里，这条路恰恰是走不通的：<strong>问题并不是不会接 Anthropic，而是组织层面只提供 Azure OpenAI 形式的统一出口。</strong></p>
+<div class="note note-warning">
+            <p>如果公司能直接放行 Anthropic，这篇文章大概率一开始就不会存在了。</p>
+          </div>
+
+<h2 id="9-经验教训"><a href="#9-经验教训" class="headerlink" title="9. 经验教训"></a>9. 经验教训</h2><p>这次问题给我的教训主要有两点：</p>
+<ol>
+<li><strong>“OpenAI-compatible” 不等于所有字段都完全兼容。</strong> 只要网关后面挂的不是原生 OpenAI 模型，字段细节就可能出现差异，毕竟兼容性是世界上最困难的工程问题。</li>
+<li><strong>UI 上的 thinking &#x2F; reasoning 选项，不一定对应到底层请求里的同一套语义。</strong> 产品层的概念和协议层的分支判断，最好分开看。</li>
+</ol>
+<p>说到底，所谓 “兼容不完全”，就是 “完全不兼容” 。</p>
+<h2 id="10-附录：如果要在本地修-goose，可以怎么改"><a href="#10-附录：如果要在本地修-goose，可以怎么改" class="headerlink" title="10. 附录：如果要在本地修 goose，可以怎么改"></a>10. 附录：如果要在本地修 goose，可以怎么改</h2><p>如果你的目标不是继续分析，而是<strong>尽快在本地把 goose 修到可用</strong>，那最直接的改法就是在 <code>crates/goose/src/providers/formats/openai.rs</code> 里，收窄 <code>max_tokens</code> &#x2F; <code>max_completion_tokens</code> 的选择条件。</p>
+<h3 id="10-1-修改位置"><a href="#10-1-修改位置" class="headerlink" title="10.1 修改位置"></a>10.1 修改位置</h3><p>目标文件：</p>
+<ul>
+<li><code>crates/goose/src/providers/formats/openai.rs</code></li>
+</ul>
+<p>目标函数：</p>
+<ul>
+<li><code>create_request(...)</code></li>
+</ul>
+<p>在 <strong>v1.28.0</strong> 中，相关逻辑大致位于这段附近：</p>
+<ul>
+<li><code>create_request(...)</code> 起点：<br><a target="_blank" rel="noopener" href="https://github.com/block/goose/blob/v1.28.0/crates/goose/src/providers/formats/openai.rs#L749">https://github.com/block/goose/blob/v1.28.0/crates/goose/src/providers/formats/openai.rs#L749</a></li>
+<li><code>extract_reasoning_effort(...)</code> 和 <code>is_reasoning_model</code>：<br><a target="_blank" rel="noopener" href="https://github.com/block/goose/blob/v1.28.0/crates/goose/src/providers/formats/openai.rs#L763-L764">https://github.com/block/goose/blob/v1.28.0/crates/goose/src/providers/formats/openai.rs#L763-L764</a></li>
+<li><code>let key = if is_reasoning_model &#123; ... &#125; else &#123; ... &#125;</code>：<br><a target="_blank" rel="noopener" href="https://github.com/block/goose/blob/v1.28.0/crates/goose/src/providers/formats/openai.rs#L798-L802">https://github.com/block/goose/blob/v1.28.0/crates/goose/src/providers/formats/openai.rs#L798-L802</a></li>
+</ul>
+<p>也就是说，最关键的就是这几行：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> (model_name, reasoning_effort) = <span class="hljs-title function_ invoke__">extract_reasoning_effort</span>(&amp;model_config.model_name);<br><span class="hljs-keyword">let</span> <span class="hljs-variable">is_reasoning_model</span> = reasoning_effort.<span class="hljs-title function_ invoke__">is_some</span>();<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">key</span> = <span class="hljs-keyword">if</span> is_reasoning_model &#123;<br>    <span class="hljs-string">&quot;max_completion_tokens&quot;</span><br>&#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-string">&quot;max_tokens&quot;</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h3 id="10-2-最小改法：对-claude-强制走-max-completion-tokens"><a href="#10-2-最小改法：对-claude-强制走-max-completion-tokens" class="headerlink" title="10.2 最小改法：对 claude-* 强制走 max_completion_tokens"></a>10.2 最小改法：对 <code>claude-*</code> 强制走 <code>max_completion_tokens</code></h3><p>如果你的诉求非常明确——<strong>就是要让企业网关里的 Claude 先恢复可用</strong>——那最小改法可以很直接：</p>
+<ul>
+<li>保留现有 reasoning 判断</li>
+<li>额外把 <code>claude-*</code> 视为必须使用 <code>max_completion_tokens</code></li>
+</ul>
+<p>伪 patch 可以写成这样：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> (model_name, reasoning_effort) = <span class="hljs-title function_ invoke__">extract_reasoning_effort</span>(&amp;model_config.model_name);<br><span class="hljs-keyword">let</span> <span class="hljs-variable">is_reasoning_model</span> = reasoning_effort.<span class="hljs-title function_ invoke__">is_some</span>();<br><span class="hljs-keyword">let</span> <span class="hljs-variable">force_max_completion_tokens</span> = model_name.<span class="hljs-title function_ invoke__">starts_with</span>(<span class="hljs-string">&quot;claude-&quot;</span>);<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">key</span> = <span class="hljs-keyword">if</span> is_reasoning_model || force_max_completion_tokens &#123;<br>    <span class="hljs-string">&quot;max_completion_tokens&quot;</span><br>&#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-string">&quot;max_tokens&quot;</span><br>&#125;;<br><br>payload<br>    .<span class="hljs-title function_ invoke__">as_object_mut</span>()<br>    .<span class="hljs-title function_ invoke__">unwrap</span>()<br>    .<span class="hljs-title function_ invoke__">insert</span>(key.<span class="hljs-title function_ invoke__">to_string</span>(), json!(model_config.<span class="hljs-title function_ invoke__">max_output_tokens</span>()));<br></code></pre></td></tr></table></figure>
+
+<p>如果写成更接近实际提交的 diff，大概是这样：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs diff">@@<br><span class="hljs-deletion">-    let (model_name, reasoning_effort) = extract_reasoning_effort(&amp;model_config.model_name);</span><br><span class="hljs-deletion">-    let is_reasoning_model = reasoning_effort.is_some();</span><br><span class="hljs-addition">+    let (model_name, reasoning_effort) = extract_reasoning_effort(&amp;model_config.model_name);</span><br><span class="hljs-addition">+    let is_reasoning_model = reasoning_effort.is_some();</span><br><span class="hljs-addition">+    let force_max_completion_tokens = model_name.starts_with(&quot;claude-&quot;);</span><br>@@<br><span class="hljs-deletion">-    let key = if is_reasoning_model &#123;</span><br><span class="hljs-addition">+    let key = if is_reasoning_model || force_max_completion_tokens &#123;</span><br>         &quot;max_completion_tokens&quot;<br>     &#125; else &#123;<br>         &quot;max_tokens&quot;<br>     &#125;;<br></code></pre></td></tr></table></figure>
+
+<p>这个改法的优点是：</p>
+<ul>
+<li>改动非常小</li>
+<li>风险面有限</li>
+<li>对你这个案例足够直接</li>
+</ul>
+<p>缺点也很明显：</p>
+<ul>
+<li>它是一个<strong>针对模型名前缀的兼容补丁</strong></li>
+<li>本质上是为你的网关环境做定制</li>
+<li>如果以后还有别的非 OpenAI 模型走同一条兼容链路，可能还得继续补规则</li>
+</ul>
+<p>所以这是个很典型的“先救火”的 patch：好用，但不优雅。</p>
+<h3 id="10-3-稍微稳一点的改法：把逻辑抽成单独判断"><a href="#10-3-稍微稳一点的改法：把逻辑抽成单独判断" class="headerlink" title="10.3 稍微稳一点的改法：把逻辑抽成单独判断"></a>10.3 稍微稳一点的改法：把逻辑抽成单独判断</h3><p>如果不想把 <code>starts_with(&quot;claude-&quot;)</code> 直接糊在 <code>create_request(...)</code> 里，也可以先抽一个小函数，例如：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">should_use_max_completion_tokens</span>(model_name: &amp;<span class="hljs-type">str</span>, is_reasoning_model: <span class="hljs-type">bool</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">bool</span> &#123;<br>    is_reasoning_model || model_name.<span class="hljs-title function_ invoke__">starts_with</span>(<span class="hljs-string">&quot;claude-&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>然后在请求构造里调用：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">key</span> = <span class="hljs-keyword">if</span> <span class="hljs-title function_ invoke__">should_use_max_completion_tokens</span>(&amp;model_name, is_reasoning_model) &#123;<br>    <span class="hljs-string">&quot;max_completion_tokens&quot;</span><br>&#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-string">&quot;max_tokens&quot;</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>这样做的好处是后续如果你还想继续补：</p>
+<ul>
+<li>某些 Azure 代理模型</li>
+<li>某些企业网关里的非原生 OpenAI 模型</li>
+<li>其他也只接受 <code>max_completion_tokens</code> 的兼容实现</li>
+</ul>
+<p>至少改动点会更集中一些，不至于把判断全散在请求构造逻辑里。</p>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent/" class="category-chain-item">Agent</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Troubleshooting/" class="print-no-link">#Troubleshooting</a>
+      
+        <a href="/tags/Agent/" class="print-no-link">#Agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Goose 升级后 Azure OpenAI 通道下的 Claude 突然不可用：一次 max_tokens / max_completion_tokens 兼容性排查</div>
+      <div>https://gou7ma7.github.io/2026/04/13/devops/@2026_goose_call_azure_openai_claude_breakage_max_tokens/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Roy Lee</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年4月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/04/29/devops/@2026_one_gateway_two_protocols_zero_clarity/" title="名叫 openai.azure.com 的网关却提供 Anthropic 协议时，你让 Agent 怎么办？">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">名叫 openai.azure.com 的网关却提供 Anthropic 协议时，你让 Agent 怎么办？</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/02/07/devops/@2026_execute_in_goose/" title="记一次 AI agent 编排工具 Goose 持续出现 404 的长期未解决 Issue（已修复）">
+                        <span class="hidden-mobile">记一次 AI agent 编排工具 Goose 持续出现 404 的长期未解决 Issue（已修复）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+<i class="iconfont icon-love"></i>
+<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

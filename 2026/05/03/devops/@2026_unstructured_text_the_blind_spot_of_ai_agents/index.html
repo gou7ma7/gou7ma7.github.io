@@ -1,0 +1,1051 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Roy Lee">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这几天一直想总结一下 AI 大人出糗经历，给自己即将被淘汰的职业生涯整点电子吗啡安慰一下，这不就来例子了。   背景：Windows、goose Agent、 Hermes Agent、Markdown 测试报告、多次表格结构重构  事后总结确实发现这个 case 根源在于工具选型，一开始就应该用诸如 .xml 这种结构化且几乎是 test report 的标准指定文件。 但当时想到所谓 “Ma">
+<meta property="og:type" content="article">
+<meta property="og:title" content="这个版本 AI 直接改 非结构化文件 的水平还是不强势啊 -- 看看原理">
+<meta property="og:url" content="https://gou7ma7.github.io/2026/05/03/devops/@2026_unstructured_text_the_blind_spot_of_ai_agents/index.html">
+<meta property="og:site_name" content="DevOps -&gt; AI Agent">
+<meta property="og:description" content="这几天一直想总结一下 AI 大人出糗经历，给自己即将被淘汰的职业生涯整点电子吗啡安慰一下，这不就来例子了。   背景：Windows、goose Agent、 Hermes Agent、Markdown 测试报告、多次表格结构重构  事后总结确实发现这个 case 根源在于工具选型，一开始就应该用诸如 .xml 这种结构化且几乎是 test report 的标准指定文件。 但当时想到所谓 “Ma">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-03T14:30:00.000Z">
+<meta property="article:modified_time" content="2026-05-07T08:28:59.000Z">
+<meta property="article:author" content="Roy Lee">
+<meta property="article:tag" content="Troubleshooting">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Goose">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>这个版本 AI 直接改 非结构化文件 的水平还是不强势啊 -- 看看原理 - DevOps -&gt; AI Agent</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"gou7ma7.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/gou7ma7/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="这个版本 AI 直接改 非结构化文件 的水平还是不强势啊 -- 看看原理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-05-03 22:30" pubdate>
+          2026年5月3日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          54 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">这个版本 AI 直接改 非结构化文件 的水平还是不强势啊 -- 看看原理</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年5月7日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>这几天一直想总结一下 AI 大人<strong>出糗经历</strong>，给自己即将被淘汰的职业生涯整点<strong>电子吗啡</strong>安慰一下，这不就来例子了。</p>
+</blockquote>
+<blockquote>
+<p><strong>背景</strong>：Windows、goose Agent、 Hermes Agent、Markdown 测试报告、多次表格结构重构</p>
+</blockquote>
+<p>事后总结确实发现这个 case 根源在于<strong>工具选型</strong>，一开始就应该用诸如 .xml 这种<strong>结构化</strong>且几乎是 test report 的标准指定文件。</p>
+<p>但当时想到所谓 “Markdown 才是 <strong>AI-native language</strong>” + <strong>真实世界哪来这么多结构化的干净数据</strong>。</p>
+<p>因此直接就开始干活，半天过去，结果等发现的时候，已经烧了小半个月的工资而且陷入了<strong>再也改不动</strong>的处境，着实让处在觉得 “一个行政 + AI ” 就能把我开除的焦虑中松了口气。</p>
+<span id="more"></span>
+
+<h2 id="1-背景：用-AI-Agent-编写一份测试报告"><a href="#1-背景：用-AI-Agent-编写一份测试报告" class="headerlink" title="1. 背景：用 AI Agent 编写一份测试报告"></a>1. 背景：用 AI Agent 编写一份测试报告</h2><p>我在做一个内部系统的测试工作，需要产出一份 Markdown 格式的测试报告（<code>.md</code>）。报告结构大致如下：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section"># System Test Report</span><br><br><span class="hljs-section">## 1) UX test</span><br><span class="hljs-section">### Findings (UX) — action-based table</span><br>| Action | Severity | Actual | Evidence | Recommendation |<br>|---|---|---|---|---|<br>| action<span class="hljs-emphasis">_a | P2 | ... | ... | ... |</span><br><span class="hljs-emphasis">| action_</span>b | P1 | ... | ... | ... |<br><br><span class="hljs-section">## 2) Accuracy test</span><br><span class="hljs-section">### 2.1 Results table (compact)</span><br>| ID | Action | Correctness | Turns | External check |<br>|---|---|---|---:|---|<br>| ACC-001 | ... | Correct | 1 | Not found |<br>| ACC-002 | ... | Correct | 1 | Not found |<br><br><span class="hljs-section">### 2.2 Evidence</span><br>| ID | Ground truth | Agent prompt | Agent answer | External check |<br>|---|---|---|---|---|<br>| ACC-001 | <span class="hljs-code">`node:xxx`</span> — &quot;quote...&quot; | prompt text | answer excerpt | Not found |<br><br><span class="hljs-section">### 2.3 How to locate (common)</span><br>...<br><br><span class="hljs-section">## 3) Performance test</span><br>...<br></code></pre></td></tr></table></figure>
+
+<p>整个过程中，我让 goose Agent 帮我做两件事：</p>
+<ol>
+<li><strong>执行测试</strong>（调用 MCP 工具、记录结果）——这部分很顺利</li>
+<li><strong>把结果回填到报告的 Markdown 表格里</strong>——这部分翻车了</li>
+</ol>
+<h2 id="2-故障回顾：为什么-AI-改文件比人慢-10-倍还容易错？"><a href="#2-故障回顾：为什么-AI-改文件比人慢-10-倍还容易错？" class="headerlink" title="2. 故障回顾：为什么 AI 改文件比人慢 10 倍还容易错？"></a>2. 故障回顾：为什么 AI 改文件比人慢 10 倍还容易错？</h2><p>一开始 markdown 中 table 数据还少的时候改得非常顺利，但是随着表越来越长我开始感觉到不对了。</p>
+<h3 id="2-1-典型的失败循环"><a href="#2-1-典型的失败循环" class="headerlink" title="2.1 典型的失败循环"></a>2.1 典型的失败循环</h3><p>我让 Agent 把某个测试用例的结果填进 <code>## 2) Accuracy test</code> 下的 Evidence 表格。Agent 的操作路径是：</p>
+<ol>
+<li>用 <code>Goose edit</code> 工具，提供 <code>before</code>（要被替换的原文）和 <code>after</code>（替换后的内容）</li>
+<li>工具返回：<code>No match found for the specified text.</code></li>
+<li>Agent 换一种写法再试——还是 <code>No match found</code></li>
+<li>Agent 改用 Python 脚本去读文件、定位、替换——脚本报编码错误</li>
+<li>Agent 改用 PowerShell——PowerShell 的换行拼接语法报错</li>
+<li>Agent 再试 <code>edit</code>——还是 <code>No match found</code></li>
+<li>……</li>
+</ol>
+<p>下面是从 session 历史里提取的<strong>真实失败统计</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>操作类型</th>
+<th align="right">尝试次数</th>
+<th align="right">成功</th>
+<th align="right">失败</th>
+<th>典型错误</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>functions.edit</code>（精确替换）</td>
+<td align="right">~40</td>
+<td align="right">~5</td>
+<td align="right">~35</td>
+<td><code>No match found</code></td>
+</tr>
+<tr>
+<td>Python 脚本（读取&#x2F;定位&#x2F;替换）</td>
+<td align="right">~15</td>
+<td align="right">~3</td>
+<td align="right">~12</td>
+<td><code>UnicodeEncodeError</code>、<code>&lt;&lt; was unexpected</code>、无输出</td>
+</tr>
+<tr>
+<td>PowerShell 脚本（读取&#x2F;替换）</td>
+<td align="right">~10</td>
+<td align="right">~5</td>
+<td align="right">~5</td>
+<td>Parser error（换行拼接）、编码问题</td>
+</tr>
+</tbody></table>
+<h3 id="2-2-一个具体的例子"><a href="#2-2-一个具体的例子" class="headerlink" title="2.2 一个具体的例子"></a>2.2 一个具体的例子</h3><p>我让 Agent 把 Evidence 表格里 ACC-002 的 <code>(TBD - paste agent answer)</code> 替换成实际答案。Agent 尝试了这样的 <code>before</code>：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs lisp">**Agent answer (<span class="hljs-name">excerpt</span>)**  <br>(<span class="hljs-name">TBD</span> - paste agent answer)<br></code></pre></td></tr></table></figure>
+
+<p>工具返回：<code>No match found</code>。</p>
+<p>为什么？因为文件里实际的内容可能是：</p>
+<ul>
+<li>末尾有 <code>\r\n</code> 而不是 <code>\n</code></li>
+<li><code>**Agent answer (excerpt)**</code> 后面有两个空格（trailing spaces）形成 Markdown 换行</li>
+<li>或者之前某次编辑已经改过了这段文字，但 Agent 不知道</li>
+</ul>
+<p>Agent 看不到这些差异，只能不断”猜”新的 <code>before</code> 字符串。</p>
+<h3 id="2-3-有多慢？"><a href="#2-3-有多慢？" class="headerlink" title="2.3 有多慢？"></a>2.3 有多慢？</h3><ul>
+<li>人类做同样的事：打开文件 → Ctrl+F 找到位置 → 粘贴内容 → 保存。<strong>30 秒</strong>。</li>
+<li>Agent 做同样的事：40+ 次 <code>edit</code> 尝试 + 15+ 次脚本尝试 + 大量上下文消耗。<strong>超过 30 分钟</strong>，而且最终还没成功。</li>
+</ul>
+<p>最后我对 Agent 说：<strong>“你给我可直接粘贴的表格行文本，我自己粘贴进去。”</strong></p>
+<h2 id="3-根因①：工具层——没有结构化编辑，只有字符串替换"><a href="#3-根因①：工具层——没有结构化编辑，只有字符串替换" class="headerlink" title="3. 根因①：工具层——没有结构化编辑，只有字符串替换"></a>3. 根因①：工具层——没有结构化编辑，只有字符串替换</h2><h3 id="3-1-goose-的-edit-工具是怎么工作的？"><a href="#3-1-goose-的-edit-工具是怎么工作的？" class="headerlink" title="3.1 goose 的 edit 工具是怎么工作的？"></a>3.1 goose 的 <code>edit</code> 工具是怎么工作的？</h3><p>goose 的文件编辑能力由 <code>developer</code> 扩展提供，核心实现在：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/block/goose/blob/main/crates/goose/src/agents/platform_extensions/developer/edit.rs"><code>crates/goose/src/agents/platform_extensions/developer/edit.rs</code></a></li>
+</ul>
+<p>其中最关键的函数是 <code>string_replace</code>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">string_replace</span>(content: &amp;<span class="hljs-type">str</span>, before: &amp;<span class="hljs-type">str</span>, after: &amp;<span class="hljs-type">str</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;<span class="hljs-type">String</span>, <span class="hljs-type">String</span>&gt; &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">matches</span>: <span class="hljs-type">Vec</span>&lt;_&gt; = content.<span class="hljs-title function_ invoke__">match_indices</span>(before).<span class="hljs-title function_ invoke__">collect</span>();<br><br>    <span class="hljs-keyword">match</span> matches.<span class="hljs-title function_ invoke__">len</span>() &#123;<br>        <span class="hljs-number">0</span> =&gt; &#123;<br>            <span class="hljs-comment">// 没找到 → 报错，附带建议和文件预览</span><br>            <span class="hljs-keyword">let</span> <span class="hljs-variable">suggestion</span> = <span class="hljs-title function_ invoke__">find_similar_context</span>(content, before);<br>            <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">msg</span> = <span class="hljs-string">&quot;No match found for the specified text.&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();<br>            <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">Some</span>(hint) = suggestion &#123;<br>                msg.<span class="hljs-title function_ invoke__">push_str</span>(&amp;<span class="hljs-built_in">format!</span>(<span class="hljs-string">&quot;\n\nDid you mean:\n```\n&#123;&#125;\n```&quot;</span>, hint));<br>            &#125;<br>            <span class="hljs-keyword">let</span> <span class="hljs-variable">preview</span> = <span class="hljs-title function_ invoke__">build_file_preview</span>(content, NO_MATCH_PREVIEW_LINES);<br>            msg.<span class="hljs-title function_ invoke__">push_str</span>(&amp;<span class="hljs-built_in">format!</span>(<span class="hljs-string">&quot;\n\nFile preview:\n```\n&#123;&#125;\n```&quot;</span>, preview));<br>            <span class="hljs-title function_ invoke__">Err</span>(msg)<br>        &#125;<br>        <span class="hljs-number">1</span> =&gt; <span class="hljs-title function_ invoke__">Ok</span>(content.<span class="hljs-title function_ invoke__">replacen</span>(before, after, <span class="hljs-number">1</span>)),  <span class="hljs-comment">// 唯一匹配 → 替换</span><br>        n =&gt; &#123;<br>            <span class="hljs-comment">// 多个匹配 → 报错，要求更多上下文</span><br>            <span class="hljs-comment">// ...</span><br>            <span class="hljs-title function_ invoke__">Err</span>(msg)<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>核心就是 <code>content.match_indices(before)</code>——Rust 标准库的精确子串匹配。</strong></p>
+<p>这意味着：</p>
+<ul>
+<li><code>before</code> 必须与文件内容<strong>逐字节一致</strong></li>
+<li>多一个空格、少一个换行、BOM 不同、<code>\r\n</code> vs <code>\n</code>——全都会导致 <code>No match found</code></li>
+<li>没有模糊匹配、没有正则、没有”按结构定位”</li>
+</ul>
+<h3 id="3-2-它还提供了一个”猜测扩展”功能，但不够用"><a href="#3-2-它还提供了一个”猜测扩展”功能，但不够用" class="headerlink" title="3.2 它还提供了一个”猜测扩展”功能，但不够用"></a>3.2 它还提供了一个”猜测扩展”功能，但不够用</h3><p>注意 <code>find_similar_context</code> 函数：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">find_similar_context</span>(content: &amp;<span class="hljs-type">str</span>, search: &amp;<span class="hljs-type">str</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Option</span>&lt;<span class="hljs-type">String</span>&gt; &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">first_line</span> = search.<span class="hljs-title function_ invoke__">lines</span>().<span class="hljs-title function_ invoke__">next</span>()?.<span class="hljs-title function_ invoke__">trim</span>();<br>    <span class="hljs-keyword">if</span> first_line.<span class="hljs-title function_ invoke__">is_empty</span>() &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>;<br>    &#125;<br>    <span class="hljs-keyword">for</span> (i, line) <span class="hljs-keyword">in</span> content.<span class="hljs-title function_ invoke__">lines</span>().<span class="hljs-title function_ invoke__">enumerate</span>() &#123;<br>        <span class="hljs-keyword">if</span> line.<span class="hljs-title function_ invoke__">contains</span>(first_line) || first_line.<span class="hljs-title function_ invoke__">contains</span>(line.<span class="hljs-title function_ invoke__">trim</span>()) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-title function_ invoke__">get_line_context</span>(content, i + <span class="hljs-number">1</span>, <span class="hljs-number">2</span>));<br>        &#125;<br>    &#125;<br>    <span class="hljs-literal">None</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>它只用 <code>before</code> 的<strong>第一行</strong>去做 <code>contains</code> 匹配，然后返回附近几行作为提示。这比”完全没有提示”好，但对 LLM 来说远远不够——因为：</p>
+<ol>
+<li>返回的提示只有 2 行上下文，LLM 很难据此推断出真正的差异（是换行符？是编码？是内容变了？）</li>
+<li>没有 diff 视图，LLM 不知道”差在哪一个字符”</li>
+</ol>
+<h3 id="3-3-为什么之后大量转向-Python-PowerShell？"><a href="#3-3-为什么之后大量转向-Python-PowerShell？" class="headerlink" title="3.3 为什么之后大量转向 Python&#x2F;PowerShell？"></a>3.3 为什么之后大量转向 Python&#x2F;PowerShell？</h3><p><code>edit</code> 反复失败后，Agent 试图用脚本做两类事情：</p>
+<p><strong>第一类：定位（edit 做不到的）</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 找到某个 heading 的位置</span><br>text = <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;report.md&quot;</span>).read()<br>start = text.find(<span class="hljs-string">&quot;## 2) Accuracy test&quot;</span>)<br>end = text.find(<span class="hljs-string">&quot;## 3) Performance test&quot;</span>)<br><span class="hljs-built_in">print</span>(text[start:end])<br></code></pre></td></tr></table></figure>
+
+<p><strong>第二类：块级替换（edit 的精确匹配太脆弱）</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-variable">$report</span> = <span class="hljs-built_in">Get-Content</span> <span class="hljs-literal">-Raw</span> <span class="hljs-literal">-Encoding</span> UTF8 report.md<br><span class="hljs-variable">$start</span> = <span class="hljs-variable">$report</span>.IndexOf(<span class="hljs-string">&quot;## 2) Accuracy test&quot;</span>)<br><span class="hljs-variable">$end</span> = <span class="hljs-variable">$report</span>.IndexOf(<span class="hljs-string">&quot;## 3) Performance test&quot;</span>)<br><span class="hljs-variable">$updated</span> = <span class="hljs-variable">$report</span>.Substring(<span class="hljs-number">0</span>, <span class="hljs-variable">$start</span>) + <span class="hljs-variable">$newSection</span> + <span class="hljs-variable">$report</span>.Substring(<span class="hljs-variable">$end</span>)<br><span class="hljs-built_in">Set-Content</span> <span class="hljs-literal">-Encoding</span> UTF8 report.md <span class="hljs-variable">$updated</span><br></code></pre></td></tr></table></figure>
+
+<p>但脚本也不稳定：</p>
+<ul>
+<li>Windows <code>cmd</code> 下 Python heredoc 报 <code>&lt;&lt; was unexpected at this time</code></li>
+<li>PowerShell 拼接换行字符串 <code>`r`n</code> 导致 parser error</li>
+<li>读取 UTF-8 BOM 文件时输出乱码 &#x2F; <code>UnicodeEncodeError</code></li>
+</ul>
+<h3 id="3-4-如果是-JSON-XML，还会有这个问题吗？"><a href="#3-4-如果是-JSON-XML，还会有这个问题吗？" class="headerlink" title="3.4 如果是 JSON&#x2F;XML，还会有这个问题吗？"></a>3.4 如果是 JSON&#x2F;XML，还会有这个问题吗？</h3><p><strong>大概率不会这么严重。</strong> 因为：</p>
+<ul>
+<li>JSON 可以 <code>parse → modify → serialize</code></li>
+<li>XML 可以按 XPath 定位节点</li>
+<li>都有明确的层级结构和标签语义</li>
+</ul>
+<p>但 <strong>Markdown 没有强制层级语义</strong>。它是”给人读”的，不是”给机器改”的。Heading 之间没有显式的”结束标记”，表格只是 <code>|</code> 分隔的文本行——工具没法说”找到 ACC-001 那一行然后改第 3 列”。</p>
+<h2 id="4-根因②：LLM-层——没读到的部分等于不存在"><a href="#4-根因②：LLM-层——没读到的部分等于不存在" class="headerlink" title="4. 根因②：LLM 层——没读到的部分等于不存在"></a>4. 根因②：LLM 层——没读到的部分等于不存在</h2><h3 id="4-1-Transformer-的上下文窗口：一个硬边界"><a href="#4-1-Transformer-的上下文窗口：一个硬边界" class="headerlink" title="4.1 Transformer 的上下文窗口：一个硬边界"></a>4.1 Transformer 的上下文窗口：一个硬边界</h3><p>当前主流 LLM（GPT-4、Claude、Gemini 等）都基于 <strong>Transformer 架构</strong>。Transformer 的核心是<strong>自注意力（self-attention）机制</strong>：模型在生成每个 token 时，会对输入序列中的<strong>所有 token</strong> 计算注意力权重。</p>
+<p>这意味着：</p>
+<ul>
+<li><strong>只有在上下文窗口里的 token，才会被模型”看到”</strong></li>
+<li>没有读进上下文的文件内容，对模型来说<strong>等同于不存在</strong></li>
+<li>模型<strong>无法主动说”我没看到文件的第 80-100 行，可能那里有我需要的信息”</strong>——因为它根本不知道那些行的存在</li>
+</ul>
+<p>就像打游戏的时候，这个英雄的每一个技能出装加点你都知道，但是再看某些创意套路玩法的时候还是会惊呼：居然还能这样我怎么想不到。</p>
+<h3 id="4-2-Unknown-Unknowns：不知道自己不知道"><a href="#4-2-Unknown-Unknowns：不知道自己不知道" class="headerlink" title="4.2 Unknown Unknowns：不知道自己不知道"></a>4.2 Unknown Unknowns：不知道自己不知道</h3><p>这正是 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/There_are_unknown_unknowns">Donald Rumsfeld 的经典分类</a>：</p>
+<ul>
+<li><strong>Known knowns</strong>：我读到了文件的这一段，知道它是什么</li>
+<li><strong>Known unknowns</strong>：我知道文件还有其他部分，但我没读</li>
+<li><strong>Unknown unknowns</strong>：我不知道文件里还有一段跟我要改的地方相关（比如之前某次编辑已经改过了占位符文本）</li>
+</ul>
+<p>在我们这次的场景里，Agent 就陷入了 unknown unknowns：</p>
+<ul>
+<li>它<strong>记得</strong>之前我们定义的占位符是 <code>(TBD - paste agent answer)</code></li>
+<li>但文件里这段文字可能已经被之前某次（部分成功的）编辑改掉了</li>
+<li>Agent 不知道这件事，继续用旧的 <code>before</code> 字符串去匹配——反复失败</li>
+</ul>
+<h3 id="4-3-这是-Transformer-架构本身决定的吗？"><a href="#4-3-这是-Transformer-架构本身决定的吗？" class="headerlink" title="4.3 这是 Transformer 架构本身决定的吗？"></a>4.3 这是 Transformer 架构本身决定的吗？</h3><p><strong>基本上是的。</strong> 但需要更精确地说：</p>
+<p>Transformer 的自注意力机制本身是一种<strong>有限窗口内的全局关联计算</strong>。它的核心公式是：</p>
+
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">Attention</span><span class="hljs-params">(Q, K, V)</span></span> = <span class="hljs-built_in">softmax</span>( Q·Kᵀ / √dₖ ) · V<br></code></pre></td></tr></table></figure>
+
+
+<p>其中 Q、K、V 都来自输入序列。<strong>序列之外的信息，在数学上就不参与计算。</strong></p>
+<p>这不是”模型不够大”能解决的——即使给你 100 万 token 的上下文窗口，如果你没把文件内容放进去，它就是看不见。</p>
+<h3 id="4-4-“真实世界模型”能从根本上解决吗？"><a href="#4-4-“真实世界模型”能从根本上解决吗？" class="headerlink" title="4.4 “真实世界模型”能从根本上解决吗？"></a>4.4 “真实世界模型”能从根本上解决吗？</h3><p>学术界有一个持续的讨论：LLM 是否只是”统计模式匹配器”，还是能形成某种”世界模型”（world model）？</p>
+<p>一些相关的研究方向：</p>
+<ul>
+<li><strong>MemoryPrompt</strong>（Rakotonirina &amp; Baroni, 2024, <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2402.15268">arXiv:2402.15268</a>）：用一个小的辅助循环网络给 LLM 补充”记忆”，让它能追踪超出窗口的事实更新。实验表明，这种方法在多轮事实更新任务上超过了能看到完整历史的更大模型。</li>
+<li><strong>RAG（Retrieval-Augmented Generation）</strong>：不把所有内容塞进上下文，而是按需检索相关片段。这在问答场景有效，但在”精确编辑文件”场景下，检索不能替代”知道文件当前精确状态”。</li>
+</ul>
+<p>至少现阶段（2026-05-06）这还是一个典型的工程选型问题，比如文章一开始说的用结构化文件，或者我最近在学习的 Graph-Index 等，但是本质上都需要先抽象提炼真实世界，工程得不能再工程了。</p>
+<h2 id="5-本质区别：人类是”模糊定位-即时反馈”，Agent-是”精确猜测-延迟反馈”-（本段持续更新）"><a href="#5-本质区别：人类是”模糊定位-即时反馈”，Agent-是”精确猜测-延迟反馈”-（本段持续更新）" class="headerlink" title="5. 本质区别：人类是”模糊定位 + 即时反馈”，Agent 是”精确猜测 + 延迟反馈” （本段持续更新）"></a>5. 本质区别：人类是”模糊定位 + 即时反馈”，Agent 是”精确猜测 + 延迟反馈” （本段持续更新）</h2><blockquote>
+<p>至此，我想深入的学习一下背后的原理，如果没有 AI 大人，我肯定不会去翻论文，甚至就去某些二手知识网站草草看几个科普了事。</p>
+</blockquote>
+<h3 id="5-1-人类怎么改一个-Markdown-表格？"><a href="#5-1-人类怎么改一个-Markdown-表格？" class="headerlink" title="5.1 人类怎么改一个 Markdown 表格？"></a>5.1 人类怎么改一个 Markdown 表格？</h3><ol>
+<li><strong>视觉扫描</strong>：打开文件，滚动到大概位置（”记得 Accuracy 在中间偏下”）</li>
+<li><strong>模糊匹配</strong>：肉眼扫到 <code>## 2) Accuracy test</code>，再往下找到表格</li>
+<li><strong>精确定位</strong>：看到 <code>(TBD - paste agent answer)</code> 那一行</li>
+<li><strong>修改</strong>：选中 → 粘贴 → 保存</li>
+<li><strong>即时确认</strong>：改完立刻看到结果，发现格式不对就马上修</li>
+</ol>
+<p>整个过程依赖三种能力：</p>
+<ul>
+<li><strong>空间&#x2F;布局记忆</strong>（layout memory）：记得”大概在哪里”</li>
+<li><strong>模糊容错</strong>（fuzzy matching）：多一个空格也能认出来</li>
+<li><strong>即时视觉反馈</strong>（immediate feedback）：改完就能看</li>
+</ul>
+<h3 id="5-2-Agent-怎么改一个-Markdown-表格？"><a href="#5-2-Agent-怎么改一个-Markdown-表格？" class="headerlink" title="5.2 Agent 怎么改一个 Markdown 表格？"></a>5.2 Agent 怎么改一个 Markdown 表格？</h3><ol>
+<li><strong>读取片段</strong>：用工具读文件的一部分到上下文</li>
+<li><strong>构造 before</strong>：根据记忆（可能已过期）猜测要替换的精确文本</li>
+<li><strong>调用 edit</strong>：发送 <code>before</code> + <code>after</code></li>
+<li><strong>等待结果</strong>：收到 <code>No match found</code>（唯一的反馈是”没找到”，不告诉你差在哪）</li>
+<li><strong>重试</strong>：换一种 <code>before</code> 再猜</li>
+</ol>
+<p>这个过程的问题：</p>
+<ul>
+<li><strong>没有空间感知</strong>：Agent 不知道”表格在文件的第几行”，除非它先用脚本查</li>
+<li><strong>不能模糊匹配</strong>：工具要求逐字一致</li>
+<li><strong>反馈粒度太粗</strong>：只有 match &#x2F; no match，不像人眼能直接看到”差了一个换行”</li>
+</ul>
+<h3 id="5-3-从”智能”的角度看"><a href="#5-3-从”智能”的角度看" class="headerlink" title="5.3 从”智能”的角度看"></a>5.3 从”智能”的角度看</h3><p>这个对比揭示了一个更深层的问题：</p>
+<p><strong>人类的”智能”很大一部分来自感知-行动的闭环（perception-action loop）。</strong> 我们的视觉系统、运动系统、工作记忆紧密耦合，形成一个低延迟、高带宽的反馈环路。改文件时，你的眼睛就是你的”即时文件状态感知器”。</p>
+<p><strong>当前 Agent 的”智能”主要体现在语言推理（language reasoning）上。</strong> 它可以理解你的意图、规划步骤、生成代码——但它与外部世界的交互是通过<strong>离散的工具调用</strong>完成的。每次工具调用都是一次”盲操作”：发出去，等结果回来，再决定下一步。</p>
+<p>这就是为什么同样的”智能水平”，在不同的工具条件下表现可以差 10 倍甚至更多。<strong>Agent 的能力上限不仅取决于模型，更取决于工具。</strong></p>
+<h2 id="6-展望：如果-Agent-不靠工具，能自己”感知”世界吗？"><a href="#6-展望：如果-Agent-不靠工具，能自己”感知”世界吗？" class="headerlink" title="6. 展望：如果 Agent 不靠工具，能自己”感知”世界吗？"></a>6. 展望：如果 Agent 不靠工具，能自己”感知”世界吗？</h2><p>上面我们得出结论：<strong>Agent 缺的不是智能，是一双眼睛。</strong> 而这双”眼睛”目前需要在工具层去补。</p>
+<p>但这就引出一个更深的问题：<strong>有没有可能，AI 不需要外部工具，就能自己感知和理解环境？</strong> 人类似乎天生就能做到——我们不需要”调用 API”来看一眼文件，我们只需要睁开眼睛。</p>
+<p>下面从五个角度展望这个问题。不是预言未来，而是把当前 AI 与人类智能的差距拆开来看。</p>
+<h3 id="6-1-具身智能（Embodied-AI）：智能是从身体与环境的交互中”长”出来的"><a href="#6-1-具身智能（Embodied-AI）：智能是从身体与环境的交互中”长”出来的" class="headerlink" title="6.1 具身智能（Embodied AI）：智能是从身体与环境的交互中”长”出来的"></a>6.1 具身智能（Embodied AI）：智能是从身体与环境的交互中”长”出来的</h3><p>认知科学有一个重要流派叫<strong>具身认知（Embodied Cognition）</strong>：人类的智能不是一个脱离身体的”纯推理引擎”，而是在<strong>身体与环境的持续交互</strong>中发展出来的。</p>
+<p>婴儿学会”抓取”不是因为谁给了他一本物理学教材，而是因为他反复伸手、碰到东西、感受反馈、调整动作——几百万次的感知-行动循环。成人改文件时的”扫一眼就知道在哪”，本质上也是视觉系统和运动系统长期协作训练出来的能力。</p>
+<p>当前的 LLM 是<strong>纯语言的大脑</strong>：没有眼睛、没有手、没有空间感。它的所有”经验”都来自文本语料，而不是来自与环境的交互。</p>
+<p><strong>具身智能（Embodied AI）</strong> 是当前 AI 研究的一个重要方向，核心思路是：让 AI 在模拟或真实环境中主动探索、操作、获得反馈。典型场景包括机器人操控（manipulation）、视觉导航（visual navigation）、以及在虚拟环境中完成任务。目前主流的研究平台包括 Meta 的 <a target="_blank" rel="noopener" href="https://aihabitat.org/">Habitat</a>（用于视觉导航和具身问答）以及 AI2 的 <a target="_blank" rel="noopener" href="https://ai2thor.allenai.org/">AI2-THOR</a>（用于室内场景交互）。</p>
+<p>回到我们这个场景：Agent 编辑文件就像一个<strong>没有眼睛的人在黑暗中改文件</strong>——它只能靠”摸”（工具调用）来获取信息。而人类是<strong>睁着眼睛操作</strong>的。具身智能的终极目标，是让 AI 也能”睁开眼睛”。</p>
+<blockquote>
+<p><strong>参考</strong>：</p>
+<ul>
+<li>Embodied Cognition 综述：Shapiro, L. (2011). <em>Embodied Cognition</em>. Routledge. <a target="_blank" rel="noopener" href="https://book.douban.com/subject/6786011/">豆瓣</a></li>
+<li>Habitat 平台：Savva et al., “Habitat: A Platform for Embodied AI Research” (ICCV 2019). <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1904.01201">arXiv:1904.01201</a></li>
+<li>AI2-THOR：Kolve et al., “AI2-THOR: An Interactive 3D Environment for Visual AI” (2017). <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1712.05474">arXiv:1712.05474</a></li>
+</ul>
+</blockquote>
+<h3 id="6-2-世界模型（World-Models）：AI-能在”脑子里”模拟文件的状态吗？"><a href="#6-2-世界模型（World-Models）：AI-能在”脑子里”模拟文件的状态吗？" class="headerlink" title="6.2 世界模型（World Models）：AI 能在”脑子里”模拟文件的状态吗？"></a>6.2 世界模型（World Models）：AI 能在”脑子里”模拟文件的状态吗？</h3><p>Meta 首席 AI 科学家 Yann LeCun 在多次公开演讲和论文中提出：当前的 LLM 缺少一个关键组件——<strong>世界模型（World Model）</strong>。</p>
+<p>他提出的 <strong>JEPA（Joint Embedding Predictive Architecture）</strong> 框架的核心思想是：智能体应该学习一个<strong>环境的内部表征</strong>，能够<strong>预测</strong>环境在不同行动下会如何变化，而不仅仅是生成文本。</p>
+<p>用一个比喻：你推一下桌上的杯子，你的大脑能”预测”杯子会滑动、可能掉下去——你不需要真的推才知道。这就是”世界模型”在起作用。</p>
+<p>在我们这个场景里：如果 Agent 有一个”文件状态的内部模型”，它就不需要每次都去读文件才知道当前内容是什么——它能在”脑子里”维护一份文件的状态，预测”如果我替换这段文字，文件会变成什么样”。</p>
+<p>但当前的 LLM 没有这种<strong>持久的、可更新的内部状态模型</strong>。它的”记忆”就是上下文窗口里的 token——窗口之外的信息，在数学上就不参与计算。每次对话轮次结束，如果上下文被截断或压缩，之前的”文件状态”就可能丢失。</p>
+<p>LeCun 认为，真正的 AGI 需要的不是更大的语言模型，而是能<strong>学习世界运行规律并在内部模拟的系统</strong>。这个方向目前仍在早期研究阶段，但如果有朝一日实现，Agent 的”unknown unknowns”问题会从根本上减少——因为它”脑子里”就有一份环境的实时模型。</p>
+<blockquote>
+<p><strong>参考</strong>：</p>
+<ul>
+<li>LeCun, Y. “A Path Towards Autonomous Machine Intelligence” (2022). <a target="_blank" rel="noopener" href="https://openreview.net/pdf?id=BZ5a1r-kVsf">论文 PDF</a></li>
+<li>Ha, D. &amp; Schmidhuber, J. “World Models” (2018). <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1803.10122">arXiv:1803.10122</a></li>
+<li>LeCun JEPA 演讲（Meta AI, 2023）：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=DokLw1tILlw">YouTube</a></li>
+</ul>
+</blockquote>
+<h3 id="6-3-主动推理（Active-Inference）：智能体应该主动”去看”，而不是被动等输入"><a href="#6-3-主动推理（Active-Inference）：智能体应该主动”去看”，而不是被动等输入" class="headerlink" title="6.3 主动推理（Active Inference）：智能体应该主动”去看”，而不是被动等输入"></a>6.3 主动推理（Active Inference）：智能体应该主动”去看”，而不是被动等输入</h3><p>神经科学家 Karl Friston 提出了<strong>自由能原理（Free Energy Principle）</strong>：生物体的核心驱动力是<strong>减少对环境的不确定性（surprise）</strong>。换句话说，智能体天生就有动力去”搞清楚”自己不了解的东西。</p>
+<p>人类在编辑文件时，这个原理体现得很明显：</p>
+<ul>
+<li>你不确定表格在哪 → 你会<strong>主动滚动&#x2F;搜索</strong>（减少不确定性）</li>
+<li>你不确定改对了没 → 你会<strong>主动检查结果</strong>（减少不确定性）</li>
+<li>你发现格式不对 → 你会<strong>主动修正</strong>（减少 surprise）</li>
+</ul>
+<p>这是一种<strong>主动推理（Active Inference）</strong>：不是被动地等待信息输入，而是主动地去获取你需要的信息。</p>
+<p>当前 Agent 的问题恰恰在于它是<strong>被动的</strong>：你给它什么上下文，它就在什么上下文里工作。它不会主动说”等一下，我先完整扫描一遍文件结构再开始编辑”——除非你在 system prompt 里明确要求它这么做。</p>
+<p>一些前沿研究正在尝试把主动推理的思想引入 AI Agent：让 Agent 自己判断”我对当前环境的哪些部分不够了解”，然后<strong>主动去探索&#x2F;查询</strong>以减少不确定性。如果这个能力成熟，Agent 就不会再盲目地用过期的 <code>before</code> 字符串去碰运气——它会先主动确认文件的当前状态。</p>
+<blockquote>
+<p><strong>参考</strong>：</p>
+<ul>
+<li>Friston, K. “The free-energy principle: a unified brain theory?” <em>Nature Reviews Neuroscience</em> 11, 127–138 (2010). <a target="_blank" rel="noopener" href="https://doi.org/10.1038/nrn2787">doi:10.1038&#x2F;nrn2787</a></li>
+<li>Friston, K. et al. “Active Inference: The Free Energy Principle in Mind, Brain, and Behavior” (MIT Press, 2022). <a target="_blank" rel="noopener" href="https://mitpress.mit.edu/9780262045353/active-inference/">MIT Press</a></li>
+<li>Fountas, Z. et al. “Deep active inference agents using Monte-Carlo methods” (NeurIPS 2020). <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.04176">arXiv:2006.04176</a></li>
+</ul>
+</blockquote>
+<h3 id="6-4-双系统理论（System-1-System-2）：快思考与慢思考"><a href="#6-4-双系统理论（System-1-System-2）：快思考与慢思考" class="headerlink" title="6.4 双系统理论（System 1 &#x2F; System 2）：快思考与慢思考"></a>6.4 双系统理论（System 1 &#x2F; System 2）：快思考与慢思考</h3><p>诺贝尔经济学奖得主 Daniel Kahneman 在《思考，快与慢》中提出了著名的<strong>双系统理论</strong>：</p>
+<ul>
+<li><strong>System 1（快系统）</strong>：快速、直觉、自动化。例如：扫一眼就知道表格在哪、看到红色就觉得危险、一眼认出朋友的脸。</li>
+<li><strong>System 2（慢系统）</strong>：慢速、逻辑、需要集中注意力。例如：计算 17 × 24、分析一段法律条文、写一段代码。</li>
+</ul>
+<p>人类在编辑文件时，两个系统紧密协作：</p>
+<ul>
+<li><strong>System 1</strong> 负责快速定位（”表格大概在中间偏下”）、模式识别（”这行看起来像我要改的那行”）</li>
+<li><strong>System 2</strong> 负责精确操作（”确认这是 ACC-002 那一行，把第 4 列改成新内容”）</li>
+</ul>
+<p>当前的 LLM 更像一个<strong>纯 System 2 的存在</strong>：它擅长逻辑推理、长链条规划、代码生成——但它缺乏 System 1 式的<strong>快速感知和直觉定位</strong>能力。</p>
+<p>这就是为什么 Agent 在”找到文件里的某一段”这件事上表现很差：这本质上是一个 System 1 任务（人类靠直觉&#x2F;视觉就能完成），但 Agent 不得不用 System 2 的方式（逻辑推理 + 精确字符串匹配）去做——效率自然低一个数量级。</p>
+<p>一个有趣的研究方向是：能否给 Agent 补上 System 1？比如用一个<strong>快速的、低精度但高覆盖的”预扫描”模块</strong>来完成粗定位，再把精确操作交给 LLM（System 2）。这其实就是我们下文会描述的”结构化定位工具”——它本质上就是在工程化地给 Agent 补 System 1。</p>
+<blockquote>
+<p><strong>参考</strong>：</p>
+<ul>
+<li>Kahneman, D. <em>Thinking, Fast and Slow</em> (2011). Farrar, Straus and Giroux. <a target="_blank" rel="noopener" href="https://book.douban.com/subject/10785583/">豆瓣</a></li>
+<li>Bengio, Y. “From System 1 Deep Learning to System 2 Deep Learning” (NeurIPS 2019 Keynote). <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=T3sxeTgT4qc">YouTube</a></li>
+<li>Weston, J. &amp; Sukhbaatar, S. “System 2 Attention (is something you might need too)” (2023). <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2311.16502">arXiv:2311.16502</a></li>
+</ul>
+</blockquote>
+<h3 id="6-5-多模态-AI（Multimodal-AI）：给-Agent-一双”真正的眼睛”"><a href="#6-5-多模态-AI（Multimodal-AI）：给-Agent-一双”真正的眼睛”" class="headerlink" title="6.5 多模态 AI（Multimodal AI）：给 Agent 一双”真正的眼睛”"></a>6.5 多模态 AI（Multimodal AI）：给 Agent 一双”真正的眼睛”</h3><p>最后一个展望，也是目前最接近落地的方向：<strong>多模态 AI</strong>。</p>
+<p>当前的多模态模型（如 GPT-4V、Claude vision、Gemini）已经可以”看”图片和截图。如果 Agent 能像人一样”看到”文件的渲染结果（而不只是处理文本 token），是否能解决定位问题？</p>
+<p>答案是：<strong>部分能，但不够。</strong></p>
+<p>“看截图”和”精确编辑文件”之间还有巨大鸿沟：</p>
+<ul>
+<li>你能从截图里看到”表格大概在这个位置”→ 粗定位 ✅</li>
+<li>但你不能从截图里精确知道”第 65 行第 3 列的文本是什么”→ 精确编辑 ❌</li>
+<li>更不能直接”点击截图来修改文件”→ 操作闭环 ❌</li>
+</ul>
+<p>但如果把多模态和工具链结合起来，可以形成一个很有意思的架构：</p>
+<ol>
+<li><strong>Vision（System 1）</strong>：Agent 先”看一眼”文件的渲染视图，快速定位”我要改的区域大概在哪”</li>
+<li><strong>Tool（System 2）</strong>：再用结构化工具精确定位并修改</li>
+</ol>
+<p>这就像人类实际的操作方式：先用眼睛扫一眼（System 1），再用鼠标&#x2F;键盘精确操作（System 2）。</p>
+<p>目前已经有一些研究在探索”视觉 Grounding + 工具操作”的结合，比如让 Agent 通过截图理解 UI 布局，然后生成对应的操作指令。如果这条路走通，Agent 编辑文件的体验会接近人类——先”看”，再”改”。</p>
+<blockquote>
+<p><strong>参考</strong>：</p>
+<ul>
+<li>Yang, Z. et al. “Set-of-Mark Prompting Unleashes Extraordinary Visual Grounding in GPT-4V” (2023). <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2310.11441">arXiv:2310.11441</a></li>
+<li>Zheng, B. et al. “GPT-4Vision is a Generalist Web Agent, if Grounded” (2024). <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2401.01614">arXiv:2401.01614</a></li>
+<li>MemoryPrompt（辅助 LLM 追踪上下文变化）：Rakotonirina &amp; Baroni (2024). <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2402.15268">arXiv:2402.15268</a></li>
+</ul>
+</blockquote>
+<h3 id="6-6-小结：人类智能-vs-AI-智能——不是谁更”聪明”，而是认识世界的方式不同"><a href="#6-6-小结：人类智能-vs-AI-智能——不是谁更”聪明”，而是认识世界的方式不同" class="headerlink" title="6.6 小结：人类智能 vs AI 智能——不是谁更”聪明”，而是认识世界的方式不同"></a>6.6 小结：人类智能 vs AI 智能——不是谁更”聪明”，而是认识世界的方式不同</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>人类</th>
+<th>当前 AI (LLM + Agent)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>感知</td>
+<td>多模态（视觉&#x2F;听觉&#x2F;触觉），持续、主动</td>
+<td>单模态（文本为主），离散、被动</td>
+</tr>
+<tr>
+<td>记忆</td>
+<td>长期记忆 + 工作记忆，可灵活调用</td>
+<td>上下文窗口（有限），窗口外即不可见</td>
+</tr>
+<tr>
+<td>定位</td>
+<td>模糊匹配 + 空间布局记忆（System 1）</td>
+<td>精确字符串匹配（System 2 only）</td>
+</tr>
+<tr>
+<td>反馈</td>
+<td>即时视觉反馈（改完就能看）</td>
+<td>延迟工具回执（match &#x2F; no match）</td>
+</tr>
+<tr>
+<td>探索</td>
+<td>主动推理（不确定就去看）</td>
+<td>被动等待（给什么上下文用什么）</td>
+</tr>
+<tr>
+<td>世界模型</td>
+<td>内置（能预测操作后果）</td>
+<td>无（每次都要重新读取确认）</td>
+</tr>
+</tbody></table>
+<p>这张表不是说 AI 不如人——在逻辑推理、代码生成、海量知识检索等方面，AI 已经远超多数人。但在<strong>与具体环境交互、操作实体对象</strong>这类任务上，人类的”感知-行动闭环”仍然有巨大优势。</p>
+<p><strong>Agent 要变强，不只是模型要更大——更重要的是，它需要学会像人一样”感知”世界。</strong></p>
+<p>工具层的改进（结构化编辑器、模糊匹配）是当下最务实的路；而具身智能、世界模型、主动推理、多模态融合，是更远的路。两条路不矛盾，终点是同一个：<strong>让 Agent 从”盲人摸象”变成”睁眼做事”。</strong></p>
+<h2 id="7-怎么修：Agent-需要什么样的文件编辑工具？"><a href="#7-怎么修：Agent-需要什么样的文件编辑工具？" class="headerlink" title="7. 怎么修：Agent 需要什么样的文件编辑工具？"></a>7. 怎么修：Agent 需要什么样的文件编辑工具？</h2><blockquote>
+<p>本章只能说理论上可行，但稍微想想就知道 ROI 极低，每种场景都得专门适配一个 “结构化定位工具”， 这是与 AI 落地的思想相悖的。</p>
+</blockquote>
+<h3 id="7-1-当前阶段最务实的改进：结构化定位-模糊匹配"><a href="#7-1-当前阶段最务实的改进：结构化定位-模糊匹配" class="headerlink" title="7.1 当前阶段最务实的改进：结构化定位 + 模糊匹配"></a>7.1 当前阶段最务实的改进：结构化定位 + 模糊匹配</h3><p>不需要等”真正的世界模型”或”超长上下文”。只需要在工具层补两类能力：</p>
+<p><strong>能力 A：按结构定位</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">get_section</span><span class="hljs-params">(file, heading=<span class="hljs-string">&quot;## 2) Accuracy test&quot;</span>)</span></span><br>→ 返回该 <span class="hljs-selector-tag">section</span> 的精确文本 + 起止行号<br><br><span class="hljs-function"><span class="hljs-title">list_markdown_headings</span><span class="hljs-params">(file)</span></span><br>→ 返回所有 heading 的层级/行号/标题<br><br><span class="hljs-function"><span class="hljs-title">get_table_row</span><span class="hljs-params">(file, section=<span class="hljs-string">&quot;2.2 Evidence&quot;</span>, key_column=<span class="hljs-string">&quot;ID&quot;</span>, key_value=<span class="hljs-string">&quot;ACC-002&quot;</span>)</span></span><br>→ 返回该行的完整内容<br></code></pre></td></tr></table></figure>
+
+<p>有了这些，Agent 就不需要”猜 before 字符串”——它可以先定位、再修改。</p>
+<p><strong>能力 B：模糊&#x2F;容错匹配</strong></p>
+<p>类似 <code>git apply</code> 的 fuzzy hunk matching：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs routeros">edit_fuzzy(file, <span class="hljs-attribute">before</span>=<span class="hljs-string">&quot;...&quot;</span>, <span class="hljs-attribute">after</span>=<span class="hljs-string">&quot;...&quot;</span>, <span class="hljs-attribute">tolerance</span>=0.9)<br>→ 找到相似度 ≥ 90% 的片段，替换之<br>→ 如果多个匹配，返回候选列表让 Agent 选择<br></code></pre></td></tr></table></figure>
+
+<p>或者更简单：让 <code>edit</code> 工具在失败时返回 <strong>diff 提示</strong>（”你的 before 和文件里最相似的片段差在第 3 行，你多了一个 <code>\r</code>“）。</p>
+<h3 id="7-2-Unknown-unknowns-的解法：先扫描，再编辑"><a href="#7-2-Unknown-unknowns-的解法：先扫描，再编辑" class="headerlink" title="7.2 Unknown unknowns 的解法：先扫描，再编辑"></a>7.2 Unknown unknowns 的解法：先扫描，再编辑</h3><p>如果工具支持”按结构列出文件内容”，Agent 就可以在编辑前先执行一次扫描：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs clean">list_markdown_headings(<span class="hljs-string">&quot;report.md&quot;</span>)<br>→ ## <span class="hljs-number">1</span>) UX test (line <span class="hljs-number">5</span>)<br>→ ## <span class="hljs-number">2</span>) Accuracy test (line <span class="hljs-number">43</span>)<br>→ ### <span class="hljs-number">2.1</span> Results table (line <span class="hljs-number">54</span>)<br>→ ### <span class="hljs-number">2.2</span> Evidence (line <span class="hljs-number">61</span>)<br>→ ## <span class="hljs-number">3</span>) Performance test (line <span class="hljs-number">88</span>)<br></code></pre></td></tr></table></figure>
+
+<p>这一步的意义是：<strong>把 unknown unknowns 变成 known knowns。</strong> Agent 知道了文件的完整结构，就不会再”以为某段还在、其实已经被改过了”。</p>
+<h3 id="7-3-这够用吗？"><a href="#7-3-这够用吗？" class="headerlink" title="7.3 这够用吗？"></a>7.3 这够用吗？</h3><p>对于”编辑 Markdown&#x2F;文本文件”这个场景——<strong>基本够用。</strong></p>
+<p>更长远来看，理想的 Agent 文件编辑工具应该像一个”无头编辑器”（headless editor）：</p>
+<ul>
+<li>支持按行号&#x2F;列号定位</li>
+<li>支持按正则&#x2F;结构化查询定位</li>
+<li>支持原子化修改（插入行、替换行、删除行）</li>
+<li>每次修改后返回受影响区域的上下文（让 Agent “看到”改完的样子）</li>
+</ul>
+<p>这本质上是在给 Agent 补上它缺失的那条”感知-行动闭环”：改 → 看到结果 → 确认 → 下一步。</p>
+<h2 id="8-结语"><a href="#8-结语" class="headerlink" title="8. 结语"></a>8. 结语</h2><p>回到开头的问题：<strong>AI Agent 改一个 Markdown 表格为什么能失败 50 次？</strong></p>
+<p>答案是三层叠加：</p>
+<ol>
+<li><strong>工具层</strong>：<code>edit</code> 工具是逐字精确匹配，没有结构化定位和模糊容错</li>
+<li><strong>LLM 层</strong>：Transformer 只能看到上下文窗口内的内容，文件的”当前真实状态”不一定在窗口里</li>
+<li><strong>环境层</strong>：Windows 换行符、BOM、PowerShell&#x2F;cmd 语法差异，进一步放大了脆弱性</li>
+</ol>
+<p>这三者的乘法效应，把一个”30 秒的任务”变成了”30 分钟的死循环”。</p>
+<p><strong>Agent 缺的不是智能，是一双眼睛。</strong></p>
+<p>而这双”眼睛”，目前需要我们在工具层去补。</p>
+<hr>
+<h2 id="附录：goose-edit-工具源码位置"><a href="#附录：goose-edit-工具源码位置" class="headerlink" title="附录：goose edit 工具源码位置"></a>附录：goose edit 工具源码位置</h2><ul>
+<li>文件编辑核心实现：<a target="_blank" rel="noopener" href="https://github.com/block/goose/blob/main/crates/goose/src/agents/platform_extensions/developer/edit.rs"><code>crates/goose/src/agents/platform_extensions/developer/edit.rs</code></a></li>
+<li><code>string_replace</code> 函数：精确子串匹配 + 唯一性校验</li>
+<li><code>find_similar_context</code> 函数：用 <code>before</code> 的第一行做 <code>contains</code> 匹配，返回附近上下文</li>
+<li>工具描述注册：<a target="_blank" rel="noopener" href="https://github.com/block/goose/blob/main/crates/goose/src/agents/platform_extensions/developer/mod.rs"><code>crates/goose/src/agents/platform_extensions/developer/mod.rs</code></a></li>
+</ul>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Agent/" class="category-chain-item">Agent</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Troubleshooting/" class="print-no-link">#Troubleshooting</a>
+      
+        <a href="/tags/Agent/" class="print-no-link">#Agent</a>
+      
+        <a href="/tags/Goose/" class="print-no-link">#Goose</a>
+      
+        <a href="/tags/LLM/" class="print-no-link">#LLM</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>这个版本 AI 直接改 非结构化文件 的水平还是不强势啊 -- 看看原理</div>
+      <div>https://gou7ma7.github.io/2026/05/03/devops/@2026_unstructured_text_the_blind_spot_of_ai_agents/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Roy Lee</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年5月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/04/29/devops/@2026_one_gateway_two_protocols_zero_clarity/" title="名叫 openai.azure.com 的网关却提供 Anthropic 协议时，你让 Agent 怎么办？">
+                        <span class="hidden-mobile">名叫 openai.azure.com 的网关却提供 Anthropic 协议时，你让 Agent 怎么办？</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+<i class="iconfont icon-love"></i>
+<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
