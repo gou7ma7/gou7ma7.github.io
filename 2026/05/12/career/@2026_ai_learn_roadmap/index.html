@@ -1,0 +1,1233 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Roy Lee">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="写给和我一样、有一定 Python 基础与 DevOps 背景，希望转型 &#x2F; 进阶为 AI Agent 工程师或 LLM Platform 工程师的人。参考：roadmap.sh&#x2F;ai-engineer、roadmap.sh&#x2F;ai-agents。本文不设硬性时间表，按”能力阶段”递进；每个阶段给出官方文档 &#x2F; 论文 &#x2F; 开源项目 &#x2F; 视">
+<meta property="og:type" content="article">
+<meta property="og:title" content="成为 AI Agent 工程师的学习 Roadmap（2026）">
+<meta property="og:url" content="https://gou7ma7.github.io/2026/05/12/career/@2026_ai_learn_roadmap/index.html">
+<meta property="og:site_name" content="DevOps -&gt; AI Agent">
+<meta property="og:description" content="写给和我一样、有一定 Python 基础与 DevOps 背景，希望转型 &#x2F; 进阶为 AI Agent 工程师或 LLM Platform 工程师的人。参考：roadmap.sh&#x2F;ai-engineer、roadmap.sh&#x2F;ai-agents。本文不设硬性时间表，按”能力阶段”递进；每个阶段给出官方文档 &#x2F; 论文 &#x2F; 开源项目 &#x2F; 视">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-11T16:00:00.000Z">
+<meta property="article:author" content="Roy Lee">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Roadmap">
+<meta property="article:tag" content="Career">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>成为 AI Agent 工程师的学习 Roadmap（2026） - DevOps -&gt; AI Agent</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"gou7ma7.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/gou7ma7/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="成为 AI Agent 工程师的学习 Roadmap（2026）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-05-12 00:00" pubdate>
+          2026年5月12日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          46 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">成为 AI Agent 工程师的学习 Roadmap（2026）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>写给和我一样、有一定 Python 基础与 DevOps 背景，希望转型 &#x2F; 进阶为 <strong>AI Agent 工程师</strong>或 <strong>LLM Platform 工程师</strong>的人。<br>参考：<a target="_blank" rel="noopener" href="https://roadmap.sh/ai-engineer">roadmap.sh&#x2F;ai-engineer</a>、<a target="_blank" rel="noopener" href="https://roadmap.sh/ai-agents">roadmap.sh&#x2F;ai-agents</a>。<br>本文不设硬性时间表，按”能力阶段”递进；每个阶段给出<strong>官方文档 &#x2F; 论文 &#x2F; 开源项目 &#x2F; 视频 &#x2F; 书籍 &#x2F; Newsletter</strong> 六类资源，以及可落地的实战项目。</p>
+</blockquote>
+<div class="note note-info">
+            <p><strong>给 DevOps 背景同学的一句忠告</strong>：不要被铺天盖地的 LLMOps 名词唬住。你已有的 Kubernetes、CI&#x2F;CD、IaC、可观测性、容量规划经验，在 LLM Infra 时代是<strong>稀缺品</strong>。真正缺的是上层的 <em>模型直觉</em> 和 <em>Agent 工程化范式</em>——本 roadmap 就是补这两块。</p>
+          </div>
+
+<p>本文按 2026 年此刻真正在生产里被使用的形态来组织内容：<strong>agent harness + memory layer + context engineering</strong> 是 Stage 3 的主语，框架（LangGraph &#x2F; AutoGen 等）只在它们仍然合适的场景下出现。文末附一节 <a href="#%E9%99%84%E5%BD%95agent-%E5%B7%A5%E7%A8%8B%E5%8C%96%E8%8C%83%E5%BC%8F%E7%9A%84%E6%BC%94%E8%BF%9B%E5%8F%B22022-2026">《Agent 工程化范式的演进史》</a>，用来对照过去几年那些昙花一现或被降级的流派——你在网上看到 2023&#x2F;2024 年的教程时，可以拿那一节对位。</p>
+<h2 id="0-总览路线图"><a href="#0-总览路线图" class="headerlink" title="0. 总览路线图"></a>0. 总览路线图</h2><pre><code class=" mermaid">flowchart TD
+    Start([Python + DevOps 基础]) --&gt; S1[Stage 1&lt;br/&gt;LLM 应用基础]
+    S1 --&gt; S2[Stage 2&lt;br/&gt;RAG 与上下文工程]
+    S2 --&gt; S3[Stage 3&lt;br/&gt;Agent 工程化]
+    S3 --&gt; S4[Stage 4&lt;br/&gt;评测 / 可观测 / 安全]
+    S3 --&gt; S5[Stage 5&lt;br/&gt;模型微调 LoRA / RLHF]
+    S4 --&gt; S6[Stage 6&lt;br/&gt;LLM Platform / Infra]
+    S5 --&gt; S6
+    S6 --&gt; Goal([AI Agent 工程师 ✕ LLM Platform 工程师])
+
+    classDef done fill:#9ad,stroke:#357,color:#000
+    classDef todo fill:#fde,stroke:#b48,color:#000
+    class Start done
+    class Goal todo
+</code></pre>
+
+<p>两条主线交汇：</p>
+<ul>
+<li><strong>应用主线</strong>：Stage 1 → 2 → 3 → 4，做出真正能上线的 Agent 产品。</li>
+<li><strong>底层主线</strong>：Stage 5 → 6，理解模型本身 + 把 Agent 当成”分布式系统”来运维。</li>
+</ul>
+<p>DevOps 背景的同学，建议 1→2→3→4 走完后，在 5、6 中根据兴趣二选一深入；想做 Platform 就重 6 轻 5，想做研究型应用就反之。</p>
+<div class="note note-tip">
+            <p>如果你想先从最贴近 DevOps &#x2F; 测试开发经验的切入点开始，可以先看我单独拆出的 <a href="/2026/06/29/career/@2026_agent_eval_harness/">Agent Eval &#x2F; Test Harness 到底是什么</a>。</p>
+          </div>
+
+<hr>
+<h2 id="Stage-1-·-LLM-应用基础（必经之路）"><a href="#Stage-1-·-LLM-应用基础（必经之路）" class="headerlink" title="Stage 1 · LLM 应用基础（必经之路）"></a>Stage 1 · LLM 应用基础（必经之路）</h2><h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><ul>
+<li>不再把 LLM 当黑魔法，能解释 token、context window、temperature、top-p、function calling、structured output、<strong>prompt caching</strong> 各是什么。</li>
+<li>熟练用 <strong>OpenAI &#x2F; Anthropic &#x2F; Google</strong> 三家原生 SDK，至少手写 3 个不依赖框架的小工具。</li>
+<li>知道 2026 年这一代主力模型的家底：Claude Opus 4.5&#x2F;4.6、GPT-5.2 &#x2F; 5.4-Codex、Gemini 3、DeepSeek-V3.x &#x2F; R1、Kimi K2.5、GLM-5——以及它们各自的「性格」。</li>
+</ul>
+<h3 id="关键概念清单"><a href="#关键概念清单" class="headerlink" title="关键概念清单"></a>关键概念清单</h3><ul>
+<li>Tokenization（BPE &#x2F; tiktoken）、上下文窗口、KV Cache 直觉</li>
+<li>Sampling 参数：temperature、top-p、top-k、logprobs</li>
+<li>Tool Use &#x2F; Function Calling &#x2F; Structured Output（JSON Schema）</li>
+<li><strong>Prompt caching</strong>（Anthropic &#x2F; OpenAI &#x2F; Gemini 都已普及；是 Claude Code 等长链路 agent 能跑得起来的根本前提）</li>
+<li>Streaming、SSE、async I&#x2F;O</li>
+<li>Reasoning &#x2F; thinking models 与普通模型的取舍（Opus thinking、GPT-5 thinking、Gemini 3 Deep Think）</li>
+<li>Cost &amp; latency 的工程权衡</li>
+</ul>
+<h3 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h3><ul>
+<li><strong>官方文档</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.anthropic.com/">Anthropic API Docs</a> —— 当前 Agent 文档质量最高的一家</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/openai/openai-cookbook">OpenAI Cookbook</a></li>
+<li><a target="_blank" rel="noopener" href="https://ai.google.dev/gemini-api/docs">Google Gemini API</a></li>
+</ul>
+</li>
+<li><strong>论文</strong>（精读，不要只看摘要）<ul>
+<li><em>Attention Is All You Need</em>（2017）</li>
+<li><em>Language Models are Few-Shot Learners</em>（GPT-3, 2020）</li>
+<li><em>Chain-of-Thought Prompting</em>（2022）</li>
+</ul>
+</li>
+<li><strong>视频</strong><ul>
+<li>Andrej Karpathy <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=zjkBMFhNj_g">《Intro to LLMs》</a> + 《Let’s build GPT》系列</li>
+</ul>
+</li>
+<li><strong>书籍</strong><ul>
+<li><em>Hands-On Large Language Models</em>（O’Reilly，Jay Alammar 著），适合系统补全图谱</li>
+</ul>
+</li>
+<li><strong>Newsletter &#x2F; 博客</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://simonwillison.net/">Simon Willison’s Weblog</a> —— 实操向，每天看一眼不会错</li>
+<li><a target="_blank" rel="noopener" href="https://lilianweng.github.io/">Lilian Weng’s Blog</a> —— 综述写得最清楚的人之一</li>
+</ul>
+</li>
+</ul>
+<h3 id="实战项目"><a href="#实战项目" class="headerlink" title="实战项目"></a>实战项目</h3><ol>
+<li><strong>CLI 翻译器 + 词典</strong>：纯 SDK，支持流式输出、自定义 system prompt、保存历史。</li>
+<li><strong>Structured Extractor</strong>：给一段 Jira &#x2F; Confluence 文本，用 function calling 抽出结构化字段，对比 Pydantic 校验失败率。</li>
+<li><strong>多家 LLM 路由器</strong>：写一个统一接口的 <code>llm_call(provider, model, ...)</code>，输出 cost &#x2F; latency 对比表（你 DevOps 的本能应该很喜欢这个）。</li>
+</ol>
+<hr>
+<h2 id="Stage-2-·-RAG-与上下文工程"><a href="#Stage-2-·-RAG-与上下文工程" class="headerlink" title="Stage 2 · RAG 与上下文工程"></a>Stage 2 · RAG 与上下文工程</h2><h3 id="目标-1"><a href="#目标-1" class="headerlink" title="目标"></a>目标</h3><ul>
+<li>理解 RAG 不是”接个向量库”那么简单，而是 <strong>chunking → embedding → retrieval → reranking → prompt assembly</strong> 一整条流水线。</li>
+<li>能就业务数据做出<strong>可评测</strong>的 RAG，不只是 demo。</li>
+</ul>
+<h3 id="关键概念清单-1"><a href="#关键概念清单-1" class="headerlink" title="关键概念清单"></a>关键概念清单</h3><ul>
+<li>Embedding 模型选型（OpenAI <code>text-embedding-3</code>、Voyage 3、Cohere Embed v4、<code>bge-m3</code>、<code>Qwen3-Embedding</code>、Nomic v2）</li>
+<li>向量数据库：pgvector &#x2F; Qdrant &#x2F; Weaviate &#x2F; LanceDB &#x2F; Turbopuffer 的权衡</li>
+<li>Chunking 策略：fixed &#x2F; recursive &#x2F; semantic &#x2F; <strong>late chunking</strong>（2024 起的事实最佳实践）</li>
+<li>Hybrid Search（BM25 + dense）、Reranker（Cohere Rerank 3、<code>bge-reranker-v2</code>、Voyage Rerank）</li>
+<li>Query rewriting、HyDE、multi-query、<strong>ColBERT &#x2F; ColPali</strong>（多向量与视觉 RAG）</li>
+<li><strong>Agentic RAG</strong>：把检索本身变成 agent 的 tool，而不是固定 pipeline（与 Stage 3 的 harness 衔接）</li>
+<li><strong>GraphRAG &#x2F; LightRAG &#x2F; HippoRAG</strong>：知识图谱辅助检索这条支线在 2025 已经站稳</li>
+<li>长上下文 vs RAG 的取舍（Gemini 3 &#x2F; GPT-5.2 已把「百万 context + cache」做成默认选项，很多 RAG 场景被改写）</li>
+</ul>
+<h3 id="资源-1"><a href="#资源-1" class="headerlink" title="资源"></a>资源</h3><ul>
+<li><strong>官方文档</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.llamaindex.ai/">LlamaIndex Docs</a> —— RAG 概念解释最系统</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/pgvector/pgvector">pgvector</a> —— DevOps 同学请优先选 Postgres 方案</li>
+</ul>
+</li>
+<li><strong>论文</strong><ul>
+<li><em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</em>（2020，原始 RAG）</li>
+<li><em>Lost in the Middle</em>（2023）</li>
+<li><em>Self-RAG</em>、<em>Corrective RAG (CRAG)</em></li>
+</ul>
+</li>
+<li><strong>开源项目</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/AnswerDotAI/RAGatouille"><code>ragatouille</code></a>（ColBERT 实战）</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/SciPhi-AI/R2R"><code>r2r</code></a>（production-grade RAG 参考实现）</li>
+</ul>
+</li>
+<li><strong>博客</strong><ul>
+<li>Jason Liu 的 RAG 系列（<a target="_blank" rel="noopener" href="https://jxnl.co/">jxnl.co</a>），工程视角极强</li>
+</ul>
+</li>
+</ul>
+<h3 id="实战项目-1"><a href="#实战项目-1" class="headerlink" title="实战项目"></a>实战项目</h3><ol>
+<li><strong>个人知识库 RAG</strong>：把你过去几年的博客 &#x2F; 笔记灌进去，做一个能引用原文链接的问答。</li>
+<li><strong>代码库问答</strong>：选一个中等规模 repo（比如 <code>vllm</code>），实现 file-level + symbol-level 双层检索。</li>
+<li><strong>RAG 评测台</strong>：用 <a target="_blank" rel="noopener" href="https://github.com/explodinggradients/ragas">Ragas</a> 或自写 LLM-as-judge，对 chunk size、reranker 开关做 A&#x2F;B，输出报表——这一步很多人跳过，但这是从”会调 API”到”工程师”的分水岭。</li>
+</ol>
+<hr>
+<h2 id="Stage-3-·-Agent-Harness、Memory-Layer-与-Context-Engineering（2026-年的核心）"><a href="#Stage-3-·-Agent-Harness、Memory-Layer-与-Context-Engineering（2026-年的核心）" class="headerlink" title="Stage 3 · Agent Harness、Memory Layer 与 Context Engineering（2026 年的核心）"></a>Stage 3 · Agent Harness、Memory Layer 与 Context Engineering（2026 年的核心）</h2><blockquote>
+<p>这一阶段是整篇 roadmap 最重要、也是最容易过时的一节。<strong>关键词从 2024 年的「Agent 框架」变成了 2026 年的 「Agent harness」+「Memory Layer」+「Context Engineering」</strong>。下面会先讲清楚这三个名词，再列资源和项目。</p>
+</blockquote>
+<h3 id="3-1-什么是-Agent-Harness？"><a href="#3-1-什么是-Agent-Harness？" class="headerlink" title="3.1 什么是 Agent Harness？"></a>3.1 什么是 Agent Harness？</h3><p>2026 年大家在用、在卷、在赚钱的 Agent，几乎全都长成同一个样子：</p>
+<blockquote>
+<p><strong>一个 CLI &#x2F; 桌面 app，包住一个模型，再包上 sandbox、文件工具、shell 工具、prompt cache、子 agent、todo list、skills、hooks、MCP client。</strong></p>
+</blockquote>
+<p>这一整层就叫 <strong>agent harness</strong>（也叫 <em>agentic harness</em>、<em>coding agent harness</em>；Karpathy 给的新昵称是 <strong>「Claws」</strong> 🦞）。代表作：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>代表</th>
+<th>出品方</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>终端&#x2F;IDE 内 coding harness</td>
+<td><strong>Claude Code</strong>、<strong>Codex CLI &#x2F; Codex app</strong>、<strong>Cursor</strong>、<strong>Cline</strong>、<strong>OpenCode</strong>、<strong>Aider</strong></td>
+<td>Anthropic &#x2F; OpenAI &#x2F; 社区</td>
+</tr>
+<tr>
+<td>通用工作 harness（「Claude Code for everything」）</td>
+<td><strong>Claude Cowork</strong>（前身 Claude Code 的非编码模式）、<strong>Codex app + Automations</strong></td>
+<td>Anthropic &#x2F; OpenAI</td>
+</tr>
+<tr>
+<td>桌面&#x2F;手机端 personal-assistant harness（「Claws」）</td>
+<td><strong>OpenClaw</strong>、Moltbot、NanoClaw、PicoClaw、ZeroClaw</td>
+<td>Peter Steinberger 等</td>
+</tr>
+<tr>
+<td>跨 harness 编排层</td>
+<td><strong>Hermes Agent</strong></td>
+<td>Nous Research</td>
+</tr>
+<tr>
+<td>开源、可部署</td>
+<td><strong>goose</strong>（Block，已捐给 AAIF）、<strong>OpenHands</strong></td>
+<td>Block &#x2F; All-Hands-AI</td>
+</tr>
+</tbody></table>
+<p>你应该把「会用 + 会读源码 + 会扩展」这些 harness 当成 2026 年 Agent 工程师的硬核能力，<strong>优先级高于任何一个 Python Agent 框架</strong>。</p>
+<p>harness 真正解决的工程问题（这也是面试时能聊出深度的点）：</p>
+<ul>
+<li><strong>prompt caching 设计</strong>：Claude Code 的 Thariq Shihipar 公开说过，「我们整个 harness 围绕 prompt cache 命中率来设计，命中率掉了就当 SEV 报警」。你要理解为什么 system prompt 顺序、tool 描述顺序、todo list 都得是 cache 友好的。</li>
+<li><strong>context compaction &#x2F; 截断策略</strong>：长会话怎么压缩、压缩时如何不丢初始指令（Summer Yue 那条 OpenClaw 翻车案例就是 compaction 把「don’t action」指令丢了）。</li>
+<li><strong>sandbox</strong>：Claude Cowork 用本地容器，Codex app 是 macOS app sandbox，Co-do 用 <code>&lt;iframe sandbox&gt;</code> + WebAssembly 把浏览器变成 sandbox。</li>
+<li><strong>sub-agent &#x2F; spawn</strong>：主 agent 派 sub-agent 干「窄任务」，结果摘要回主 agent，主 agent 的 context 不被污染。</li>
+<li><strong>hooks &#x2F; skills &#x2F; commands</strong>：harness 可扩展性的三大支柱（详见 3.3）。</li>
+</ul>
+<h3 id="3-2-Memory-Layer：从「塞-vector-DB」到独立产品类别"><a href="#3-2-Memory-Layer：从「塞-vector-DB」到独立产品类别" class="headerlink" title="3.2 Memory Layer：从「塞 vector DB」到独立产品类别"></a>3.2 Memory Layer：从「塞 vector DB」到独立产品类别</h3><p>2026 年的另一个分水岭是：<strong>memory 不再是 RAG 的一个章节，而是一个独立的中间件类别</strong>。代表产品和它们的取向：</p>
+<table>
+<thead>
+<tr>
+<th>产品</th>
+<th>一句话定位</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Mem0</strong></td>
+<td>提取-存储-检索 三段式 SDK，最像「memory 中的 Redis」</td>
+<td>通用对话 &#x2F; personal assistant</td>
+</tr>
+<tr>
+<td><strong>Letta</strong>（前身 MemGPT）</td>
+<td>把 OS 概念搬进 LLM：core memory + archival memory + 函数调用调度</td>
+<td>长期人格化 agent</td>
+</tr>
+<tr>
+<td><strong>Zep</strong></td>
+<td>基于时序知识图谱（temporal graph）的 episodic memory，强在事实更新和时间推理</td>
+<td>客服、CRM、需要「前后对照」的场景</td>
+</tr>
+<tr>
+<td><strong>LangMem</strong></td>
+<td>LangChain 出的一套 memory primitives，紧贴 LangGraph</td>
+<td>已经在 LangGraph 栈里</td>
+</tr>
+<tr>
+<td><strong>Cognee</strong></td>
+<td>knowledge graph + ontology 路线</td>
+<td>偏知识管理</td>
+</tr>
+<tr>
+<td><strong>Supermemory &#x2F; Superlocalmemory</strong></td>
+<td>个人本地优先</td>
+<td>indie hacker</td>
+</tr>
+</tbody></table>
+<p>社区已经有了正经的 benchmark：<strong>LoCoMo</strong>（Long Conversation Memory）、agentmarketcap 的 vendor landscape 报告等。</p>
+<p>选型口诀（综合 2026 年几篇对比文章）：</p>
+<ul>
+<li><strong>要快上线、要 SaaS 兜底</strong> → Mem0</li>
+<li><strong>要长期人格、要「agent 自己改自己的 memory」</strong> → Letta</li>
+<li><strong>业务有大量「事实随时间变化」的场景</strong>（人事、库存、订单）→ Zep</li>
+<li><strong>就想自己造，且团队懂图数据库</strong> → Cognee 或自己在 pgvector + Postgres 上手撸</li>
+</ul>
+<h3 id="3-3-Context-Engineering：取代-Prompt-Engineering-的新词"><a href="#3-3-Context-Engineering：取代-Prompt-Engineering-的新词" class="headerlink" title="3.3 Context Engineering：取代 Prompt Engineering 的新词"></a>3.3 Context Engineering：取代 Prompt Engineering 的新词</h3><p>2025 下半年到 2026 上半年，「prompt engineering」这个词基本被 <strong>「context engineering」</strong> 顶掉了。背后是几篇关键文章：</p>
+<ul>
+<li>Matt Webb 的 <a target="_blank" rel="noopener" href="https://interconnected.org/home/2025/11/28/plumbing">《Context plumbing》</a> —— 把 agent 工程比作「把 context 从源端管道到 LLM 跟前」；</li>
+<li>Armin Ronacher 的 <a target="_blank" rel="noopener" href="https://lucumr.pocoo.org/2025/11/21/agents-are-hard/">《Agent design is still hard》</a> —— 提出 <strong>reinforcement</strong> 概念：每次 tool 返回时顺手把目标、todo 状态、背景变化「塞回去」提醒 agent，Claude Code 的 todo list 就是典型；</li>
+<li>Karpathy 的 「agentic engineering」一词 + 后续的 <a target="_blank" rel="noopener" href="https://simonwillison.net/2026/Feb/21/claws/">「Claws」</a> 命名。</li>
+</ul>
+<p>这一节要掌握的具体技术：</p>
+<ul>
+<li><strong>AGENTS.md</strong>（OpenAI 主推，已捐给 AAIF）：仓库根目录给 agent 看的「团队规则」</li>
+<li><strong>Skills</strong>（Anthropic 主推，已成 <a target="_blank" rel="noopener" href="https://agentskills.io/">agentskills.io</a> 开放标准；Cursor &#x2F; Codex &#x2F; OpenCode &#x2F; Amp &#x2F; goose &#x2F; Letta &#x2F; VS Code 全部支持）：把「会做某件事的知识包」以目录 + <code>SKILL.md</code> 形式分发</li>
+<li><strong>MCP（Model Context Protocol）</strong>：现在归 <a target="_blank" rel="noopener" href="https://aaif.io/">AAIF（Agentic AI Foundation）</a> 治理，事实标准</li>
+<li><strong>prompt caching 友好的 system prompt 排版</strong></li>
+<li><strong>reinforcement &#x2F; 状态回灌</strong></li>
+<li><strong>context compaction</strong>：何时压缩、压缩什么、保留什么</li>
+<li><strong>sub-agent 的 context 隔离</strong></li>
+</ul>
+<h3 id="3-4-还要不要学-LangGraph-Pydantic-AI？"><a href="#3-4-还要不要学-LangGraph-Pydantic-AI？" class="headerlink" title="3.4 还要不要学 LangGraph &#x2F; Pydantic AI？"></a>3.4 还要不要学 LangGraph &#x2F; Pydantic AI？</h3><p>要学，但<strong>降级</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>选型</th>
+<th>我现在的看法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>原生 SDK + 200 行 loop</strong>（Anthropic &#x2F; OpenAI）</td>
+<td>必修。2025 下半年开始，Armin Ronacher 等几乎所有重度 agent 实践者都明确说「短期内不上抽象，差异在 cache control &#x2F; reinforcement &#x2F; tool prompt，框架抽不走」。</td>
+</tr>
+<tr>
+<td><strong>LangGraph</strong></td>
+<td>仍是「需要状态机 + 持久化 + 分布式」场景下最成熟的，团队&#x2F;平台向产品依然推荐。但不要把它当「agent 入门课」。</td>
+</tr>
+<tr>
+<td><strong>Pydantic AI</strong></td>
+<td>类型安全党友好；轻量项目可用。</td>
+</tr>
+<tr>
+<td><strong>AutoGen &#x2F; CrewAI</strong></td>
+<td>主要在做「研究型多 agent 协作」演示项目时考虑。</td>
+</tr>
+<tr>
+<td><strong>OpenAI Agents SDK</strong></td>
+<td>OpenAI 自家的轻量 agent 抽象，配合 Codex 生态用很顺。</td>
+</tr>
+</tbody></table>
+<h3 id="3-5-资源"><a href="#3-5-资源" class="headerlink" title="3.5 资源"></a>3.5 资源</h3><ul>
+<li><strong>必读文章 &#x2F; 帖子</strong><ul>
+<li>Anthropic <a target="_blank" rel="noopener" href="https://www.anthropic.com/research/building-effective-agents">《Building effective agents》</a> —— 仍是奠基</li>
+<li>Anthropic <a target="_blank" rel="noopener" href="https://www.anthropic.com/engineering/built-multi-agent-research-system">《How we built our multi-agent research system》</a></li>
+<li>OpenAI <a target="_blank" rel="noopener" href="https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf">《A practical guide to building agents》</a></li>
+<li>Armin Ronacher <a target="_blank" rel="noopener" href="https://lucumr.pocoo.org/2025/11/21/agents-are-hard/">《Agent design is still hard》</a> + <a target="_blank" rel="noopener" href="https://lucumr.pocoo.org/2025/11/22/llm-apis/">《LLM APIs are a Synchronization Problem》</a></li>
+<li>Matt Webb <a target="_blank" rel="noopener" href="https://interconnected.org/home/2025/11/28/plumbing">《Context plumbing》</a></li>
+<li>Thomas Ptacek <a target="_blank" rel="noopener" href="https://fly.io/blog/everyone-write-an-agent/">《You should write an agent》</a></li>
+<li>《Inside the Agent Harness: How Codex and Claude Code Actually Work》（Medium，2026）</li>
+<li>Steve Yegge <a target="_blank" rel="noopener" href="https://steve-yegge.medium.com/software-survival-3-0-97a2a6255f7b">《Software Survival 3.0》</a> ——「Desire Paths」&#x2F; 让 hallucination 成真</li>
+</ul>
+</li>
+<li><strong>论文 &#x2F; Benchmark</strong><ul>
+<li><em>ReAct</em>（仍在）、<em>Reflexion</em>、<em>Voyager</em></li>
+<li><strong>SWE-bench &#x2F; SWE-bench Verified</strong>、<strong>Terminal-Bench</strong>、<strong>GAIA</strong>、<strong>BrowseComp</strong>、<strong>LoCoMo</strong>（memory）</li>
+<li>vLLM 论文里的 prefix caching 章节（理解 cache 行为）</li>
+</ul>
+</li>
+<li><strong>官方文档 &#x2F; 标准</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/">Model Context Protocol</a>、<a target="_blank" rel="noopener" href="https://aaif.io/">AAIF</a>、<a target="_blank" rel="noopener" href="https://agentskills.io/">Agent Skills 标准</a>、AGENTS.md</li>
+<li><a target="_blank" rel="noopener" href="https://docs.claude.com/en/docs/claude-code">Claude Code docs</a>、<a target="_blank" rel="noopener" href="https://developers.openai.com/codex/">Codex docs</a>、<a target="_blank" rel="noopener" href="https://block.github.io/goose/">goose docs</a></li>
+<li>Memory layer：<a target="_blank" rel="noopener" href="https://docs.mem0.ai/">Mem0</a>、<a target="_blank" rel="noopener" href="https://docs.letta.com/">Letta</a>、<a target="_blank" rel="noopener" href="https://help.getzep.com/">Zep</a>、<a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langmem">LangMem</a></li>
+<li>框架：<a target="_blank" rel="noopener" href="https://langchain-ai.github.io/langgraph/">LangGraph</a>、<a target="_blank" rel="noopener" href="https://ai.pydantic.dev/">Pydantic AI</a>、<a target="_blank" rel="noopener" href="https://openai.github.io/openai-agents-python/">OpenAI Agents SDK</a></li>
+</ul>
+</li>
+<li><strong>开源项目</strong>（建议<strong>真的把源码读一遍</strong>，至少读 harness 主 loop）<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/openclaw/openclaw"><code>OpenClaw</code></a> —— 2026 年最火的个人 assistant harness</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/block/goose"><code>goose</code></a> —— 唯一一个进 AAIF 的开源 harness</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/All-Hands-AI/OpenHands"><code>OpenHands</code></a>、<a target="_blank" rel="noopener" href="https://github.com/Aider-AI/aider"><code>Aider</code></a>、<a target="_blank" rel="noopener" href="https://github.com/opencode-ai/opencode"><code>OpenCode</code></a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/cline/cline"><code>Cline</code></a> —— VS Code 内 harness</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/browser-use/browser-use"><code>browser-use</code></a> —— browser agent</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/aXp-Engineering/Everything-Claude-Code"><code>Everything-Claude-Code</code></a> —— 一份维护得很认真的 skills + hooks + commands 集合</li>
+</ul>
+</li>
+<li><strong>视频 &#x2F; 课程</strong><ul>
+<li>DeepLearning.AI <em>AI Agents in LangGraph</em>、<em>Long-Term Agentic Memory With LangGraph</em></li>
+<li>Anthropic 官方 Claude Code workshop &#x2F; cookbook</li>
+<li>各家 harness 维护者在 YouTube 的实战直播（搜「claude code workflow」、「codex skills」、「hermes agent」）</li>
+</ul>
+</li>
+<li><strong>博客 &#x2F; Newsletter</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://simonwillison.net/">Simon Willison</a> 的 ai-agents &#x2F; coding-agents tag —— 2026 年这条战线最稳定的实时观察站</li>
+<li><a target="_blank" rel="noopener" href="https://www.latent.space/">Latent Space</a>、<a target="_blank" rel="noopener" href="https://lilianweng.github.io/">Lilian Weng</a>、Jason Liu</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-6-实战项目（按难度递增，全部带-2026-时态）"><a href="#3-6-实战项目（按难度递增，全部带-2026-时态）" class="headerlink" title="3.6 实战项目（按难度递增，全部带 2026 时态）"></a>3.6 实战项目（按难度递增，全部带 2026 时态）</h3><ol>
+<li><strong>手写 ReAct Agent</strong>：&lt; 300 行原生 SDK，3 个 tool（搜索 &#x2F; 计算器 &#x2F; 文件读写）。重点：把 prompt cache 命中率打印出来，看 cache 是怎么工作的。</li>
+<li><strong>给 Claude Code &#x2F; Codex 写一套 Skills + AGENTS.md</strong>：把你团队的「提交规范、release 流程、内部库 API、常见排错」做成 skills，让 harness 在你 repo 里「开箱即用」。这是 2026 年最容易出影响力的一类项目。</li>
+<li><strong>DevOps Copilot harness</strong>：fork goose 或 OpenHands，加入 <code>kubectl</code>、<code>terraform plan</code>、Prometheus、PagerDuty 只读 tool，做一个集群诊断 agent。强烈建议加 <a target="_blank" rel="noopener" href="https://www.openpolicyagent.org/">OPA</a> 风格的 policy 拦截层（safety first）。</li>
+<li><strong>写一个 MCP server</strong>：把你团队某个内部系统（Jira、Confluence、内部 K8s 控制面）包成 MCP server，配上 Claude Desktop &#x2F; Cursor &#x2F; Codex 连接说明。</li>
+<li><strong>接一层 Memory Layer</strong>：给上面 3 &#x2F; 4 接入 Mem0 或 Letta，让 agent 跨 session 记住「上次这个 namespace 出过什么问题、谁在 oncall」。跑一遍 LoCoMo 风格自测。</li>
+<li><strong>用 Hermes（或自写一个简版）编排两个 harness</strong>：Codex 负责重的代码改写，Claude Code 负责审阅 + 解释，Hermes 维持共享 context。这是 2026 年最前沿的「meta-harness」范式。</li>
+<li><strong>复刻一个迷你 Claw</strong>：参考 NanoClaw（~4000 行）写一个跑在自己 Mac mini &#x2F; Raspberry Pi 上、通过 Telegram &#x2F; Signal 控制、能调度任务的私人 assistant harness。<strong>强烈建议禁掉所有 outbound 写操作</strong>，否则参考 OpenClaw 那次「speedrun 删邮件」教训。</li>
+</ol>
+<hr>
+<h2 id="Stage-4-·-评测、可观测、安全（容易被忽视的”后半场”）"><a href="#Stage-4-·-评测、可观测、安全（容易被忽视的”后半场”）" class="headerlink" title="Stage 4 · 评测、可观测、安全（容易被忽视的”后半场”）"></a>Stage 4 · 评测、可观测、安全（容易被忽视的”后半场”）</h2><h3 id="目标-2"><a href="#目标-2" class="headerlink" title="目标"></a>目标</h3><ul>
+<li>让 Agent <strong>可被回归测试</strong>、<strong>可被观测</strong>、<strong>可被治理</strong>。这一阶段最能把 DevOps 经验变现。</li>
+</ul>
+<h3 id="关键概念"><a href="#关键概念" class="headerlink" title="关键概念"></a>关键概念</h3><ul>
+<li>Eval：offline（fixed dataset）&#x2F; online（A&#x2F;B、影子流量）&#x2F; LLM-as-judge &#x2F; 人工标注</li>
+<li>Tracing：OpenTelemetry GenAI semantic conventions、span &#x2F; generation 概念</li>
+<li>Prompt Injection、jailbreak、PII 泄漏、数据投毒</li>
+<li>Cost &#x2F; token 限流、rate limit、fallback</li>
+<li>幻觉缓解：grounding、citation、constrained decoding</li>
+</ul>
+<h3 id="资源-2"><a href="#资源-2" class="headerlink" title="资源"></a>资源</h3><ul>
+<li><strong>官方 &#x2F; 工具</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://langfuse.com/">Langfuse</a>（开源，自托管友好，DevOps 应该很喜欢）</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Arize-ai/phoenix">Arize Phoenix</a></li>
+<li><a target="_blank" rel="noopener" href="https://braintrust.dev/">Braintrust</a>、<a target="_blank" rel="noopener" href="https://smith.langchain.com/">LangSmith</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/explodinggradients/ragas">Ragas</a>、<a target="_blank" rel="noopener" href="https://github.com/confident-ai/deepeval">DeepEval</a></li>
+<li><a target="_blank" rel="noopener" href="https://opentelemetry.io/docs/specs/semconv/gen-ai/">OpenTelemetry GenAI</a> 规范</li>
+</ul>
+</li>
+<li><strong>安全</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://genai.owasp.org/">OWASP Top 10 for LLM Applications</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.lakera.ai/">Lakera Prompt Injection Playbook</a></li>
+<li>Simon Willison 的 prompt injection 系列文章</li>
+</ul>
+</li>
+<li><strong>Eval 框架</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://inspect.aisi.org.uk/">Inspect AI</a>（UK AISI 出品，2025 年起的 agent eval 事实标准之一）</li>
+<li><a target="_blank" rel="noopener" href="https://www.promptfoo.dev/">Promptfoo</a>、<a target="_blank" rel="noopener" href="https://github.com/openai/evals">OpenAI Evals</a></li>
+</ul>
+</li>
+<li><strong>论文 &#x2F; 报告 &#x2F; Benchmark</strong><ul>
+<li><em>MMLU-Pro</em>、<em>GPQA Diamond</em>、<em>SWE-bench Verified</em>、<em>Terminal-Bench</em>、<em>GAIA</em>、<em>BrowseComp</em>、<em>τ-bench</em>（tool use）</li>
+<li><em>LoCoMo</em>（长对话 memory）、<em>MTEB v2</em>（embedding）</li>
+</ul>
+</li>
+</ul>
+<h3 id="实战项目-2"><a href="#实战项目-2" class="headerlink" title="实战项目"></a>实战项目</h3><ol>
+<li>给 Stage 3 的 Agent 接入 Langfuse，建立 100 条 golden dataset，跑 nightly eval。</li>
+<li>做一次<strong>红队</strong>：对自己的 Agent 实施 5 种 prompt injection，写复盘。</li>
+<li>用 OpenTelemetry 把 LLM 调用接入你已有的 Grafana &#x2F; Loki 栈。</li>
+</ol>
+<hr>
+<h2 id="Stage-5-·-模型微调（LoRA-RLHF-DPO）"><a href="#Stage-5-·-模型微调（LoRA-RLHF-DPO）" class="headerlink" title="Stage 5 · 模型微调（LoRA &#x2F; RLHF &#x2F; DPO）"></a>Stage 5 · 模型微调（LoRA &#x2F; RLHF &#x2F; DPO）</h2><blockquote>
+<p>你选了”要能动手做微调”，所以这一阶段必修。但请记住：<strong>90% 的业务问题用 prompt + RAG 就能解决，先穷尽前面的手段再来微调。</strong></p>
+</blockquote>
+<h3 id="目标-3"><a href="#目标-3" class="headerlink" title="目标"></a>目标</h3><ul>
+<li>理解 pretraining &#x2F; SFT &#x2F; RLHF &#x2F; DPO 的关系。</li>
+<li>能在单卡 &#x2F; 多卡上跑通 LoRA &#x2F; QLoRA 微调，并把模型部署起来。</li>
+</ul>
+<h3 id="关键概念-1"><a href="#关键概念-1" class="headerlink" title="关键概念"></a>关键概念</h3><ul>
+<li>Transformer 架构细节、注意力变体（MHA &#x2F; GQA &#x2F; MLA）</li>
+<li>PEFT 家族：LoRA、QLoRA、DoRA</li>
+<li>对齐：RLHF（PPO）、DPO、KTO、ORPO；<strong>GRPO</strong> 与 DeepSeek-R1 风格的 RL on verifiable rewards</li>
+<li><strong>RL Environments &#x2F; Verifiable rewards</strong>（Karpathy 2025-11 强调这是 2026 年训练 agent 的「主战场」——可参考 Prime Intellect Environments Hub 等社区项目）</li>
+<li>数据集构建（最难的一步）、数据去重、合成数据</li>
+<li>训练框架：<code>transformers</code> + <code>trl</code> + <code>peft</code>、<code>axolotl</code>、<code>unsloth</code>、<code>verl</code></li>
+<li>推理优化：量化（GPTQ &#x2F; AWQ &#x2F; GGUF）、speculative decoding</li>
+</ul>
+<h3 id="资源-3"><a href="#资源-3" class="headerlink" title="资源"></a>资源</h3><ul>
+<li><strong>课程</strong><ul>
+<li>Hugging Face <a target="_blank" rel="noopener" href="https://huggingface.co/learn/llm-course">LLM Course</a></li>
+<li>Karpathy <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=l8pRSuU81PU">《Let’s reproduce GPT-2》</a></li>
+<li>Stanford CS336 <em>Language Modeling from Scratch</em>（公开课件）</li>
+</ul>
+</li>
+<li><strong>论文 &#x2F; 技术报告</strong><ul>
+<li><em>LoRA</em>（2021）、<em>QLoRA</em>（2023）</li>
+<li><em>InstructGPT</em>（RLHF 起点）、<em>Direct Preference Optimization</em>（DPO，2023）</li>
+<li><em>DeepSeekMath</em>（GRPO 起源）、<em>DeepSeek-V3 &#x2F; R1 Tech Reports</em>、<em>Llama 3</em>、<em>Kimi K2 &#x2F; K2.5</em>、<em>GLM-5</em>（2026 年开源派的几份必读）</li>
+<li><em>Tülu 3</em>（Allen AI 系统讲 SFT + DPO + RLVR pipeline）</li>
+</ul>
+</li>
+<li><strong>开源</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/unslothai/unsloth"><code>unsloth</code></a> —— 单卡 QLoRA 友好</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/OpenAccess-AI-Collective/axolotl"><code>axolotl</code></a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/huggingface/trl"><code>trl</code></a></li>
+</ul>
+</li>
+<li><strong>书籍</strong><ul>
+<li><em>Build a Large Language Model (From Scratch)</em>，Sebastian Raschka</li>
+</ul>
+</li>
+</ul>
+<h3 id="实战项目-3"><a href="#实战项目-3" class="headerlink" title="实战项目"></a>实战项目</h3><ol>
+<li>用 <code>unsloth</code> + 一张消费级 GPU（或 Colab &#x2F; RunPod）QLoRA 微调一个 7B 模型，做一个<strong>风格化助手</strong>（比如模仿你博客的语气）。</li>
+<li>用 DPO 调一次同一个模型，对比 SFT-only 的差异。</li>
+<li>用 <code>vllm</code> 把微调后的模型部署成 OpenAI-compatible API，接回你 Stage 3 的 Agent。</li>
+</ol>
+<hr>
+<h2 id="Stage-6-·-LLM-Platform-Infra（DevOps-同学的主场）"><a href="#Stage-6-·-LLM-Platform-Infra（DevOps-同学的主场）" class="headerlink" title="Stage 6 · LLM Platform &#x2F; Infra（DevOps 同学的主场）"></a>Stage 6 · LLM Platform &#x2F; Infra（DevOps 同学的主场）</h2><h3 id="目标-4"><a href="#目标-4" class="headerlink" title="目标"></a>目标</h3><ul>
+<li>把 LLM &#x2F; Agent 当成<strong>有状态、长尾延迟、GPU 绑定</strong>的服务来运营。</li>
+<li>给团队提供”自助式” LLM 能力（gateway、quota、audit、evals as a service）。</li>
+</ul>
+<h3 id="关键概念-2"><a href="#关键概念-2" class="headerlink" title="关键概念"></a>关键概念</h3><ul>
+<li>推理引擎：<strong>vLLM</strong>、<strong>SGLang</strong>、TensorRT-LLM、TGI 的取舍（2026 年 vLLM 与 SGLang 双寡头）</li>
+<li>KV Cache、PagedAttention、continuous batching、<strong>prefix caching</strong>、<strong>chunked prefill</strong></li>
+<li><strong>Disaggregated serving</strong>：prefill &#x2F; decode 分离（NVIDIA <strong>Dynamo</strong>、vLLM PD-disagg、Mooncake 思路）——2025-2026 大模型服务化最大的架构变化</li>
+<li><strong>Speculative decoding</strong>、EAGLE、MTP</li>
+<li>服务化：模型路由、smart routing（按 prompt 难度选模型）、KV-aware load balancing、autoscaling on GPU</li>
+<li><strong>Kubernetes 原生 LLM 栈</strong>：<a target="_blank" rel="noopener" href="https://github.com/llm-d/llm-d"><code>llm-d</code></a>（Red Hat &#x2F; Google &#x2F; IBM 主推）、<a target="_blank" rel="noopener" href="https://kserve.github.io/website/">KServe</a> 的 LLM Runtime、<a target="_blank" rel="noopener" href="https://github.com/kaito-project/kaito">KAITO</a>、KubeRay</li>
+<li>LLM Gateway：<a target="_blank" rel="noopener" href="https://github.com/BerriAI/litellm">LiteLLM</a>、<a target="_blank" rel="noopener" href="https://portkey.ai/">Portkey</a>、<a target="_blank" rel="noopener" href="https://www.helicone.ai/">Helicone</a>、Cloudflare AI Gateway</li>
+<li>GPU 调度：Device Plugin、MIG、<strong>DRA（Dynamic Resource Allocation，K8s 1.34+ GA）</strong></li>
+<li>多租户配额、PII redaction、合规（EU AI Act 已 in force）</li>
+<li>数据飞轮：日志 → 标注 → 数据集 → SFT&#x2F;DPO&#x2F;RLVR → 上线</li>
+</ul>
+<h3 id="资源-4"><a href="#资源-4" class="headerlink" title="资源"></a>资源</h3><ul>
+<li><strong>官方文档</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.vllm.ai/">vLLM Docs</a> —— 一定要读 architecture 和 paged attention 章节</li>
+<li><a target="_blank" rel="noopener" href="https://docs.sglang.ai/">SGLang</a></li>
+<li><a target="_blank" rel="noopener" href="https://kserve.github.io/website/">KServe</a>、<a target="_blank" rel="noopener" href="https://docs.ray.io/en/latest/serve/index.html">Ray Serve</a></li>
+</ul>
+</li>
+<li><strong>论文 &#x2F; 工程文章</strong><ul>
+<li><em>Efficient Memory Management for LLM Serving with PagedAttention</em>（vLLM 论文）</li>
+<li><em>FlashAttention 1&#x2F;2&#x2F;3</em></li>
+<li>Character.AI、Anthropic、OpenAI 关于 inference infra 的工程博客</li>
+</ul>
+</li>
+<li><strong>开源</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/vllm-project/vllm"><code>vllm</code></a>、<a target="_blank" rel="noopener" href="https://github.com/sgl-project/sglang"><code>sglang</code></a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/llm-d/llm-d"><code>llm-d</code></a> —— 2025 才开源、Kubernetes-native 的分布式推理栈，DevOps 同学的甜区</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ai-dynamo/dynamo">NVIDIA Dynamo</a> —— PD 分离 + smart router 参考实现</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/BerriAI/litellm"><code>litellm</code></a> —— 几乎是 LLM Gateway 事实标准</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/skypilot-org/skypilot"><code>skypilot</code></a> —— 多云 GPU 调度</li>
+</ul>
+</li>
+<li><strong>Newsletter</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://www.latent.space/">Latent Space</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.semianalysis.com/">SemiAnalysis</a> —— 硬件 &#x2F; 容量视角，DevOps 必读</li>
+</ul>
+</li>
+</ul>
+<h3 id="实战项目-4"><a href="#实战项目-4" class="headerlink" title="实战项目"></a>实战项目</h3><ol>
+<li><strong>自建 LLM Gateway</strong>：基于 LiteLLM，加上你团队的 SSO、quota、Langfuse 上报，全套 Helm chart。</li>
+<li><strong>vLLM &#x2F; SGLang on K8s</strong>：单节点 → 多节点 TP &#x2F; PP &#x2F; EP，用 Prometheus 看 token&#x2F;s、TTFT、TPOT、prefix cache hit。</li>
+<li><strong>PD 分离实验</strong>：用 llm-d 或 Dynamo 把 prefill 与 decode 分到不同 GPU 池，测对长 context 工作负载的 TTFT &#x2F; 吞吐改善。</li>
+<li><strong>GPU Autoscaler PoC</strong>：基于队列深度 + KV cache 占用（而非 CPU）扩缩容，写一篇内部文档解释为什么传统 HPA 不适用。</li>
+<li><strong>完整数据飞轮</strong>：Stage 4 的 trace → 自动挑选低分对话 → 人工修订 → 周期性 SFT&#x2F;DPO → A&#x2F;B 上线。</li>
+</ol>
+<hr>
+<h2 id="一些”反-roadmap”的建议"><a href="#一些”反-roadmap”的建议" class="headerlink" title="一些”反 roadmap”的建议"></a>一些”反 roadmap”的建议</h2><ol>
+<li><strong>不要按线性时间走完</strong>。Stage 1 → 3 跑通后，立刻找一个真实业务场景，从场景倒逼回去补 4、5、6。否则学完会忘。</li>
+<li><strong>写文档比写代码重要</strong>。Agent 时代，prompt 和 tool description 都是文档；产品决策、eval 报告都是文档。这是 senior 和 junior 的关键差。</li>
+<li><strong>追踪一个稳定的小社区</strong>就够。我个人订阅：Simon Willison、Lilian Weng、Latent Space、Anthropic Engineering、HuggingFace blog、Jason Liu。再多就是噪音。</li>
+<li><strong>优先动手，再看综述</strong>。看到一个新概念（比如 GraphRAG、Agentic RAG、AutoGen v2），先用半天写个最小可跑的版本，再回头看论文 &#x2F; 文章，吸收效率高 10 倍。</li>
+<li><strong>小心框架陷阱</strong>。LangChain &#x2F; LlamaIndex 的 API 还在剧烈迭代，<strong>理解概念比记 API 重要</strong>；任何时候都要能用 200 行原生 SDK 复现你的 Agent 核心逻辑。</li>
+<li><strong>DevOps 经验不要丢</strong>。当所有人都在卷 prompt 时，懂 GPU、懂 K8s、懂可观测性的人才是稀缺品。把”我能让这个 Agent 7×24 稳定跑在生产”作为你的差异化标签。</li>
+</ol>
+<hr>
+<h2 id="配套书单（可选）"><a href="#配套书单（可选）" class="headerlink" title="配套书单（可选）"></a>配套书单（可选）</h2><ul>
+<li><em>Hands-On Large Language Models</em> — Jay Alammar &amp; Maarten Grootendorst</li>
+<li><em>Build a Large Language Model (From Scratch)</em> — Sebastian Raschka</li>
+<li><em>AI Engineering</em> — Chip Huyen（2024，少有的体系化作品）</li>
+<li><em>Designing Machine Learning Systems</em> — Chip Huyen（虽然不是 LLM 专项，但 ML system 思维必备）</li>
+<li><em>Prompt Engineering for LLMs</em> — John Berryman &amp; Albert Ziegler（O’Reilly）</li>
+</ul>
+<hr>
+<h2 id="附录：Agent-工程化范式的演进史（2022-2026）"><a href="#附录：Agent-工程化范式的演进史（2022-2026）" class="headerlink" title="附录：Agent 工程化范式的演进史（2022-2026）"></a>附录：Agent 工程化范式的演进史（2022-2026）</h2><p>这一节专门留给「考古」：你在 2026 年读到 2023 &#x2F; 2024 年那些教程、博客、视频时，往往会困惑「为什么大家在认真讨论一个我从没听过的库」。下面是一份不算完全公允的「流派对照表」，方便你定位它们在今天的位置。</p>
+<h3 id="流派一：Prompt-Toolbox（2022-末-–-2023-上）"><a href="#流派一：Prompt-Toolbox（2022-末-–-2023-上）" class="headerlink" title="流派一：Prompt Toolbox（2022 末 – 2023 上）"></a>流派一：Prompt Toolbox（2022 末 – 2023 上）</h3><ul>
+<li><strong>代表</strong>：原始 LangChain（<code>Chain</code>、<code>AgentExecutor</code>、<code>load_tools</code>）、LlamaIndex 早期</li>
+<li><strong>核心叙事</strong>：「把 prompt 模板和工具调用串成 Chain」</li>
+<li><strong>典型代码</strong>：<code>initialize_agent(tools, llm, agent=&quot;zero-shot-react-description&quot;)</code></li>
+<li><strong>被淘汰原因</strong>：抽象层比业务层还重，调试地狱；模型一升级（function calling、JSON mode 普及）整套 abstraction 立刻冗余</li>
+<li><strong>今天的位置</strong>：LangChain 自身已经几乎重写，老 API 仍在但不是任何人的首选</li>
+</ul>
+<h3 id="流派二：Multi-Agent-协作框架（2023-下-–-2024-上）"><a href="#流派二：Multi-Agent-协作框架（2023-下-–-2024-上）" class="headerlink" title="流派二：Multi-Agent 协作框架（2023 下 – 2024 上）"></a>流派二：Multi-Agent 协作框架（2023 下 – 2024 上）</h3><ul>
+<li><strong>代表</strong>：AutoGen（v0.2）、CrewAI、MetaGPT、ChatDev、CAMEL</li>
+<li><strong>核心叙事</strong>：「让多个角色 agent 互相对话，模拟一个软件公司 &#x2F; 研究所」</li>
+<li><strong>典型代码</strong>：定义 <code>Researcher</code> &#x2F; <code>Coder</code> &#x2F; <code>Critic</code> 三个 role，让他们自己开会</li>
+<li><strong>被降级原因</strong>：演示效果好、上线效果差；token 烧得吓人、出错时 root-cause 几乎不可能；2024 下半年 Anthropic 那篇 <em>Building effective agents</em> 给出了「绝大多数情况你需要的是 workflow 而不是多 agent」的明确判断</li>
+<li><strong>今天的位置</strong>：AutoGen v0.4 重写为事件驱动后仍在；研究类项目和「让多个模型互相对照」的场景下还在用，<strong>不是默认范式</strong></li>
+</ul>
+<h3 id="流派三：状态机派-图编排（2024）"><a href="#流派三：状态机派-图编排（2024）" class="headerlink" title="流派三：状态机派 &#x2F; 图编排（2024）"></a>流派三：状态机派 &#x2F; 图编排（2024）</h3><ul>
+<li><strong>代表</strong>：<strong>LangGraph</strong>、Burr、Inngest（agent 模式）</li>
+<li><strong>核心叙事</strong>：「Agent 本质是一张有循环的状态图，把节点 &#x2F; 边显式画出来更可控」</li>
+<li><strong>当下定位</strong>：<strong>仍然有效</strong>，是「需要持久化、HITL、长时运行、人工审批」场景的首选——尤其在企业内部平台向产品里。但<strong>不是 2026 的入门姿势</strong>，因为大部分一线开发者今天先接触的是 Claude Code &#x2F; Codex 这样的 harness，而不是从零造一个 graph</li>
+</ul>
+<h3 id="流派四：类型安全派（2024-末-起）"><a href="#流派四：类型安全派（2024-末-起）" class="headerlink" title="流派四：类型安全派（2024 末 起）"></a>流派四：类型安全派（2024 末 起）</h3><ul>
+<li><strong>代表</strong>：<strong>Pydantic AI</strong>、Instructor、Marvin</li>
+<li><strong>核心叙事</strong>：「function calling 的输出是结构化的，那 agent 的所有边界都用 Pydantic 卡死」</li>
+<li><strong>当下定位</strong>：仍是好选择，尤其当你的 agent 输出要进数据库、要被下游程序消费。它和 harness 不冲突——Claude Code 的内部其实就是大量结构化 schema</li>
+</ul>
+<h3 id="流派五：Coding-Agent-范式（2024-中起爆-→-2026-主流）"><a href="#流派五：Coding-Agent-范式（2024-中起爆-→-2026-主流）" class="headerlink" title="流派五：Coding Agent 范式（2024 中起爆 → 2026 主流）"></a>流派五：Coding Agent 范式（2024 中起爆 → 2026 主流）</h3><ul>
+<li><strong>早期代表</strong>：smol-developer、GPT-Engineer、Devin（2024 春）、Aider、Cursor、Cline</li>
+<li><strong>2025 工业化</strong>：Claude Code（2025-05 GA）、OpenAI Codex CLI &#x2F; Codex app、OpenCode、goose（Block 开源）</li>
+<li><strong>2026 泛化</strong>：「Coding Agent 是包装最完整的通用 agent，把它的 sandbox &#x2F; shell &#x2F; file 能力解开来就是任何工作的 agent」——Claude Code 改名 <strong>Cowork</strong>、Codex 上 <strong>Skills + Automations</strong> 都是这个判断的产物</li>
+<li><strong>今天的位置</strong>：<strong>主战场</strong>。Stage 3.1 整节讲的就是它</li>
+</ul>
+<h3 id="流派六：Personal-Assistant-Harness-「Claws」（2025-末-–-2026-爆发）"><a href="#流派六：Personal-Assistant-Harness-「Claws」（2025-末-–-2026-爆发）" class="headerlink" title="流派六：Personal Assistant Harness &#x2F; 「Claws」（2025 末 – 2026 爆发）"></a>流派六：Personal Assistant Harness &#x2F; 「Claws」（2025 末 – 2026 爆发）</h3><ul>
+<li><strong>代表</strong>：OpenClaw（前身 Clawdbot → Moltbot）、NanoClaw、PicoClaw、ZeroClaw</li>
+<li><strong>核心叙事</strong>：「把 coding agent harness 的能力下放到本地硬件 + IM（Telegram &#x2F; Signal &#x2F; WhatsApp）+ 定时任务，做一个真正属于个人的 24&#x2F;7 助手」</li>
+<li><strong>特征</strong>：通常运行在 Mac mini &#x2F; Raspberry Pi，强调本地化与可审计；<strong>也是踩坑最多的一类</strong>（删邮件、刷 PR、autonomous 影响力操作等都在 2026 上半年集中爆发）</li>
+<li><strong>今天的位置</strong>：仍处于 Wild West 阶段，正经场景需要严格的 outbound 限制</li>
+</ul>
+<h3 id="流派七：Meta-Harness-跨编排（2026-萌芽）"><a href="#流派七：Meta-Harness-跨编排（2026-萌芽）" class="headerlink" title="流派七：Meta-Harness &#x2F; 跨编排（2026 萌芽）"></a>流派七：Meta-Harness &#x2F; 跨编排（2026 萌芽）</h3><ul>
+<li><strong>代表</strong>：<strong>Hermes Agent</strong>（Nous Research）、社区里各种「orchestrator-of-orchestrators」实验</li>
+<li><strong>核心叙事</strong>：「不同 harness（Claude Code、Codex、Cline）各有所长，让它们在共享 context 下分工」</li>
+<li><strong>今天的位置</strong>：尚早，但是值得跟踪——你可以把它视作 2024 年 multi-agent 论调的「工程化重生」，不再是模型互相对话，而是 <strong>harness 互相调度</strong></li>
+</ul>
+<h3 id="一张图总结"><a href="#一张图总结" class="headerlink" title="一张图总结"></a>一张图总结</h3><pre><code class=" mermaid">flowchart 
+    A[&quot;2022 末&lt;br/&gt;Prompt Toolbox&lt;br/&gt;(LangChain v0.x)&quot;] --&gt; B[&quot;2023 下&lt;br/&gt;Multi-Agent 协作&lt;br/&gt;(AutoGen v0.2 / CrewAI)&quot;]
+    B --&gt; C[&quot;2024 上&lt;br/&gt;状态机 / 图编排&lt;br/&gt;(LangGraph)&quot;]
+    C --&gt; D[&quot;2024 末&lt;br/&gt;类型安全派&lt;br/&gt;(Pydantic AI / Instructor)&quot;]
+    D --&gt; E[&quot;2025&lt;br/&gt;Coding Agent 工业化&lt;br/&gt;(Claude Code / Codex / goose)&quot;]
+    E --&gt; F[&quot;2025 末&lt;br/&gt;Personal Assistant Harness&lt;br/&gt;(OpenClaw / Claws)&quot;]
+    F --&gt; G[&quot;2026&lt;br/&gt;Meta-Harness&lt;br/&gt;(Hermes / 跨 harness 编排)&quot;]
+
+    classDef legacy fill:#eee,stroke:#999,color:#555
+    classDef current fill:#9ad,stroke:#357,color:#000
+    class A,B,C,D legacy
+    class E,F,G current
+</code></pre>
+
+<p>如果你今天才入门，<strong>直接从 2025 这一行往下学</strong>就是最短路径；前面三行做「读懂老博客 + 不踩坑」用就够。</p>
+<hr>
+<h2 id="给我自己的下一步-TODO"><a href="#给我自己的下一步-TODO" class="headerlink" title="给我自己的下一步 TODO"></a>给我自己的下一步 TODO</h2><ul>
+<li><input disabled="" type="checkbox"> 完成 Stage 3 的 MCP Server 项目，开源出来</li>
+<li><input disabled="" type="checkbox"> 在博客里专门开一个 <em>AI Engineering Notes</em> 分类，记录每个 stage 的踩坑</li>
+<li><input disabled="" type="checkbox"> 把现有 K8s 集群接入 vLLM + LiteLLM + Langfuse 的最小生产闭环</li>
+<li><input disabled="" type="checkbox"> 用 unsloth 做一次”博客口吻”模型微调，作为 Stage 5 的毕业项目</li>
+</ul>
+<blockquote>
+<p>路线图是死的，节奏是活的。Roadmap 的价值不在”必须按它走”，而在”任何时候迷茫了，知道自己缺哪一块”。共勉。</p>
+</blockquote>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Career/" class="category-chain-item">Career</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Agent/" class="print-no-link">#Agent</a>
+      
+        <a href="/tags/LLM/" class="print-no-link">#LLM</a>
+      
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
+      
+        <a href="/tags/Roadmap/" class="print-no-link">#Roadmap</a>
+      
+        <a href="/tags/Career/" class="print-no-link">#Career</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>成为 AI Agent 工程师的学习 Roadmap（2026）</div>
+      <div>https://gou7ma7.github.io/2026/05/12/career/@2026_ai_learn_roadmap/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Roy Lee</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年5月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/06/24/devops/@2026_e_reader_gracefully_keeps_me_alive_at_work/" title="Review AI 全靠电纸书续命不然早瞎了">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Review AI 全靠电纸书续命不然早瞎了</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/05/03/devops/@2026_unstructured_text_the_blind_spot_of_ai_agents/" title="这个版本 AI 直接改 非结构化文件 的水平还是不强势啊 -- 看看原理">
+                        <span class="hidden-mobile">这个版本 AI 直接改 非结构化文件 的水平还是不强势啊 -- 看看原理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+<i class="iconfont icon-love"></i>
+<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

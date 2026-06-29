@@ -19,20 +19,20 @@
   <meta name="author" content="Roy Lee">
   <meta name="keywords" content="">
   
-    <meta name="description" content="用最新的模型生成很老的知识点，一种又新又旧的学习体验。  前言这是一篇跨越 3年 又新又旧的文章。（或者说单纯鸽了这么久，上次写作的细节仍历历在目） 当时写作时 ChatGPT 都没落地，为了调一个 Blog 展示效果还得花上许多时间查文档，试实现。 现在 AI 的存在已经让手写 Blog 这种类似以前游戏中为了节省算力资源预先渲染好的的 “过场动画” 大部分时候没什么意义了，想要查询什么知识">
+    <meta name="description" content="前言这是一篇跨越 3年 又新又旧的文章。（或者说单纯鸽了这么久，上次写作的细节仍历历在目） 当时写作时 ChatGPT 都没落地，为了调一个 Blog 展示效果还得花上许多时间查文档，试实现。 现在 AI 的存在已经让手写 Blog 这种，类似以前游戏中，为了节省算力资源，预先渲染好的 “过场动画” 大部分时候没什么意义了，想要查询什么知识点的时候，直接实时生成一篇 Post，通识知识质量还高于绝">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从二叉树遍历到yield，然后到协程、异步">
 <meta property="og:url" content="https://gou7ma7.github.io/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/index.html">
 <meta property="og:site_name" content="DevOps -&gt; AI Agent">
-<meta property="og:description" content="用最新的模型生成很老的知识点，一种又新又旧的学习体验。  前言这是一篇跨越 3年 又新又旧的文章。（或者说单纯鸽了这么久，上次写作的细节仍历历在目） 当时写作时 ChatGPT 都没落地，为了调一个 Blog 展示效果还得花上许多时间查文档，试实现。 现在 AI 的存在已经让手写 Blog 这种类似以前游戏中为了节省算力资源预先渲染好的的 “过场动画” 大部分时候没什么意义了，想要查询什么知识">
+<meta property="og:description" content="前言这是一篇跨越 3年 又新又旧的文章。（或者说单纯鸽了这么久，上次写作的细节仍历历在目） 当时写作时 ChatGPT 都没落地，为了调一个 Blog 展示效果还得花上许多时间查文档，试实现。 现在 AI 的存在已经让手写 Blog 这种，类似以前游戏中，为了节省算力资源，预先渲染好的 “过场动画” 大部分时候没什么意义了，想要查询什么知识点的时候，直接实时生成一篇 Post，通识知识质量还高于绝">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gou7ma7.github.io/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield01.png">
+<meta property="og:image" content="https://gou7ma7.github.io/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/return_vs_yield_banner.jpeg">
 <meta property="article:published_time" content="2022-05-29T00:48:59.000Z">
-<meta property="article:modified_time" content="2026-03-20T14:21:03.000Z">
+<meta property="article:modified_time" content="2026-05-18T01:44:21.000Z">
 <meta property="article:author" content="Roy Lee">
 <meta property="article:tag" content="DataStructure">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://gou7ma7.github.io/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield01.png">
+<meta name="twitter:image" content="https://gou7ma7.github.io/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/return_vs_yield_banner.jpeg">
   
   
   
@@ -229,7 +229,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5k 字
+          5.7k 字
         
       </span>
     
@@ -240,7 +240,7 @@
         
         
         
-          42 分钟
+          48 分钟
         
       </span>
     
@@ -282,7 +282,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2026年3月20日 晚上
+                    本文最后更新于 2026年5月18日 上午
                   
                 
               </p>
@@ -290,20 +290,17 @@
             
               <div class="markdown-body">
                 
-                <p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield01.png" srcset="/img/loading.gif" lazyload alt="本图由 2025年11月20日 谷歌发布的Nano Banana Pro （Gemini 3 Pro图像）生成"></p>
-<blockquote>
-<p>用最新的模型生成很老的知识点，一种又新又旧的学习体验。</p>
-</blockquote>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是一篇跨越 3年 又新又旧的文章。<br>（或者说单纯鸽了这么久，上次写作的细节仍历历在目）</p>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是一篇跨越 3年 又新又旧的文章。<br>（或者说单纯鸽了这么久，上次写作的细节仍历历在目）</p>
 <p>当时写作时 ChatGPT 都没落地，为了调一个 Blog 展示效果还得花上许多时间查文档，试实现。</p>
-<p>现在 AI 的存在已经让手写 Blog 这种类似以前游戏中为了节省算力资源预先渲染好的的 “过场动画” 大部分时候没什么意义了，想要查询什么知识点的时候，直接实时生成一篇 Post，通识知识质量还高于绝大多数。</p>
+<p>现在 AI 的存在已经让手写 Blog 这种，类似以前游戏中，为了节省算力资源，预先渲染好的 “过场动画” 大部分时候没什么意义了，想要查询什么知识点的时候，直接实时生成一篇 Post，通识知识质量还高于绝大多数。</p>
 <p>看了一下时间，正好是来上海的第一份工作，封控将要结束，从共享办公室搬到自己租的办公楼时候。</p>
 <span id="more"></span>
 
-<p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/background.png" srcset="/img/loading.gif" lazyload alt="写作背景"></p>
-<blockquote>
-<p>这张生成图真的太抽象了，而且我说了我是 2025年3月去的百度，不知道 2023 和 “虚桌” 是什么意思。。。</p>
-</blockquote>
+<p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/background.webp" srcset="/img/loading.gif" lazyload alt="用最新的模型生成很老的知识点，一种又新又旧的学习体验"></p>
+<div class="note note-info">
+            <p>2026-05-14 update: 换上了时生成能力最强的 gpt-image-2 模型，图中细节之丰富，且画面逻辑正确性远超本文写作时的版本。</p>
+          </div>
+
 <p>那个时候刚刚才接触云服务，又正值 AI 普及方兴未艾，面对公司都是谷歌退下来的老人，没想到自己两年后也会去百度走一遭。</p>
 <p>一晃也真的是又 3年 过去了，再不抓紧总结点什么的话，感觉都留不下自己的痕迹。</p>
 <p>本文理论部分大规模参考以下视频，甚至可以当成是学习读书笔记。当视频看到第4遍，同时再加上不断地应用 ayscio 相关的架构，总算把这个抽象的概念越看越具体了。</p>
@@ -330,7 +327,7 @@
 <h3 id="可迭代对象是什么"><a href="#可迭代对象是什么" class="headerlink" title="可迭代对象是什么"></a>可迭代对象是什么</h3><p>具体的来说，在 Python 里面，可以跟在 in 关键字后面的就是 <strong>可迭代对象</strong>。</p>
 <p>抽象的来说，可迭代对象（Iterable）： 能够被迭代（遍历）的对象，作为 “数据容器”，提供迭代的 “数据来源”，但不负责迭代的具体逻辑（如 “如何获取下一个元素”“是否迭代结束”）</p>
 <p>按照视频中的拆解 Python 实现后发现，实现了 <code>__iter__ </code> 方法，用来随时返回容器里面的数据的对象，就叫做可迭代对象。而且也满足上述定义：能返回自身作为被迭代的对象，且不需要知道对象之间（如何迭代）关系。</p>
-<h2 id="迭代器是什么-1"><a href="#迭代器是什么-1" class="headerlink" title="迭代器是什么"></a>迭代器是什么</h2><p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield02.jpg" srcset="/img/loading.gif" lazyload alt="可迭代对象和迭代器的区别"></p>
+<h2 id="迭代器是什么-1"><a href="#迭代器是什么-1" class="headerlink" title="迭代器是什么"></a>迭代器是什么</h2><p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/iterable_vs_iterator.jpg" srcset="/img/loading.gif" lazyload alt="可迭代对象和迭代器的区别"></p>
 <blockquote>
 <p>很明显的能够看到，由于可迭代对象（Iterable）只是 “数据容器”，且不知道迭代逻辑，因此不具备 “惰性计算” 的能力，还是一股脑加载到内存里面的。</p>
 </blockquote>
@@ -418,36 +415,49 @@
 <p>最终版本连递归都不需要我们维护，正如递归会自动维护一个栈一样，递归一个生成器的时候它会自动维护相关上下文，又向上屏蔽了一些细节。</p>
 <h1 id="由-yield-from-走向协程"><a href="#由-yield-from-走向协程" class="headerlink" title="由 yield from 走向协程"></a>由 yield from 走向协程</h1><p>yield from 额外还有 双向通信 的特点，本文知识点已经够多了，这里就先省略。</p>
 <h2 id="生成器和迭代器的区别"><a href="#生成器和迭代器的区别" class="headerlink" title="生成器和迭代器的区别"></a>生成器和迭代器的区别</h2><p>话说这是之前遇到很高频的面试问题了，以前并没有系统的学习过，也只是从用法上进行了一些回答，回想起来不甚满意。</p>
-<p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield03.png" srcset="/img/loading.gif" lazyload alt="迭代器和生成器的区别"></p>
+<p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/iterator_vs_generator.png" srcset="/img/loading.gif" lazyload alt="迭代器和生成器的区别"></p>
 <p>总的来说，正如之前 yield 相关的代码展示的那样， yield 自动维护了相关的计数，手动维护全局变量。</p>
-<p>在屏蔽底层 C语言 实现的细节下，我认为我们已经阐述清楚了 <strong>迭代器</strong> 这个概念，接下来我们继续讨论生成器。</p>
-<p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield04.png" srcset="/img/loading.gif" lazyload alt="迭代器和生成器的区别-底层实现"></p>
-<p>我们往底层实现来看，发现 迭代器 是很自然用了共享的 “清单” 变量，每次操作的时候，都需要维护这个 “清单” 变量，而生成器会自动的利用封存的 栈帧 来维持这个状态。</p>
-<p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield05.png" srcset="/img/loading.gif" lazyload alt="生成器有栈帧"><br>这张图是刚开始使用，没有按照 文生图 提示词规则，而是直接使用自然语言描述得到的版本，宝贵的是能明显凸显出当生成器调用 .next() 的时候，会保存栈帧这个动作，因此这张图还是保留了下来。</p>
-<h2 id="多进程、多线程、协程的区别"><a href="#多进程、多线程、协程的区别" class="headerlink" title="多进程、多线程、协程的区别"></a>多进程、多线程、协程的区别</h2><p>在我刚接触编程的时候，我就尝试用生活化的例子构建场景进行学习，现在终于可以轻松实现了。<br><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/yield06.png" srcset="/img/loading.gif" lazyload alt="区别"></p>
+<p>在屏蔽底层 C语言 实现的细节下，我认为我们已经阐述清楚了 <strong>迭代器</strong> 这个概念，接下来继续往 CPython 里看一眼，它俩的对象布局其实完全不同。</p>
+<p>迭代器就是一个普通 Python 实例对象：状态 <code>self.i</code>、<code>self.n</code> 存在实例属性里；每次调用 <code>next()</code> 都走普通方法调用路径，CPython 临时建一个 <code>_PyInterpreterFrame</code>，跑完 <code>__next__</code> 就立刻销毁：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* 迭代器只是一个普通 Python 对象 —— Counter 实例 */</span><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">PyObject</span> &#123;</span>                <span class="hljs-comment">/* 实例本身常驻 */</span><br>    Py_ssize_t ob_refcnt;<br>    PyTypeObject *ob_type;<br>    <span class="hljs-comment">/* self.i, self.n 存在 __dict__ 里 */</span><br>&#125;;<br><br><span class="hljs-comment">/* 每次 next() 调用时临时新建、跑完即销毁 */</span><br><span class="hljs-class"><span class="hljs-keyword">struct</span> _<span class="hljs-title">PyInterpreterFrame</span> &#123;</span>     <span class="hljs-comment">/* 短命的栈帧 */</span><br>    PyObject *f_locals;<br>    <span class="hljs-type">int</span> f_lasti;                 <span class="hljs-comment">/* 字节码指针 */</span><br>    <span class="hljs-comment">/* ... */</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/iterator_internals.png" srcset="/img/loading.gif" lazyload alt="迭代器的 C 层运作"></p>
+<p>生成器则是一个专门的 <code>PyGenObject</code>，它内部 <strong>自带一个永不销毁的栈帧</strong>。<code>gi_frame_state</code> 标记它现在是 <code>EXECUTING</code> 还是 <code>SUSPENDED</code>；<code>f_lasti</code> 记下上次 <code>yield</code> 停在哪条字节码，<code>f_localsplus</code> 数组里冻着所有局部变量。<code>next()</code> 不过是把这个保存的 frame “解冻 → 跑到下一个 yield → 再冻起来”：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* 生成器对象自带一个永久的栈帧 */</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    PyObject_HEAD<br>    _PyInterpreterFrame *gi_iframe;  <span class="hljs-comment">/* 持久栈帧 */</span><br>    <span class="hljs-type">char</span> gi_frame_state;             <span class="hljs-comment">/* CREATED / EXECUTING / SUSPENDED / CLOSED */</span><br>    PyObject *gi_code;<br>&#125; PyGenObject;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/generator_internals.png" srcset="/img/loading.gif" lazyload alt="生成器的 C 层运作"></p>
+<h2 id="多进程、多线程、协程的区别"><a href="#多进程、多线程、协程的区别" class="headerlink" title="多进程、多线程、协程的区别"></a>多进程、多线程、协程的区别</h2><p>在我刚接触编程的时候，我就尝试用生活化的例子构建场景进行学习，现在终于可以轻松实现了。这次我把三者放到同一个比喻里——<strong>棋馆</strong>：进程是各开一家、线程是同一个馆里多桌但由裁判强行换桌、协程则是一位大师同时下多盘的 “车轮战”，由大师<strong>自己</strong>决定什么时候去下一盘。</p>
+<blockquote>
+<p>先把容易混的一组词分清：<strong>协程是机制</strong>（一个能被暂停 &#x2F; 恢复的函数），<strong>异步是外在表现</strong>（事件循环 + 一堆协程，让单线程看起来像在同时服务很多人）。本文重点画的是 “机制” 本身。</p>
+</blockquote>
 <p>根本定义： </p>
 <ol>
 <li>进程是 资源分配 的最小单位；</li>
-<li>线程是 CPU执行 的最小单位；</li>
-<li>异步是具有 主动释放CPU执行 能力的执行程序（与上两者完全不是一个层面的概念）。</li>
+<li>线程是 CPU 执行 的最小单位；</li>
+<li>协程是具有 <strong>主动释放 CPU 执行</strong> 能力的执行单元（与上两者完全不是一个层面的概念）。</li>
 </ol>
-<p>进程:</p>
+<h3 id="多进程"><a href="#多进程" class="headerlink" title="多进程"></a>多进程</h3><p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/concurrency_process.webp" srcset="/img/loading.gif" lazyload alt="进程：各开一家棋馆，多核上真并行"></p>
 <ol>
 <li>具有真正并行的能力（需要硬件 + 操作系统支持）；</li>
-<li>正所谓 “并行计算”， 是真正能同时计算执行的；</li>
+<li>正所谓 “并行计算”，是真正能同时计算执行的；</li>
+<li>每个进程有独立的地址空间、文件句柄、套接字（图中 Panel 2），所以一个进程崩了不会拖累其他进程；</li>
+<li>代价就是 “开一家棋馆” 的成本：启动慢，进程间共享数据麻烦。</li>
 </ol>
-<p>线程：</p>
+<h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/concurrency_thread.webp" srcset="/img/loading.gif" lazyload alt="线程：同一馆多桌共用中央 GIL 控制台，同一时刻只点亮一盏头顶灯，只有一桌在下"></p>
 <ol>
 <li>“并发执行”，需要疯狂切上下文，实际上一个单位时间只能有一个线程在执行；</li>
 <li>多线程本身并不能增加执行能力，除非当前有多个核心 + 语言的多线程支持多核心调用；</li>
-<li>续：Python 3.14 前的 CPython解释器的 GIL 就是在 进程级 加上了 全局互斥锁， 因此一个同一时刻只能有一个线程能够被执行，就算有多个核心，也只有一把锁。多线程本身和多进程概念并不互斥。</li>
+<li>续：Python 3.14 前的 CPython 解释器的 GIL 就是在 <strong>进程级</strong> 加上了一把全局互斥锁——对应图中<strong>正中央那座蓝色 “GIL” 控制台</strong>：台面一台象棋钟、面板四个挡位开关（<code>#1</code>–<code>#4</code>），每个开关用一根电线连到对应桌头顶的吊灯，<strong>同一时刻只有一个开关在 ON 位、只有那桌头顶的灯是亮的</strong>，其他三桌的两位棋手都因为灯灭了，暂停等待中。；</li>
+<li>切换是 <strong>抢占式</strong> 的：每过约 5 ms &#x2F; 100 字节码，控制台的象棋钟 “咔哒” 一下，开关自动拨到下一桌（图中底部左半 before &#x2F; after 两小格演示了这次拨档），你不能也不需要在代码里写「该让给谁」；</li>
+<li>但只锁住「同一时刻只有一桌在动」并不等于锁住了「你的数据不变量」——图中底部右半画的就是经典 race condition：第 2 桌选手伸长胳膊越过窄缝、把第 3 桌的白王 “读” 到了半空中（READ 完还没 WRITE 回去），偏偏此时钟刚好 “咔哒”、开关半倒、灯从 2 号过渡到 3 号，刚被点亮的第 3 桌棋手抬头一看自己王不见了——红色标语点题：<strong>GIL guarantees ONE bytecode atomic — NOT your data invariants</strong>，<code>x += 1</code> 是 3 条字节码（READ → ADD → WRITE），GIL 完全可能在中间拨档，所以仍要老老实实 <code>threading.Lock</code>。</li>
 </ol>
-<p>异步：</p>
+<h3 id="协程（以及它撑起的-“异步”）"><a href="#协程（以及它撑起的-“异步”）" class="headerlink" title="协程（以及它撑起的 “异步”）"></a>协程（以及它撑起的 “异步”）</h3><p><img src="/2022/05/29/book/@2022_python_grammer_yield%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86/concurrency_coroutine.webp" srcset="/img/loading.gif" lazyload alt="协程：一位大师车轮战，他自己决定什么时候 yield 去下一盘"></p>
 <ol>
-<li>需要代码本身有释放能力，也就是通过上文的生成器实现；</li>
-<li>需要修改之前的代码，也就是出现经典的面试题： 如果异步代码中出现了同步的代码会怎么样-会占用整个进程导致其他的协程卡死；</li>
-<li>await 高度借鉴了 yield from，通过 事件循环 监控区分后面接的 <strong>可等待对象（Awaitable）</strong> 是否完成</li>
-<li>续：还没完成-就像上文中的递归，返回自己然后继续等待；完成-协程抛出 StopIteration 表示执行完成。</li>
+<li>需要代码本身有 “释放” 能力——也就是通过上文的生成器实现的 <code>yield</code> &#x2F; <code>await</code>；</li>
+<li>切换是 <strong>协作式</strong> 的：调度权不在操作系统，而在你写的代码手里——图中那位大师在一排棋盘之间自己走来走去，<strong>没有裁判、没有 GIL 控制台</strong>，下一步去哪盘完全由他决定。代价极低——一次协程切换本质上就是一次函数返回（对应图中 “save &#x2F; resume in user space, no syscall” 的标注），纳秒级；</li>
+<li>于是有了那道经典面试题——<strong>如果协程里掺了同步阻塞代码会怎样</strong>？答：它会霸占整个线程，让事件循环里的其他协程统统卡死——对应图中红色警告：大师在某一盘上长考迟迟不 <code>yield</code>，其他所有盘的棋手都只能干等冻住。</li>
+<li><code>await</code> 高度借鉴了 <code>yield from</code>，通过 <strong>事件循环</strong> 监控后面接的 <strong>可等待对象（Awaitable）</strong> 是否完成；</li>
+<li>续：还没完成——就像上文中的递归，返回自己然后继续等待；完成——协程抛出 <code>StopIteration</code> 表示执行完成。</li>
 </ol>
 <h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>本文从再次提笔到今天写后记，总共用时 10个 自然日，篇幅已经很长了，要是再展开协程，不知道要写到什么时候。<br>正如参考视频开篇提到的，只有当自己亲自总结的时候，才会发现原来对相关知识还是理解太浅薄了。</p>
 <p>这些天查了很多资料，也高强度请教 AI， 还动手写了很多古老的代码，工作间隙也在想如何举例，润色。</p>

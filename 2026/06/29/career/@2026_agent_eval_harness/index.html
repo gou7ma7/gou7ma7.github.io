@@ -19,24 +19,26 @@
   <meta name="author" content="Roy Lee">
   <meta name="keywords" content="">
   
-    <meta name="description" content="众所周知，AI时代 不管是生成的代码还是思考链带来的阅读量远超之前。 不看 AI爱卿 的折子吧，久了就被架空成橡皮图章了；说看吧，我试过不管什么品质的屏幕（哪怕是 Apple Vision Pro）时间稍微长一点，都看得老眼昏花视觉残留到两眼发光。">
+    <meta name="description" content="这篇先不急着展开实现细节。先把一个问题讲清楚：我到底要做什么，为什么它值得做，以及第一步到底应该怎么开始。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Review AI 全靠电纸书续命不然早瞎了">
-<meta property="og:url" content="https://gou7ma7.github.io/2026/06/24/devops/@2026_e_reader_gracefully_keeps_me_alive_at_work/index.html">
+<meta property="og:title" content="Agent Eval &#x2F; Test Harness 到底是什么">
+<meta property="og:url" content="https://gou7ma7.github.io/2026/06/29/career/@2026_agent_eval_harness/index.html">
 <meta property="og:site_name" content="DevOps -&gt; AI Agent">
-<meta property="og:description" content="众所周知，AI时代 不管是生成的代码还是思考链带来的阅读量远超之前。 不看 AI爱卿 的折子吧，久了就被架空成橡皮图章了；说看吧，我试过不管什么品质的屏幕（哪怕是 Apple Vision Pro）时间稍微长一点，都看得老眼昏花视觉残留到两眼发光。">
+<meta property="og:description" content="这篇先不急着展开实现细节。先把一个问题讲清楚：我到底要做什么，为什么它值得做，以及第一步到底应该怎么开始。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-06-24T14:30:00.000Z">
-<meta property="article:modified_time" content="2026-06-29T00:29:35.000Z">
+<meta property="article:published_time" content="2026-06-29T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-29T14:17:47.668Z">
 <meta property="article:author" content="Roy Lee">
-<meta property="article:tag" content="Work">
-<meta property="article:tag" content="Health">
-<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Harness Engineering">
+<meta property="article:tag" content="LLM Evaluation">
+<meta property="article:tag" content="测试开发">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Review AI 全靠电纸书续命不然早瞎了 - DevOps -&gt; AI Agent</title>
+  <title>Agent Eval / Test Harness 到底是什么 - DevOps -&gt; AI Agent</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,13 +202,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Review AI 全靠电纸书续命不然早瞎了"></span>
+            <span id="subtitle" data-typed-text="Agent Eval / Test Harness 到底是什么"></span>
           
         </div>
 
@@ -217,8 +219,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2026-06-24 22:30" pubdate>
-          2026年6月24日 晚上
+        <time datetime="2026-06-29 10:00" pubdate>
+          2026年6月29日 上午
         </time>
       </span>
     
@@ -229,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.4k 字
+          1.2k 字
         
       </span>
     
@@ -240,7 +242,7 @@
         
         
         
-          12 分钟
+          10 分钟
         
       </span>
     
@@ -277,12 +279,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Review AI 全靠电纸书续命不然早瞎了</h1>
+            <h1 id="seo-header">Agent Eval / Test Harness 到底是什么</h1>
             
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2026年6月29日 早上
+                    本文最后更新于 2026年6月29日 晚上
                   
                 
               </p>
@@ -291,63 +293,93 @@
               <div class="markdown-body">
                 
                 <blockquote>
-<p>众所周知，AI时代 不管是生成的代码还是思考链带来的<strong>阅读量</strong>远超之前。</p>
-<p>不看 AI爱卿 的<strong>折子</strong>吧，久了就被<strong>架空成橡皮图章</strong>了；说看吧，我试过不管什么品质的<strong>屏幕</strong>（哪怕是 Apple Vision Pro）时间稍微长一点，都看得<strong>老眼昏花视觉残留到两眼发光</strong>。</p>
+<p>这篇先不急着展开实现细节。先把一个问题讲清楚：我到底要做什么，为什么它值得做，以及第一步到底应该怎么开始。</p>
 </blockquote>
 <span id="more"></span>
 
-<h2 id="0-最终效果"><a href="#0-最终效果" class="headerlink" title="0. 最终效果"></a>0. 最终效果</h2><figure style="text-align: center;">
-  <img
-    src="/images/@2026_e_reader_gracefully_keeps_me_alive_at_work.jpeg" srcset="/img/loading.gif" lazyload
-    alt="Read in E-book"
-    style="width: 80%;"
-  >
-  <figcaption>一台可以用浏览器的电纸书</figcaption>
-</figure>
+<h2 id="0-一句话"><a href="#0-一句话" class="headerlink" title="0. 一句话"></a>0. 一句话</h2><p><code>Agent Eval / Test Harness</code> 可以先理解成：</p>
+<blockquote>
+<p>给 AI Agent 准备一套“自动化测试台”：把任务喂进去，让 Agent 做事，然后用程序记录它做得对不对、错在哪里、花了多少时间和 token。</p>
+</blockquote>
+<p>它不是模型训练，不是聊天机器人，也不是先做一个很大的平台。</p>
+<p>它更像你过去熟悉的测试开发 &#x2F; CI：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">传统软件测试：<br>输入测试用例 -&gt; 跑程序 -&gt; assert -&gt; 生成测试报告<br><br>Agent Harness：<br>输入任务样本 -&gt; 跑 Agent/模型 -&gt; scorer 判断 -&gt; 生成评测报告<br></code></pre></td></tr></table></figure>
 
-<p>最终方案本质上就是在公网上开一个 Markdown 的服务，然后 PC 连上去改对应的 .md 文件，最后电纸书直接看解析好的网页。</p>
+<h2 id="1-Harness-是不是自己造轮子"><a href="#1-Harness-是不是自己造轮子" class="headerlink" title="1. Harness 是不是自己造轮子"></a>1. Harness 是不是自己造轮子</h2><p>是，也不是。</p>
+<p>“是”的部分：第一版确实要自己写一个很小的轮子，因为只有自己写过一次，才会真正理解：</p>
+<ol>
+<li>一个 Agent 任务怎么变成测试用例；</li>
+<li>模型输出为什么不能只靠肉眼看；</li>
+<li>什么样的任务能自动判分，什么样的任务不能；</li>
+<li>为什么 trace、成本、延迟、失败原因是 AI 工程里的基本盘。</li>
+</ol>
+<p>“不是”的部分：目标不是发明一个比 Promptfoo、Inspect AI、Langfuse 更好的框架。目标是先做一个最小可理解版本，然后再迁移到工业工具。</p>
+<p>所以这个练习的本质不是“造轮子炫技”，而是：</p>
+<blockquote>
+<p>造一个小轮子，理解轮子为什么这样转。之后看到工业轮子时，知道它解决了什么问题。</p>
+</blockquote>
+<h2 id="2-它到底要测什么"><a href="#2-它到底要测什么" class="headerlink" title="2. 它到底要测什么"></a>2. 它到底要测什么</h2><p>先不要想复杂 Agent。先从最贴近自己的任务开始：</p>
+<blockquote>
+<p>给模型一份简历和一份岗位 JD，让它输出匹配项、短板、下一步学习计划。</p>
+</blockquote>
+<p>这件事肉眼看很简单，但要做成测试，就必须回答几个问题：</p>
+<ol>
+<li>输出必须有哪些字段？</li>
+<li>至少要列出几个匹配项？</li>
+<li>是否必须提到 <code>Python</code>、<code>CI/CD</code>、<code>Kubernetes</code>、<code>Agent Infra</code>？</li>
+<li>如果它胡说了一个简历里没有的经历，算不算失败？</li>
+<li>如果它没给下一步行动，算不算失败？</li>
+</ol>
+<p>一旦这些规则写清楚，它就从“让 AI 帮我分析一下”变成了“一个可回归的 Agent 测试用例”。</p>
+<h2 id="3-最小闭环"><a href="#3-最小闭环" class="headerlink" title="3. 最小闭环"></a>3. 最小闭环</h2><p>第一版只需要 5 个东西。</p>
 <pre><code class=" mermaid">flowchart LR
-  PC[&quot;PC&lt;br&gt;编辑 Markdown&quot;] --&gt; NAS[&quot;飞牛 NAS&lt;br&gt;Docker 渲染 HTML&quot;]
-  NAS --&gt; URL[&quot;飞牛 NAS&lt;br&gt;公网固定 URL&quot;]
-  URL --&gt; Reader[&quot;电纸书浏览器&lt;br&gt;只负责阅读&quot;]
+    A[&quot;task&lt;br/&gt;任务样本&quot;] --&gt; B[&quot;runner&lt;br/&gt;执行器&quot;]
+    B --&gt; C[&quot;model / agent&lt;br/&gt;模型或 Agent&quot;]
+    C --&gt; D[&quot;scorer&lt;br/&gt;评分器&quot;]
+    D --&gt; E[&quot;report&lt;br/&gt;报告&quot;]
 </code></pre>
 
-<p>我的例子中，由于公司网络限制，且兼顾在家等多地需求，还是需要使用公网而不是局域网，因此依赖 飞牛NAS 又提供服务器又提供公网访问。</p>
-<p>飞牛NAS 可以替换成主流的云服务厂商的 云机器 + 公网访问（IP访问即可，不需要域名）</p>
-<p>如果不需要公网，那么直接在 PC 上运行 Docker 然后局域网IP访问即可。</p>
-<p><code>compose.yaml</code>：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">services:</span><br>  <span class="hljs-attr">md-reader:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">mountainpass/go-markdown-server:latest</span><br>    <span class="hljs-attr">container_name:</span> <span class="hljs-string">md-reader</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span><br>    <span class="hljs-attr">ports:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;8090:8080&quot;</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">./content:/content:ro</span><br></code></pre></td></tr></table></figure>
+<p>对应到文件就是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">tasks.jsonl      # 放任务<br>runner.py        # 逐条执行任务<br>scoring.py       # 判断输出是否合格<br>trace.jsonl      # 记录每次运行细节<br>report.md        # 给人看的报告<br></code></pre></td></tr></table></figure>
 
-<p><code>content/index.md</code>：</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section"># 今日阅读</span><br><br>这里粘贴今天想在电纸书上看的大段文字。<br><br>可以是普通纯文本。<br><br>也可以是 Markdown：<br><br><span class="hljs-section">## 小标题</span><br><br><span class="hljs-bullet">-</span> 列表一<br><span class="hljs-bullet">-</span> 列表二<br><br><span class="hljs-quote">&gt; 引用也可以正常显示。</span><br></code></pre></td></tr></table></figure>
+<h2 id="4-第一件事不是写代码"><a href="#4-第一件事不是写代码" class="headerlink" title="4. 第一件事不是写代码"></a>4. 第一件事不是写代码</h2><p>第一件事是写 3 条任务样本。</p>
+<p>先不要新建一堆目录，也不要写 runner。只写一个 <code>tasks.jsonl</code>，里面放 3 条你自己能肉眼判定对错的任务。</p>
+<p>第一条任务可以是：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;career_jd_match_001&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;category&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;career_jd_match&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;input&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;resume&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;这里放我的简历摘要&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;job&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;这里放 NVIDIA Deep Learning SDET 的岗位要求&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;expected&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;required_fields&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;matched_skills&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;gaps&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;next_actions&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;min_matched_skills&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;min_gaps&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;min_next_actions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;must_mention&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;Python&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;CI/CD&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;Kubernetes&quot;</span><span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
 
-<p>启动：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker compose up -d<br></code></pre></td></tr></table></figure>
-
-<p>飞牛 fnOS 启动容器之后会自动生成一个公网地址（<strong>在公网下 飞牛管理后台 -&gt; Docker应用 -&gt; 容器 -&gt; 具体容器比如 go-markdown-server -&gt; 🔗8090:8080 即可跳转得到</strong>）映射到容器的相应端口，电纸书直接访问它即可。</p>
-<h2 id="1-AI-时代描绘清楚需求是最重要的能力"><a href="#1-AI-时代描绘清楚需求是最重要的能力" class="headerlink" title="1. AI 时代描绘清楚需求是最重要的能力"></a>1. AI 时代描绘清楚需求是最重要的能力</h2><p>很早我就有想用墨水屏显示器办公保护眼睛的模糊需求，直到我开始接触 Goose Hermes 这种主动完成任务，还能通过网关推送消息的 Agent 之后，才开始具体想如何落地。</p>
-<p>一开始肯定是想看如何直接用现成的网关支持的介质，装了各种 IM，甚至还尝试了电纸书上接受邮件。</p>
-<p>但是这里面有个一票否决的点 —— 这些接受端都是为 PC 或者滑动为主的移动设备设计的，在电纸书上体验极差。</p>
-<p>后来不断尝试之后发现以前经常使用的「公网备忘录」 似乎能覆盖这个场景。</p>
-<p>流程很简单：我在 PC 上看到一大段文字，想把它丢到公网某个地方，然后在电纸书上优雅地打开阅读。</p>
-<p>浪费不少时候后发现真正的需求其实可以压缩成一句话：</p>
+<p>如果这条任务你自己都不知道怎么判对错，就先不要自动化。</p>
+<h2 id="5-我真正要学的是什么"><a href="#5-我真正要学的是什么" class="headerlink" title="5. 我真正要学的是什么"></a>5. 我真正要学的是什么</h2><p>这个小项目真正训练的是 5 种能力：</p>
+<ol>
+<li>把模糊任务改写成可测试任务；</li>
+<li>把模型输出改成稳定结构化输出；</li>
+<li>把“感觉不错”变成 pass rate、失败原因、延迟、成本；</li>
+<li>把 Agent 行为记录成 trace，方便复盘；</li>
+<li>把 AI 系统放回测试开发和 CI&#x2F;CD 的工程语境里。</li>
+</ol>
+<p>这正好连接几个岗位方向：</p>
+<ol>
+<li>DeepSeek <code>Agent Infra / Agent Harness / 测试开发</code>；</li>
+<li>NVIDIA <code>SWQA / SDET / DGX Cloud Test</code>；</li>
+<li>自己原来的 DevOps &#x2F; 研发效能 &#x2F; 测试平台经验。</li>
+</ol>
+<h2 id="6-暂时不要展开的东西"><a href="#6-暂时不要展开的东西" class="headerlink" title="6. 暂时不要展开的东西"></a>6. 暂时不要展开的东西</h2><p>下面这些都重要，但不是第一步：</p>
+<ol>
+<li>LangGraph；</li>
+<li>MCP；</li>
+<li>vLLM；</li>
+<li>CUDA；</li>
+<li>Langfuse；</li>
+<li>Promptfoo；</li>
+<li>Inspect AI；</li>
+<li>GitHub Actions。</li>
+</ol>
+<p>先把 3 条任务写明白。否则后面所有工具都会变成新的噪音。</p>
+<h2 id="7-下一步对话"><a href="#7-下一步对话" class="headerlink" title="7. 下一步对话"></a>7. 下一步对话</h2><p>我现在先回答一个问题：</p>
 <blockquote>
-<p>我给服务器一个文本资源，最好是 Markdown 文件，然后它用最朴素、最稳定、最适合电纸书浏览器的 HTML 把它显示出来。</p>
+<p>我能不能把一个“AI 要完成的任务”，写成一条“我可以判定对错的测试用例”？</p>
 </blockquote>
-<p>也就是说，我需要的不是「同步显示器」，而是「阅读页生成器」。</p>
-<h2 id="2-之后的落地就很轻松了"><a href="#2-之后的落地就很轻松了" class="headerlink" title="2. 之后的落地就很轻松了"></a>2. 之后的落地就很轻松了</h2><p>我用的是安卓上的 Via 但受限于机能表现并不完全一致，而且巨卡无比。</p>
-<p>它可能打开普通网页没问题，但面对复杂前端时就容易渲染失败：JavaScript 太多、布局太重、按钮太小、登录流程太烦、页面刷新太慢。</p>
-<p>好在支持 JavaScript 脚本，一些主流浏览器脚本 比如我最爱的 按键翻页 改一下图标大小就能用。</p>
-<p>使用 <code>go-markdown-server + content/index.md</code> 方案之后，电纸书就只需要打开一个链接，不需要额外操作。</p>
-<p>同时之前的 Agent 网关可以配置远程连接到服务器上，完成一次对话之后就让它主动更新这个 .md 可以实时批阅 AI折子。</p>
-<h2 id="3-各种废案"><a href="#3-各种废案" class="headerlink" title="3. 各种废案"></a>3. 各种废案</h2><p>AI 回答问题的底层机制，可以理解为：模型先把输入的 Prompt 转换成一串 token，再基于这些 token 的上下文表示，逐步预测下一个 token 的概率分布。</p>
-<p>生成时，它并不是一次性从完整答案空间中找到一个绝对正确解，而是在每一步根据当前上下文、模型参数和解码策略，选择或采样下一个最合适的 token。</p>
-<p>就是这一连串 token 逐步累积形成最终回答。</p>
-<p>因此，LLM 的输出本质上是一种基于条件概率的自回归生成：它在巨大的候选序列空间中，生成一个在当前上下文下看起来高概率、连贯且符合指令的文本，而不天然保证其等同于事实真理，更别说一定是符合用户预期的了。</p>
-<p>所以没有一些<strong>预先的知识引导</strong>，或者通过<strong>正确的关键词去网上查到现有方案</strong>的话，就很容易出现 AI混学，全是糊弄反正不用背锅。</p>
-<h3 id="3-1-Hermes-各种消息网关"><a href="#3-1-Hermes-各种消息网关" class="headerlink" title="3.1 Hermes 各种消息网关"></a>3.1 Hermes 各种消息网关</h3><p>包括但不限于 IM ，Email 甚至也用了同步文件这种方式，但是一直没想好怎么渲染文件，就差临门一脚。</p>
-<h3 id="3-2-共享剪贴板"><a href="#3-2-共享剪贴板" class="headerlink" title="3.2 共享剪贴板"></a>3.2 共享剪贴板</h3><p>对电纸书来说界面太复杂太难操作了，好多产品根本打不开或者样式加载失败。</p>
-<h3 id="3-3-多端笔记工具"><a href="#3-3-多端笔记工具" class="headerlink" title="3.3 多端笔记工具"></a>3.3 多端笔记工具</h3><p>更麻烦，一个登录和打开笔记就拒之门外，更别说这些基本上都是默认滑动翻页，体验极差。</p>
+<p>如果能，后面才进入第二步：写最小 runner。</p>
+<p>如果不能，就继续改任务，不写代码。</p>
 <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
 <link rel="stylesheet" href="/css/markmap.css">
 
@@ -370,7 +402,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/DevOps/" class="category-chain-item">DevOps</a>
+  <a href="/categories/Career/" class="category-chain-item">Career</a>
   
   
 
@@ -385,11 +417,15 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Work/" class="print-no-link">#Work</a>
+        <a href="/tags/Agent/" class="print-no-link">#Agent</a>
       
-        <a href="/tags/Health/" class="print-no-link">#Health</a>
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
       
-        <a href="/tags/Docker/" class="print-no-link">#Docker</a>
+        <a href="/tags/Harness-Engineering/" class="print-no-link">#Harness Engineering</a>
+      
+        <a href="/tags/LLM-Evaluation/" class="print-no-link">#LLM Evaluation</a>
+      
+        <a href="/tags/%E6%B5%8B%E8%AF%95%E5%BC%80%E5%8F%91/" class="print-no-link">#测试开发</a>
       
     </div>
   
@@ -401,8 +437,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Review AI 全靠电纸书续命不然早瞎了</div>
-      <div>https://gou7ma7.github.io/2026/06/24/devops/@2026_e_reader_gracefully_keeps_me_alive_at_work/</div>
+      <div>Agent Eval / Test Harness 到底是什么</div>
+      <div>https://gou7ma7.github.io/2026/06/29/career/@2026_agent_eval_harness/</div>
     </div>
     <div class="license-meta">
       
@@ -414,7 +450,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2026年6月24日</div>
+          <div>2026年6月29日</div>
         </div>
       
       
@@ -446,18 +482,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/06/29/career/@2026_agent_eval_harness/" title="Agent Eval / Test Harness 到底是什么">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Agent Eval / Test Harness 到底是什么</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/05/12/career/@2026_ai_learn_roadmap/" title="成为 AI Agent 工程师的学习 Roadmap（2026）">
-                        <span class="hidden-mobile">成为 AI Agent 工程师的学习 Roadmap（2026）</span>
+                      <a href="/2026/06/24/devops/@2026_e_reader_gracefully_keeps_me_alive_at_work/" title="Review AI 全靠电纸书续命不然早瞎了">
+                        <span class="hidden-mobile">Review AI 全靠电纸书续命不然早瞎了</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
