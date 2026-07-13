@@ -1,0 +1,968 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Roy Lee">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="先说结论：这次流程图显示成源码，不是 Mermaid 写错了，也不是 Go “不支持画图”。 原来的小服务已经把 Markdown 排成了网页，却没有带上真正负责画图的 Mermaid。我们做的事情，就是把这位“绘图员”装进程序，只在需要时请它工作，再把新版本装回 NAS。 这篇文章特意写给刚接触编程的人。你不需要先学完 Go、Docker 或前端，跟着“谁负责哪一步”往下看，就能理解这次改造为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从一段没有画出来的流程图开始：给 NAS 上的 Go Markdown 服务补上 Mermaid">
+<meta property="og:url" content="https://gou7ma7.github.io/2026/07/13/devops/@2026_add_mermaid_to_go_markdown_server/index.html">
+<meta property="og:site_name" content="DevOps -&gt; AI Agent">
+<meta property="og:description" content="先说结论：这次流程图显示成源码，不是 Mermaid 写错了，也不是 Go “不支持画图”。 原来的小服务已经把 Markdown 排成了网页，却没有带上真正负责画图的 Mermaid。我们做的事情，就是把这位“绘图员”装进程序，只在需要时请它工作，再把新版本装回 NAS。 这篇文章特意写给刚接触编程的人。你不需要先学完 Go、Docker 或前端，跟着“谁负责哪一步”往下看，就能理解这次改造为">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-07-13T12:20:00.000Z">
+<meta property="article:modified_time" content="2026-07-13T12:38:41.000Z">
+<meta property="article:author" content="Roy Lee">
+<meta property="article:tag" content="Troubleshooting">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="Markdown">
+<meta property="article:tag" content="Mermaid">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="NAS">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>从一段没有画出来的流程图开始：给 NAS 上的 Go Markdown 服务补上 Mermaid - DevOps -&gt; AI Agent</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"gou7ma7.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/gou7ma7/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="从一段没有画出来的流程图开始：给 NAS 上的 Go Markdown 服务补上 Mermaid"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-07-13 20:20" pubdate>
+          2026年7月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          32 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">从一段没有画出来的流程图开始：给 NAS 上的 Go Markdown 服务补上 Mermaid</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年7月13日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p><strong>先说结论：这次流程图显示成源码，不是 Mermaid 写错了，也不是 Go “不支持画图”。</strong></p>
+<p>原来的小服务已经把 Markdown 排成了网页，却没有带上真正负责画图的 Mermaid。我们做的事情，就是把这位“绘图员”装进程序，只在需要时请它工作，再把新版本装回 NAS。</p>
+<p>这篇文章特意写给刚接触编程的人。你不需要先学完 Go、Docker 或前端，跟着“谁负责哪一步”往下看，就能理解这次改造为什么有效。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="0-这次完成了什么"><a href="#0-这次完成了什么" class="headerlink" title="0. 这次完成了什么"></a>0. 这次完成了什么</h2><p>我原本在 NAS 上运行一个很小的 Go Markdown 服务。普通标题、列表、表格都能显示，但 Mermaid 流程图会原样出现在灰色代码框里。</p>
+<p>最终完成了这些事：</p>
+<ul>
+<li>找到真正缺失的环节，而不是继续修改已经正确的流程图；</li>
+<li>从正在使用的上游项目 fork 出自己的版本；</li>
+<li>把 Mermaid 11.16.0 放进 Go 程序和 Docker 镜像，不依赖公网 CDN；</li>
+<li>普通文章不加载绘图工具，有图的文章才加载；</li>
+<li>图写错时保留源代码，不让整页内容消失；</li>
+<li>通过 Go 测试、真实浏览器和 NAS 上的 Docker 三层验证；</li>
+<li>把成果提交并推送到自己的 GitHub 仓库。</li>
+</ul>
+<p>代码在这里：</p>
+<ul>
+<li>项目：<a target="_blank" rel="noopener" href="https://github.com/gou7ma7/go-markdown-server-with-mermaid-">https://github.com/gou7ma7/go-markdown-server-with-mermaid-</a></li>
+<li>本次提交：<a target="_blank" rel="noopener" href="https://github.com/gou7ma7/go-markdown-server-with-mermaid-/commit/50b914f784c8284e29fd92e13a9f66b8a37d8852">https://github.com/gou7ma7/go-markdown-server-with-mermaid-/commit/50b914f784c8284e29fd92e13a9f66b8a37d8852</a></li>
+</ul>
+<h2 id="1-先别怀疑自己：图的写法没有问题"><a href="#1-先别怀疑自己：图的写法没有问题" class="headerlink" title="1. 先别怀疑自己：图的写法没有问题"></a>1. 先别怀疑自己：图的写法没有问题</h2><p>当页面显示下面这些文字，而不是两个方框和一条箭头时，很容易以为是语法写错了：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">flowchart TD<br>  A[开始] --&gt; B[完成]<br></code></pre></td></tr></table></figure>
+
+<p>但“页面能把这段文字完整显示出来”本身就是一条线索：文件读到了，Markdown 也处理了它，只是最后没人把文字画成图。</p>
+<p>这很像把一份建筑图纸送到了打印店：</p>
+<ul>
+<li>打印店已经认出这是一张名为 Mermaid 的图纸；</li>
+<li>它把图纸整齐地装进了文件袋；</li>
+<li>但现场没有施工人员，所以你最后看到的仍然是图纸。</li>
+</ul>
+<p>原来的处理链路其实是：</p>
+<pre><code class=" mermaid">flowchart TD
+  A[&quot;Markdown 原稿&quot;] --&gt; B[&quot;gomarkdown 排版&quot;]
+  B --&gt; C[&quot;HTML 中的代码块&quot;]
+  C --&gt; D[&quot;浏览器显示 Mermaid 源码&quot;]
+</code></pre>
+
+<p>最后一步并没有失败。它只是按照普通代码块的方式，忠实地把源码显示了出来。</p>
+<h2 id="2-认识五个角色，就能看懂整个项目"><a href="#2-认识五个角色，就能看懂整个项目" class="headerlink" title="2. 认识五个角色，就能看懂整个项目"></a>2. 认识五个角色，就能看懂整个项目</h2><p>名字很多，但每个角色只负责一件事。</p>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>它在做什么</th>
+<th>生活中的比喻</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Markdown</td>
+<td>用纯文字记录标题、表格、代码和图表</td>
+<td>原稿</td>
+</tr>
+<tr>
+<td>Go 服务</td>
+<td>读取文件，组织网页，再送给浏览器</td>
+<td>图书管理员</td>
+</tr>
+<tr>
+<td><code>gomarkdown</code></td>
+<td>把 Markdown 的结构转换成 HTML</td>
+<td>排版员</td>
+</tr>
+<tr>
+<td>Mermaid</td>
+<td>把图表文字转换成 SVG 图形</td>
+<td>绘图员</td>
+</tr>
+<tr>
+<td>浏览器</td>
+<td>执行 Mermaid，并把最终网页显示出来</td>
+<td>展览厅</td>
+</tr>
+</tbody></table>
+<p>Docker 和 NAS 则是外面的两层：</p>
+<ul>
+<li><strong>Docker 镜像</strong>像一个封好的搬家箱，程序和它需要的文件都装在里面；</li>
+<li><strong>Docker 容器</strong>是这个箱子真正打开并开始工作的状态；</li>
+<li><strong>NAS</strong>是长期放置并运行它的那台电脑。</li>
+</ul>
+<p>理解到这里已经足够继续排查了。遇到陌生技术时，不必先记住全部细节，先问一句：<strong>它在这条链路里负责什么？</strong></p>
+<h2 id="3-我们怎样证明缺的是-Mermaid"><a href="#3-我们怎样证明缺的是-Mermaid" class="headerlink" title="3. 我们怎样证明缺的是 Mermaid"></a>3. 我们怎样证明缺的是 Mermaid</h2><p>排错最怕同时怀疑所有东西。更可靠的方式，是一层一层找证据。</p>
+<h3 id="3-1-先看最小示例"><a href="#3-1-先看最小示例" class="headerlink" title="3.1 先看最小示例"></a>3.1 先看最小示例</h3><p>我们用最短的 <code>A --&gt; B</code> 流程图测试。它在 Mermaid 10 和 11 中都能成立，因此复杂语法不是主要嫌疑。</p>
+<h3 id="3-2-再看-Go-服务输出的网页"><a href="#3-2-再看-Go-服务输出的网页" class="headerlink" title="3.2 再看 Go 服务输出的网页"></a>3.2 再看 Go 服务输出的网页</h3><p><code>gomarkdown</code> 已经把图表围栏转换成了这样的 HTML：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">pre</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">code</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;language-mermaid&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">code</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">pre</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><code>language-mermaid</code> 就像贴在文件袋上的标签：“这里面是一张 Mermaid 图”。这说明解析器没有把语言名称弄丢。</p>
+<h3 id="3-3-最后找真正的绘图工具"><a href="#3-3-最后找真正的绘图工具" class="headerlink" title="3.3 最后找真正的绘图工具"></a>3.3 最后找真正的绘图工具</h3><p>测试页面里能找到 5 个 <code>language-mermaid</code> 代码块，却找不到 Mermaid 的 JavaScript 文件，也没有任何初始化代码。</p>
+<p>所以证据链很清楚：</p>
+<ol>
+<li>原始 Markdown 已经读到；</li>
+<li><code>gomarkdown</code> 已经认出 Mermaid 代码块；</li>
+<li>HTML 已经带着正确标签到达浏览器；</li>
+<li>浏览器里没有 Mermaid，自然只能显示源码。</li>
+</ol>
+<p>这不是 <code>gomarkdown</code> 的解析错误，而是服务原本没有实现“浏览器绘图”这一步。</p>
+<h2 id="4-为什么原项目没有带-Mermaid"><a href="#4-为什么原项目没有带-Mermaid" class="headerlink" title="4. 为什么原项目没有带 Mermaid"></a>4. 为什么原项目没有带 Mermaid</h2><p>这里需要把“事实”和“推测”分开。</p>
+<p>项目没有留下“我们故意拒绝 Mermaid”的说明。根据原 README 和工程结构，更合理的判断是：<strong>它的目标边界原本就停在 Markdown 转 HTML，并且很重视轻量。</strong></p>
+<p>原项目强调：</p>
+<ul>
+<li>一个很小、低内存占用的 Go Web 服务；</li>
+<li>使用 <code>scratch</code> 作为 Docker 运行环境，里面连完整操作系统都没有；</li>
+<li>尽量少的文件和依赖；</li>
+<li>标题、表格、代码块等常见 Markdown 能直接阅读。</li>
+</ul>
+<p>Mermaid 则会带来新的成本：</p>
+<ul>
+<li>压缩后的 JavaScript 文件本身也有数 MB；</li>
+<li>程序需要决定何时加载它；</li>
+<li>浏览器脚本会增加安全、缓存和兼容性工作；</li>
+<li>Mermaid 升级后还要重新测试；</li>
+<li>错误图表需要设计降级方式。</li>
+</ul>
+<p>因此，不加入 Mermaid 很可能是项目范围和体积之间的取舍，并不代表作者做错了。我们的使用场景更重视流程图，于是在自己的 fork 中选择了另一种平衡。</p>
+<h2 id="5-这些相似的仓库，到底是什么关系"><a href="#5-这些相似的仓库，到底是什么关系" class="headerlink" title="5. 这些相似的仓库，到底是什么关系"></a>5. 这些相似的仓库，到底是什么关系</h2><p>刚看到 <code>gomarkdown</code>、<code>go-markdown-server</code>、<code>language-mermaid</code> 时，我也很容易把它们看成同一个家族。实际关系如下：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>真实身份</th>
+<th>这次是否要改</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/nickgrealy/go-markdown-server">nickgrealy&#x2F;go-markdown-server</a></td>
+<td>可以追溯到的早期 Go 服务项目</td>
+<td>不直接改</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/mountain-pass/go-markdown-server">mountain-pass&#x2F;go-markdown-server</a></td>
+<td>NAS 当时使用的服务源码基础</td>
+<td>从这里 fork</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/gomarkdown/markdown">gomarkdown&#x2F;markdown</a></td>
+<td>Go 语言的 Markdown 解析库</td>
+<td>继续使用，不改</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/mermaid-js/mermaid">mermaid-js&#x2F;mermaid</a></td>
+<td>真正把文字画成图的前端库</td>
+<td>作为依赖放入程序</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/gou7ma7/go-markdown-server-with-mermaid-">gou7ma7&#x2F;go-markdown-server-with-mermaid-</a></td>
+<td>我自己的改造版</td>
+<td>在这里开发</td>
+</tr>
+</tbody></table>
+<p>另一个容易混淆的地方是名字：</p>
+<ul>
+<li>GitHub 组织名是 <code>mountain-pass</code>，中间有连字符；</li>
+<li>Docker Hub 镜像名是 <code>mountainpass/go-markdown-server</code>，中间没有连字符；</li>
+<li><code>class=&quot;language-mermaid&quot;</code> 只是 HTML 上的一张语言标签，不表示这个 Go 项目是从 Mermaid fork 出来的。</li>
+</ul>
+<h3 id="为什么从-mountain-pass-fork"><a href="#为什么从-mountain-pass-fork" class="headerlink" title="为什么从 mountain-pass fork"></a>为什么从 mountain-pass fork</h3><p>因为 NAS 当时运行的就是它发布的镜像。从相同源码起步，改动最少，旧的 Markdown 路由、样式和 Docker 用法也最容易保持一致。</p>
+<p>Fork 可以理解成“复印一份保留出处的公共笔记”。你在自己的副本上做实验，不会直接改坏原作者的项目，以后也仍然能看出它从哪里来。</p>
+<h3 id="为什么不直接修改-gomarkdown"><a href="#为什么不直接修改-gomarkdown" class="headerlink" title="为什么不直接修改 gomarkdown"></a>为什么不直接修改 gomarkdown</h3><p><code>gomarkdown</code> 已经完成了它该做的事情：把代码块和 <code>mermaid</code> 语言标签交给 HTML。</p>
+<p>如果去修改它，就像要求排版员兼任绘图员。即使解析器输出了不同标签，浏览器里仍然需要真正的 Mermaid 引擎。把功能加在 Go 服务这一层，职责更清楚，影响范围也更小。</p>
+<h2 id="6-我们实际怎样补上绘图能力"><a href="#6-我们实际怎样补上绘图能力" class="headerlink" title="6. 我们实际怎样补上绘图能力"></a>6. 我们实际怎样补上绘图能力</h2><p>改造后的链路是：</p>
+<pre><code class=" mermaid">flowchart TD
+  A[&quot;Markdown 文件&quot;] --&gt; B[&quot;Go 服务读取&quot;]
+  B --&gt; C[&quot;gomarkdown 生成 HTML&quot;]
+  C --&gt; D&#123;&quot;页面含 Mermaid 吗&quot;&#125;
+  D --&gt;|没有| E[&quot;直接显示网页&quot;]
+  D --&gt;|有| F[&quot;加载程序内置的 Mermaid&quot;]
+  F --&gt; G[&quot;浏览器画成 SVG&quot;]
+  F --&gt;|语法错误| H[&quot;保留原始代码&quot;]
+</code></pre>
+
+<p>这里有六个关键选择。</p>
+<h3 id="6-1-把绘图工具装进程序"><a href="#6-1-把绘图工具装进程序" class="headerlink" title="6.1 把绘图工具装进程序"></a>6.1 把绘图工具装进程序</h3><p>Mermaid 11.16.0 的 JavaScript、初始化脚本和样式文件都放进项目，再用 Go 的 <code>go:embed</code> 打包进可执行文件。</p>
+<p><code>go:embed</code> 可以理解成“封箱前把工具包塞进去”。部署时不需要再去 NAS 上单独找这些文件，也不会因为局域网访问不了公共 CDN 而失效。</p>
+<h3 id="6-2-有图时才加载"><a href="#6-2-有图时才加载" class="headerlink" title="6.2 有图时才加载"></a>6.2 有图时才加载</h3><p>服务生成 HTML 后，会检查其中有没有 <code>class=&quot;language-mermaid&quot;</code>。逻辑可以用接近自然语言的伪代码表示：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">如果页面里有 Mermaid 代码块：<br>    加载 Mermaid 的 CSS 和 JavaScript<br>否则：<br>    按原来的方式返回页面<br></code></pre></td></tr></table></figure>
+
+<p>普通文章因此不用下载 3.5 MB 左右的绘图库。轻量项目原本的优点被尽量保留下来。</p>
+<h3 id="6-3-先画成功，再替换源码"><a href="#6-3-先画成功，再替换源码" class="headerlink" title="6.3 先画成功，再替换源码"></a>6.3 先画成功，再替换源码</h3><p>浏览器先在内存里尝试绘图。只有生成 SVG 成功后，页面上的原始代码框才会被替换。</p>
+<p>如果语法写错，代码仍然留在页面上，并出现错误提示。这样至少还能复制源码继续修改，不会只剩一块空白。</p>
+<p>这像让绘图员先在草稿纸上完成作品，确认没问题后再换下原稿。</p>
+<h3 id="6-4-不依赖公网-CDN"><a href="#6-4-不依赖公网-CDN" class="headerlink" title="6.4 不依赖公网 CDN"></a>6.4 不依赖公网 CDN</h3><p>公共 CDN 用起来方便，但 NAS 可能没有稳定外网，CDN 也可能被网络策略拦截。自带 Mermaid 文件后，浏览器只向同一台 NAS 请求资源。</p>
+<p>代价是镜像会变大，而且以后升级 Mermaid 时要由我们更新文件。这里选择的是“可离线、可预测”，而不是最小下载体积。</p>
+<h3 id="6-5-给浏览器脚本设护栏"><a href="#6-5-给浏览器脚本设护栏" class="headerlink" title="6.5 给浏览器脚本设护栏"></a>6.5 给浏览器脚本设护栏</h3><p>Mermaid 使用 <code>securityLevel: &quot;strict&quot;</code>，脚本和样式都从服务自身加载，不开放内联脚本。原项目的 Content Security Policy 仍然有效。</p>
+<p>这不等于整个 Markdown 服务可以放心接收陌生人上传的任意内容。原渲染器允许原始 HTML，因此目前仍应只展示可信的 Markdown；如果将来开放上传，还需要额外的 HTML 清理。</p>
+<h3 id="6-6-让图适应屏幕"><a href="#6-6-让图适应屏幕" class="headerlink" title="6.6 让图适应屏幕"></a>6.6 让图适应屏幕</h3><p>生成的 SVG 最大宽度跟随正文区域，小屏幕上不会硬撑破页面。电脑、平板和电纸书都能按各自宽度阅读。</p>
+<h2 id="7-验证不是“感觉能用”，而是逐层确认"><a href="#7-验证不是“感觉能用”，而是逐层确认" class="headerlink" title="7. 验证不是“感觉能用”，而是逐层确认"></a>7. 验证不是“感觉能用”，而是逐层确认</h2><p>我把验证分成三层。每一层回答一个不同的问题。</p>
+<h3 id="7-1-Go-层：功能有没有接对"><a href="#7-1-Go-层：功能有没有接对" class="headerlink" title="7.1 Go 层：功能有没有接对"></a>7.1 Go 层：功能有没有接对</h3><p>运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">go <span class="hljs-built_in">test</span> ./...<br></code></pre></td></tr></table></figure>
+
+<p>自动测试确认：</p>
+<ul>
+<li>普通页面不会加载 Mermaid；</li>
+<li>有图页面会加载三个内置资源；</li>
+<li>资源的类型和缓存设置正确；</li>
+<li>不存在的资源返回 404；</li>
+<li>默认安全策略允许自带脚本，但没有放开不必要的内联脚本。</li>
+</ul>
+<h3 id="7-2-浏览器层：真的画出来了吗"><a href="#7-2-浏览器层：真的画出来了吗" class="headerlink" title="7.2 浏览器层：真的画出来了吗"></a>7.2 浏览器层：真的画出来了吗</h3><p>服务器返回正确 HTML，不等于浏览器一定能画图，所以又准备了真实浏览器测试页。</p>
+<p>结果是：</p>
+<ul>
+<li>5 个有效图表全部变成 SVG；</li>
+<li>页面中剩余的 Mermaid 源码框为 0；</li>
+<li>浏览器控制台没有报错；</li>
+<li>故意写错的图不会生成错误 SVG，原始代码仍然保留。</li>
+</ul>
+<p>这里很重要的一课是：<strong>测试要覆盖真正工作的那一层。</strong> Go 测试能检查网页准备工作，最终绘图发生在浏览器，就还要打开浏览器看。</p>
+<h3 id="7-3-Docker-与-NAS-层：换到真实环境还能工作吗"><a href="#7-3-Docker-与-NAS-层：换到真实环境还能工作吗" class="headerlink" title="7.3 Docker 与 NAS 层：换到真实环境还能工作吗"></a>7.3 Docker 与 NAS 层：换到真实环境还能工作吗</h3><p>最后构建新的 Docker 镜像，在 NAS 上保留原来的内容目录和端口，只替换运行程序。</p>
+<p>生产页面返回 HTTP 200，原测试文档中的 5 张图都成功显示，浏览器控制台仍然干净。旧镜像和原 Compose 文件备份都保留着，出现问题可以切回。</p>
+<p>部署像换灯泡：先把旧灯泡放在手边，再装新灯泡并通电检查，而不是先把旧灯泡扔掉。</p>
+<h3 id="一个与-Mermaid-无关的小插曲"><a href="#一个与-Mermaid-无关的小插曲" class="headerlink" title="一个与 Mermaid 无关的小插曲"></a>一个与 Mermaid 无关的小插曲</h3><p>测试 Compose 曾指定容器使用 <code>1001:1001</code> 身份运行，但 NAS 上原有 Markdown 目录的访问规则不允许这个身份读取，于是出现 <code>permission denied</code>。</p>
+<p>这不是绘图失败，而是“箱子里的人没有书架钥匙”。最终沿用这台 NAS 原有服务的运行身份，并继续把内容目录只读挂载。遇到类似错误时，不要为了省事直接给整个目录开放所有权限，应先确认究竟是哪一个身份需要读哪一个目录。</p>
+<h2 id="8-Git-做的不是魔法，而是给过程留存档"><a href="#8-Git-做的不是魔法，而是给过程留存档" class="headerlink" title="8. Git 做的不是魔法，而是给过程留存档"></a>8. Git 做的不是魔法，而是给过程留存档</h2><p>这次最后执行了两个动作：</p>
+<ul>
+<li><code>commit</code>：给当前成果拍一张带说明的快照；</li>
+<li><code>push</code>：把这张快照上传到自己的远端仓库。</li>
+</ul>
+<p>提交信息是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">feat: add self-hosted Mermaid rendering<br></code></pre></td></tr></table></figure>
+
+<p>提交编号 <code>50b914f</code> 就像这张快照的取件码。以后无论代码继续怎样变化，都能准确回到这一次完成并验证过的状态。</p>
+<p>Fork、commit 和 push 可以这样记：</p>
+<table>
+<thead>
+<tr>
+<th>动作</th>
+<th>类比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fork</td>
+<td>复印一本公共笔记，并保留原作者信息</td>
+</tr>
+<tr>
+<td>修改</td>
+<td>在自己的副本上做实验</td>
+</tr>
+<tr>
+<td>Commit</td>
+<td>给一个阶段拍照并写说明</td>
+</tr>
+<tr>
+<td>Push</td>
+<td>把照片备份到远端书架</td>
+</tr>
+</tbody></table>
+<h2 id="9-如果你刚开始学编程，真正值得带走什么"><a href="#9-如果你刚开始学编程，真正值得带走什么" class="headerlink" title="9. 如果你刚开始学编程，真正值得带走什么"></a>9. 如果你刚开始学编程，真正值得带走什么</h2><p>这次涉及 Go、HTML、JavaScript、Docker、NAS 和 Git，看起来像要同时学六门课。实际上，解决问题时我们没有从头学完任何一门，而是反复做下面五件事：</p>
+<ol>
+<li><strong>把现象说准确</strong>：不是“Markdown 坏了”，而是“Mermaid 源码出现了，图没有出现”。</li>
+<li><strong>给每个角色划职责</strong>：解析器负责排版，Mermaid 负责绘图，浏览器负责执行。</li>
+<li><strong>找能被检查的证据</strong>：HTML 有语言标签，但页面没有 Mermaid 脚本。</li>
+<li><strong>在正确的一层做小改动</strong>：改服务的页面输出，不重写 Markdown 解析库。</li>
+<li><strong>给每一步留退路</strong>：错误时保留源码，部署时保留旧镜像，代码用 Git 留快照。</li>
+</ol>
+<p>这套方法比记住某一条命令更重要。以后遇到“文件能读却不能预览”“接口有数据却页面没显示”“容器能启动却访问不到目录”，都可以先画出链路，再寻找缺失的那一棒。</p>
+<div class="note note-tip">
+            <p>看不懂整个项目并不妨碍你解决其中一个具体问题。</p><p>能把大问题缩成一句可验证的话，再找到负责那一步的代码，你已经在使用成熟开发者最常用的排错方法了。</p>
+          </div>
+
+<h2 id="10-一张给下次的排错清单"><a href="#10-一张给下次的排错清单" class="headerlink" title="10. 一张给下次的排错清单"></a>10. 一张给下次的排错清单</h2><p>当 Mermaid 再次没有显示时，可以按这个顺序检查：</p>
+<ol>
+<li>Markdown 文件能否正常打开？</li>
+<li>代码块有没有标记为 <code>mermaid</code>？</li>
+<li>返回的 HTML 中有没有 <code>language-mermaid</code>？</li>
+<li>Mermaid JavaScript 是否成功加载？</li>
+<li>浏览器控制台有没有语法或安全策略错误？</li>
+<li>最小的 <code>A --&gt; B</code> 能否显示？</li>
+<li>本地能显示、NAS 不能显示时，资源路径和容器权限是否一致？</li>
+</ol>
+<p>一次只回答一个问题。每得到一个确定答案，未知范围就会小一圈。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/gou7ma7/go-markdown-server-with-mermaid-">本次改造后的项目</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/gou7ma7/go-markdown-server-with-mermaid-/commit/50b914f784c8284e29fd92e13a9f66b8a37d8852">本次功能提交</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/mountain-pass/go-markdown-server">mountain-pass&#x2F;go-markdown-server</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/gomarkdown/markdown">gomarkdown&#x2F;markdown</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/mermaid-js/mermaid">Mermaid</a></li>
+</ul>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/DevOps/" class="category-chain-item">DevOps</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Troubleshooting/" class="print-no-link">#Troubleshooting</a>
+      
+        <a href="/tags/Go/" class="print-no-link">#Go</a>
+      
+        <a href="/tags/Markdown/" class="print-no-link">#Markdown</a>
+      
+        <a href="/tags/Mermaid/" class="print-no-link">#Mermaid</a>
+      
+        <a href="/tags/Docker/" class="print-no-link">#Docker</a>
+      
+        <a href="/tags/NAS/" class="print-no-link">#NAS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>从一段没有画出来的流程图开始：给 NAS 上的 Go Markdown 服务补上 Mermaid</div>
+      <div>https://gou7ma7.github.io/2026/07/13/devops/@2026_add_mermaid_to_go_markdown_server/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Roy Lee</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年7月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/06/29/career/@2026_agent_eval_harness/" title="Agent Eval / Test Harness 到底是什么">
+                        <span class="hidden-mobile">Agent Eval / Test Harness 到底是什么</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+<i class="iconfont icon-love"></i>
+<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
